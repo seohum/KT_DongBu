@@ -551,6 +551,20 @@ img{
 }
 
 
+
+.kakao-icon-img{
+  width:27px;
+  height:27px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.side-kakao .kakao-icon-img{
+  width:30px;
+  height:30px;
+}
+
+
 /* =========================================================
    SUB PAGE
 ========================================================= */
@@ -1224,7 +1238,7 @@ img{
   position:fixed;
   top:0;
 
-  /* PC에서도 430px 모바일 영역 오른쪽 바깥에 완전히 숨김 */
+  /* PC에서도 중앙 430px 모바일 화면의 오른쪽 끝을 기준으로 동작 */
   left:50%;
   margin-left:215px;
 
@@ -1233,13 +1247,16 @@ img{
 
   background:#fff;
 
-  /* 기본 상태: 모바일 영역 바깥 */
-  transform:translateX(0);
+  /* 평소에는 완전히 숨김 */
+  transform:translateX(110%);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
 
   transition:
-    transform
-    .3s
-    cubic-bezier(.22,.61,.36,1);
+    transform .3s cubic-bezier(.22,.61,.36,1),
+    opacity .2s ease,
+    visibility .2s ease;
 
   z-index:301;
 
@@ -1256,8 +1273,11 @@ img{
 
 
 .side-menu.active{
-  /* 햄버거를 눌렀을 때만 안쪽으로 슬라이드 */
+  /* 햄버거 버튼을 눌렀을 때만 모바일 화면 위로 슬라이드 */
   transform:translateX(-100%);
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
 }
 
 
@@ -1662,6 +1682,10 @@ img{
     margin-left:0;
   }
 
+  .side-menu.active{
+    transform:translateX(-100%);
+  }
+
 }
 
 /* =========================================================
@@ -1796,6 +1820,76 @@ img{
 }
 #homePage .footer{
   display:none;
+}
+
+
+/* =========================================================
+   HOME SECTOR CARDS - CENTER LAYOUT
+========================================================= */
+
+.sector-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px 10px;
+}
+
+.sector-card .sector-icon{
+  margin:0 0 8px 0;
+  align-self:center;
+}
+
+.sector-card h3{
+  width:100%;
+  margin:0;
+  text-align:center;
+  font-size:13px;
+  line-height:1.25;
+  letter-spacing:-.55px;
+  white-space:nowrap;
+}
+
+.sector-card p{
+  width:100%;
+  margin:5px 0 0;
+  text-align:center;
+  font-size:9px;
+  line-height:1.35;
+}
+
+.sector-card .sector-action{
+  position:static;
+  display:block;
+  width:100%;
+  margin-top:9px;
+  text-align:center;
+}
+
+@media(max-width:360px){
+  .sector-card h3{
+    font-size:11.5px;
+    letter-spacing:-.7px;
+  }
+
+  .sector-card{
+    padding-left:7px;
+    padding-right:7px;
+  }
+}
+
+
+.phone-icon-img{
+  width:28px;
+  height:28px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.side-phone .phone-icon-img{
+  width:30px;
+  height:30px;
 }
 
 </style>
@@ -2055,7 +2149,8 @@ img{
       href="tel:01088713121"
       class="quick-phone"
     >
-      ☎ 전화 상담
+      <img src="assets/phone-call.png" alt="전화상담" class="phone-icon-img">
+      전화 상담
     </a>
 
 
@@ -2063,7 +2158,8 @@ img{
       class="quick-kakao"
       onclick="openKakao()"
     >
-      💬 카카오톡 상담
+      <img src="assets/kakao-talk.png" alt="카카오톡" class="kakao-icon-img">
+      카카오톡 상담
     </button>
 
   </div>
@@ -3078,7 +3174,7 @@ img{
     >
 
       <span class="side-contact-icon">
-        ☎
+        <img src="assets/phone-call.png" alt="전화상담" class="phone-icon-img">
       </span>
 
       <span class="side-contact-copy">
@@ -3103,7 +3199,7 @@ img{
     >
 
       <span class="side-contact-icon">
-        💬
+        <img src="assets/kakao-talk.png" alt="카카오톡" class="kakao-icon-img">
       </span>
 
       <span class="side-contact-copy">
