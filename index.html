@@ -71,7 +71,7 @@ img{
 .app{
   width:100%;
   max-width:430px;
-  min-height:100vh;
+  min-height:auto;
 
   margin:0 auto;
 
@@ -510,15 +510,15 @@ img{
 
 
 .quick-contact-buttons{
-  display:grid;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:12px;
+}
 
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:8px;
-
-  margin-top:15px;
+.quick-contact-buttons .quick-phone,
+.quick-contact-buttons .quick-kakao{
+  width:100%;
 }
 
 
@@ -571,13 +571,8 @@ img{
 
 .sub-page{
   display:none;
-
-  min-height:100vh;
-
-  padding:
-    0
-    14px
-    110px;
+  min-height:auto;
+  padding:0 14px 92px;
 
   background:#f7f8fa;
 }
@@ -839,7 +834,7 @@ img{
 ========================================================= */
 
 .soon-page{
-  min-height:430px;
+  min-height:300px;
 
   display:flex;
   flex-direction:column;
@@ -1723,11 +1718,7 @@ img{
   }
 
   .app{
-    min-height:
-      calc(
-        100vh
-        - 48px
-      );
+    min-height:auto;
 
     border-radius:26px;
 
@@ -1751,7 +1742,7 @@ img{
    HOME COMPACT OVERRIDES
 ========================================================= */
 #homePage .hero{
-  padding:22px 18px 16px;
+  padding:18px 18px 16px;
 }
 #homePage .hero-badge{
   margin-bottom:8px;
@@ -1809,8 +1800,10 @@ img{
   font-size:9px;
 }
 #homePage .quick-contact-buttons{
+  display:flex;
+  flex-direction:column;
   margin-top:10px;
-  gap:7px;
+  gap:8px;
 }
 #homePage .quick-phone,
 #homePage .quick-kakao{
@@ -1892,6 +1885,98 @@ img{
   height:30px;
 }
 
+
+/* =========================================================
+   HOME SECTOR IMAGE CARDS
+========================================================= */
+
+.sector-image{
+  width:66px;
+  height:66px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 9px;
+  flex:0 0 auto;
+}
+
+#homePage .sector-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+#homePage .sector-card > div{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+#homePage .sector-card h3,
+#homePage .sector-card p,
+#homePage .sector-action,
+#homePage .opening-soon{
+  text-align:center;
+}
+
+#homePage .sector-card h3{
+  white-space:nowrap;
+}
+
+#homePage .opening-soon{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+@media(max-width:360px){
+  .sector-image{
+    width:58px;
+    height:58px;
+  }
+
+  #homePage .sector-card h3{
+    font-size:11.5px;
+  }
+}
+
+
+/* PAGE HEIGHT FIT */
+#homePage{
+  min-height:auto;
+}
+
+.sub-page.active{
+  min-height:auto;
+}
+
+.sub-page > :last-child{
+  margin-bottom:0;
+}
+
+/* 마지막 콘텐츠와 하단 네비게이션 사이 여백 */
+.app{
+  padding-bottom:0;
+}
+
+#homePage{
+  padding-bottom:12px;
+}
+
+/* 서브페이지는 입주특판 페이지와 같은 기본 여백 규칙 사용 */
+.sub-page{
+  padding-bottom:92px;
+}
+
+@media(min-width:700px){
+  .app{
+    min-height:auto;
+    padding-bottom:0;
+  }
+}
+
 </style>
 </head>
 
@@ -1956,17 +2041,13 @@ img{
 
 <section class="hero">
 
-  <span class="hero-badge">
-    KT 동부법인지사
-  </span>
-
   <h1>
     필요한 통신 서비스를<br>
     <strong>한 곳에서 간편하게</strong>
   </h1>
 
   <p>
-    인터넷·TV부터 입주 특판까지 맞춤 상담
+    KT 동부법인지사가 최고의 혜택과 전문 상담으로 함께합니다.
   </p>
 
 </section>
@@ -1994,13 +2075,14 @@ img{
 
       <div>
 
-        <div class="sector-icon">
-          📡
-        </div>
+        <img
+          src="assets/home/internet.png"
+          alt="인터넷 / 인터넷+TV"
+          class="sector-image"
+        >
 
         <h3>
-          인터넷 /<br>
-          인터넷+TV
+          인터넷 / 인터넷+TV
         </h3>
 
         <p>
@@ -2026,13 +2108,14 @@ img{
 
       <div>
 
-        <div class="sector-icon">
-          🏢
-        </div>
+        <img
+          src="assets/home/business.png"
+          alt="기업 / 소상공인"
+          class="sector-image"
+        >
 
         <h3>
-          기업 /<br>
-          소상공인
+          기업 / 소상공인
         </h3>
 
         <p>
@@ -2063,13 +2146,14 @@ img{
 
       <div>
 
-        <div class="sector-icon">
-          🏙️
-        </div>
+        <img
+          src="assets/home/apartment.png"
+          alt="아파트 입주 특판"
+          class="sector-image"
+        >
 
         <h3>
-          아파트<br>
-          입주 특판
+          아파트 입주 특판
         </h3>
 
         <p>
@@ -2095,9 +2179,11 @@ img{
 
       <div>
 
-        <div class="sector-icon">
-          💬
-        </div>
+        <img
+          src="assets/home/consult.png"
+          alt="기타 문의"
+          class="sector-image"
+        >
 
         <h3>
           기타 문의
