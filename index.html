@@ -2045,7 +2045,7 @@ img{
     <!-- 실제 전화번호로 변경 -->
 
     <a
-      href="tel:01088713121"
+      href="tel:01012345678"
       class="quick-phone"
     >
       ☎ 전화 상담
@@ -3066,7 +3066,7 @@ img{
 
 
     <a
-      href="tel:01012345678"
+      href="tel:01088713121"
       class="side-phone"
     >
 
@@ -3906,6 +3906,27 @@ function openKakao(){
 
 
 
+
+/* =========================================================
+   ADMIN LOCALSTORAGE LINK
+========================================================= */
+
+function saveToAdmin(data){
+
+  const list =
+    JSON.parse(
+      localStorage.getItem("kt_consult_list") || "[]"
+    );
+
+  list.unshift(data);
+
+  localStorage.setItem(
+    "kt_consult_list",
+    JSON.stringify(list)
+  );
+}
+
+
 /* =========================================================
    CONSULT SUBMIT
 ========================================================= */
@@ -3973,8 +3994,15 @@ function submitConsult(){
 
   const data = {
 
+    id:
+      "consult_" +
+      Date.now(),
+
     category:
-      "consult",
+      "상담신청",
+
+    status:
+      "접수",
 
     type:
       document
@@ -4012,7 +4040,7 @@ function submitConsult(){
 
     createdAt:
       new Date()
-        .toISOString()
+        .toLocaleString("ko-KR")
 
   };
 
@@ -4023,7 +4051,9 @@ function submitConsult(){
   );
 
 
-  /*
+  
+  saveToAdmin(data);
+/*
     =====================================
     나중에 실제 서버 연결 위치
 
@@ -4127,8 +4157,15 @@ function submitJoin(){
 
   const data = {
 
+    id:
+      "join_" +
+      Date.now(),
+
     category:
-      "join",
+      "가입신청",
+
+    status:
+      "접수",
 
     apartment:
       document
@@ -4166,7 +4203,7 @@ function submitJoin(){
 
     createdAt:
       new Date()
-        .toISOString()
+        .toLocaleString("ko-KR")
 
   };
 
@@ -4177,7 +4214,9 @@ function submitJoin(){
   );
 
 
-  showToast(
+  
+  saveToAdmin(data);
+showToast(
     "가입 신청이 접수되었습니다."
   );
 
