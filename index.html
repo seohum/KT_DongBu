@@ -1222,22 +1222,19 @@ img{
 
 .side-menu{
   position:fixed;
-
   top:0;
 
-  right:
-    max(
-      0px,
-      calc((100vw - 430px) / 2)
-    );
+  /* PC에서도 430px 모바일 영역 오른쪽 바깥에 완전히 숨김 */
+  left:50%;
+  margin-left:215px;
 
   width:min(355px,88vw);
-
   height:100dvh;
 
   background:#fff;
 
-  transform:translateX(110%);
+  /* 기본 상태: 모바일 영역 바깥 */
+  transform:translateX(0);
 
   transition:
     transform
@@ -1250,7 +1247,6 @@ img{
   flex-direction:column;
 
   overflow-y:auto;
-
   overscroll-behavior:contain;
 
   box-shadow:
@@ -1260,7 +1256,8 @@ img{
 
 
 .side-menu.active{
-  transform:translateX(0);
+  /* 햄버거를 눌렀을 때만 안쪽으로 슬라이드 */
+  transform:translateX(-100%);
 }
 
 
@@ -1657,6 +1654,16 @@ img{
 }
 
 
+
+@media(max-width:430px){
+
+  .side-menu{
+    left:100%;
+    margin-left:0;
+  }
+
+}
+
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
@@ -2045,7 +2052,7 @@ img{
     <!-- 실제 전화번호로 변경 -->
 
     <a
-      href="tel:01012345678"
+      href="tel:01088713121"
       class="quick-phone"
     >
       ☎ 전화 상담
@@ -3066,7 +3073,7 @@ img{
 
 
     <a
-      href="tel:01088713121"
+      href="tel:01012345678"
       class="side-phone"
     >
 
