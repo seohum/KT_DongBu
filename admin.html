@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KT 동부법인지사 - 관리자 센터</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Pretendard, -apple-system, sans-serif; background: #f4f5f7; color: #333; line-height: 1.5; }
+
+  /* Header */
+  header { background: #111; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+  .admin-brand { display:flex; align-items:center; gap:10px; }
+  .admin-logo { width:52px; height:31px; object-fit:contain; display:block; flex-shrink:0; }
+  .admin-logo-fallback { display:none; width:52px; height:31px; align-items:center; justify-content:center; border-radius:7px; background:#2a2a2a; color:#aaa; font-size:10px; font-weight:800; }
+  header h1 span { color: #e31937; font-size: 12px; background: rgba(227,25,55,0.2); padding: 3px 8px; border-radius: 4px; }
+
+  .container { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
+
+  /* Dashboard Cards */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  .stat-card h3 { font-size: 13px; color: #666; font-weight: 600; }
+  .stat-card .value { font-size: 28px; font-weight: 800; margin-top: 8px; color: #111; }
+  .stat-card .value.red { color: #e31937; }
+
+  /* Controls */
+  .controls { background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-filter { padding: 8px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 13px; font-weight: 600; }
+  .btn-filter.active { background: #111; color: #fff; border-color: #111; }
+  
+  .search-box { display: flex; gap: 8px; }
+  .search-box input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; width: 200px; }
+  .btn-excel { background: #107c41; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+  /* Table */
+  .table-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+  th, td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
+  th { background: #f8fafc; font-weight: 700; color: #475569; }
+  tr:hover { background: #f8fafc; }
+
+  /* Status Badges */
+  .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+  .badge-category { background: #e0f2fe; color: #0369a1; }
+  .badge-category.join { background: #fef3c7; color: #b45309; }
+  .badge-status { cursor: pointer; }
+  .badge-접수 { background: #fee2e2; color: #991b1b; }
+  .badge-완료 { background: #dcfce7; color: #166534; }
+  .badge-취소 { background: #f1f5f9; color: #475569; }
+
+  /* Actions */
+  .btn-action { padding: 4px 8px; font-size: 11px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; margin-right: 4px; }
+  .btn-action.delete { border-color: #fca5a5; color: #dc2626; }
+
+  /* Modal */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: #fff; border-radius: 16px; width: 90%; max-width: 500px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+  .modal-body p { margin-bottom: 10px; font-size: 14px; }
+  .modal-body strong { display: inline-block; width: 100px; color: #64748b; }
+  .modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 8px; }
+
+  @media (max-width: 768px) {
+    .table-card { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="admin-brand">
+    <img
+      src="assets/kt-logo2.png"
+      alt="KT"
+      class="admin-logo"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+    >
+    <div class="admin-logo-fallback">KT CI</div>
+
+    <h1>
+      동부법인지사
+      <span>관리자 시스템</span>
+    </h1>
+  </div>
+
+  <button onclick="clearAllData()" style="background:#333; color:#aaa; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">전체 데이터 초기화</button>
+</header>
+
+<div class="container">
+
+  <!-- Dashboard Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>총 신청 건수</h3>
+      <div class="value" id="statTotal">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>미처리 (접수)</h3>
+      <div class="value red" id="statPending">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>일반 상담 신청</h3>
+      <div class="value" id="statConsult">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>아파트 가입 신청</h3>
+      <div class="value" id="statJoin">0</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="filters">
+      <button class="btn-filter active" onclick="setFilter('ALL', this)">전체보기</button>
+      <button class="btn-filter" onclick="setFilter('상담신청', this)">상담신청</button>
+      <button class="btn-filter" onclick="setFilter('가입신청', this)">가입신청</button>
+      <button class="btn-filter" onclick="setFilter('접수', this)">미처리 건만</button>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="이름/연락처 검색..." onkeyup="renderTable()">
+      <button class="btn-excel" onclick="exportToCSV()">CSV 엑셀 다운로드</button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>신청일시</th>
+          <th>구분</th>
+          <th>이름</th>
+          <th>연락처</th>
+          <th>상세 / 단지명</th>
+          <th>상태 (클릭 변경)</th>
+          <th>관리</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- JS 렌더링 -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>신청 상세 내용</h3>
+      <button onclick="closeModal()" style="border:none; background:none; font-size:20px; cursor:pointer;">&times;</button>
+    </div>
+    <div class="modal-body" id="modalContent">
+      <!-- JS 내용 동적 생성 -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-filter" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentCategoryFilter = 'ALL';
+
+function getStorageData() {
+  return JSON.parse(localStorage.getItem('kt_consult_list') || '[]');
+}
+
+function setStorageData(data) {
+  localStorage.setItem('kt_consult_list', JSON.stringify(data));
+  render();
+}
+
+function render() {
+  updateStats();
+  renderTable();
+}
+
+function updateStats() {
+  const data = getStorageData();
+  document.getElementById('statTotal').textContent = data.length;
+  document.getElementById('statPending').textContent = data.filter(d => d.status === '접수').length;
+  document.getElementById('statConsult').textContent = data.filter(d => d.category === '상담신청').length;
+  document.getElementById('statJoin').textContent = data.filter(d => d.category === '가입신청').length;
+}
+
+function setFilter(cat, btn) {
+  currentCategoryFilter = cat;
+  document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  const data = getStorageData();
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const tbody = document.getElementById('tableBody');
+
+  let filtered = data.filter(item => {
+    // 필터링
+    if (currentCategoryFilter === '접수') {
+      if (item.status !== '접수') return false;
+    } else if (currentCategoryFilter !== 'ALL') {
+      if (item.category !== currentCategoryFilter) return false;
+    }
+    // 검색어
+    if (query) {
+      return item.name.toLowerCase().includes(query) || item.phone.includes(query);
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#999; padding:40px;">신청 데이터가 없습니다.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(item => `
+    <tr>
+      <td>${item.createdAt}</td>
+      <td>
+        <span class="badge badge-category ${item.category === '가입신청' ? 'join' : ''}">
+          ${item.category}
+        </span>
+      </td>
+      <td><strong>${item.name}</strong></td>
+      <td><a href="tel:${item.phone}" style="color:#0369a1; text-decoration:none;">${item.phone}</a></td>
+      <td>
+        ${item.category === '가입신청' 
+          ? `[${item.apartment}] ${item.unit || ''} (${item.product})` 
+          : `[${item.type}] ${item.carrier || ''}`}
+      </td>
+      <td>
+        <span class="badge badge-status badge-${item.status}" onclick="toggleStatus('${item.id}')">
+          ${item.status} 🔄
+        </span>
+      </td>
+      <td>
+        <button class="btn-action" onclick="showDetail('${item.id}')">상세</button>
+        <button class="btn-action delete" onclick="deleteItem('${item.id}')">삭제</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function toggleStatus(id) {
+  const data = getStorageData();
+  const target = data.find(item => item.id === id);
+  if (!target) return;
+
+  if (target.status === '접수') target.status = '완료';
+  else if (target.status === '완료') target.status = '취소';
+  else target.status = '접수';
+
+  setStorageData(data);
+}
+
+function deleteItem(id) {
+  if (!confirm("정말 이 내역을 삭제하시겠습니까?")) return;
+  let data = getStorageData();
+  data = data.filter(item => item.id !== id);
+  setStorageData(data);
+}
+
+function showDetail(id) {
+  const data = getStorageData();
+  const item = data.find(i => i.id === id);
+  if (!item) return;
+
+  const content = document.getElementById('modalContent');
+  if (item.category === '상담신청') {
+    content.innerHTML = `
+      <p><strong>접수일시:</strong> ${item.createdAt}</p>
+      <p><strong>상담유형:</strong> ${item.type}</p>
+      <p><strong>고객명:</strong> ${item.name}</p>
+      <p><strong>연락처:</strong> ${item.phone}</p>
+      <p><strong>설치주소:</strong> ${item.address || '미입력'}</p>
+      <p><strong>현재 통신사:</strong> ${item.carrier || '미선택'}</p>
+      <p><strong>문의 내용:</strong><br><span style="color:#555;">${item.message || '없음'}</span></p>
+    `;
+  } else {
+    content.innerHTML = `
+      <p><strong>접수일시:</strong> ${item.createdAt}</p>
+      <p><strong>가입단지:</strong> ${item.apartment}</p>
+      <p><strong>가입자명:</strong> ${item.name}</p>
+      <p><strong>연락처:</strong> ${item.phone}</p>
+      <p><strong>동/호수:</strong> ${item.unit || '미입력'}</p>
+      <p><strong>희망상품:</strong> ${item.product}</p>
+      <p><strong>설치희망일:</strong> ${item.installDate || '미입력'}</p>
+    `;
+  }
+
+  document.getElementById('detailModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+}
+
+function clearAllData() {
+  if (confirm("모든 신청 데이터를 초기화하시겠습니까?")) {
+    localStorage.removeItem('kt_consult_list');
+    render();
+  }
+}
+
+function exportToCSV() {
+  const data = getStorageData();
+  if (data.length === 0) { alert("다운로드할 데이터가 없습니다."); return; }
+
+  let csv = "\uFEFF일시,구분,이름,연락처,유형/단지,상세내용/동호수,상태\n";
+  data.forEach(row => {
+    const detail1 = row.type || row.apartment || '';
+    const detail2 = (row.message || row.unit || '').replace(/,/g, ' ');
+    csv += `"${row.createdAt}","${row.category}","${row.name}","${row.phone}","${detail1}","${detail2}","${row.status}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute("download", `KT_상담접수목록_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'kt_consult_list') render();
+});
+
+window.addEventListener('focus', render);
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) render();
+});
+
+// 최초 렌더링
+render();
+</script>
+</body>
+</html>
