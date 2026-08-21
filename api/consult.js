@@ -10,6 +10,9 @@ const ALLOWED_TYPES = new Set([
   "입주 특판 상담"
 ]);
 
+const SHEETS_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec";
+
 export default async function handler(request, response) {
   const origin = request.headers.origin || "";
   const allowedOrigin = process.env.ALLOWED_ORIGIN || "https://seohum.github.io";
@@ -109,6 +112,22 @@ export default async function handler(request, response) {
       return response.status(502).json({ success: false, message: "알림 전송에 실패했습니다." });
     }
 
+    const sheets = await fetch(SHEETS_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "create", ...body })
+    });
+
+    const sheetsResult = await sheets.json();
+
+    if (!sheets.ok || !sheetsResult.success) {
+      console.error("Google Sheets API error", sheetsResult);
+      return response.status(502).json({
+        success: false,
+        message: "관리자 접수 목록 저장에 실패했습니다."
+      });
+    }
+
     return response.status(200).json({ success: true });
   } catch (error) {
     console.error(error);
@@ -137,4 +156,3 @@ function formatPhone(value) {
     ? `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7)}`
     : `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(6)}`;
 }
-ㄱ
