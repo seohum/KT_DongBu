@@ -4410,8 +4410,6 @@ async function submitConsult(){
       );
     }
 
-    await saveToAdmin(data);
-
     showToast(
       "상담 신청이 접수되었습니다."
     );
@@ -4630,8 +4628,6 @@ async function submitJoin(){
     if(!response.ok || !result.success){
       throw new Error(result.message || "가입 접수에 실패했습니다.");
     }
-
-    await saveToAdmin(data);
 
     showToast("가입 신청이 접수되었습니다.");
     setTimeout(function(){ goHomeAndNav(); }, 1300);
