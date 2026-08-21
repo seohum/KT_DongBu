@@ -3457,6 +3457,14 @@ let currentFlyer = "";
 
 let toastTimer;
 
+const SPECIAL_SITE_LINKS = [
+  {
+    slug:"dongdaegu-boutique-terrace",
+    name:"동대구 부띠끄 테라스",
+    flyerId:"flyer-01"
+  }
+];
+
 const FORM_ENDPOINT =
   (window.KT_CONSULT_CONFIG || {}).FORM_ENDPOINT || "";
 
@@ -3833,6 +3841,42 @@ function openFlyer(
   window.scrollTo(
     0,
     0
+  );
+
+}
+
+
+function openSiteFromLink(){
+
+  const site =
+    new URLSearchParams(
+      window.location.search
+    )
+      .get("site");
+
+  if(!site){
+    return;
+  }
+
+  const normalizedSite =
+    site
+      .trim()
+      .toLowerCase();
+
+  const matchedSite =
+    SPECIAL_SITE_LINKS
+      .find(item=>
+        item.slug === normalizedSite ||
+        item.name === site.trim()
+      );
+
+  if(!matchedSite){
+    return;
+  }
+
+  openFlyer(
+    matchedSite.name,
+    matchedSite.flyerId
   );
 
 }
@@ -4792,6 +4836,7 @@ async function checkAdminPassword(){
 ========================================================= */
 
 goHomeAndNav();
+openSiteFromLink();
 
 </script>
 
