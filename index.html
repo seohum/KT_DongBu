@@ -4529,6 +4529,29 @@ async function submitJoin(){
     status:
       "접수",
 
+    type:
+      document
+        .getElementById(
+          "joinProduct"
+        )
+        .value,
+
+    address:
+      [
+        document
+          .getElementById(
+            "joinApartmentName"
+          )
+          .value,
+        document
+          .getElementById(
+            "joinUnit"
+          )
+          .value
+      ]
+        .filter(Boolean)
+        .join(" "),
+
     apartment:
       document
         .getElementById(
@@ -4562,6 +4585,20 @@ async function submitJoin(){
           "joinDate"
         )
         .value,
+
+    message:
+      document
+        .getElementById(
+          "joinDate"
+        )
+        .value
+        ? "설치 희망일: " +
+          document
+            .getElementById(
+              "joinDate"
+            )
+            .value
+        : "",
 
     createdAt:
       new Date()
