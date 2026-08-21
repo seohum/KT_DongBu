@@ -3401,6 +3401,7 @@ img{
 
 
 
+<script src="config.js"></script>
 <script>
 
 
@@ -3415,6 +3416,9 @@ let currentApartment = "";
 let currentFlyer = "";
 
 let toastTimer;
+
+const FORM_ENDPOINT =
+  (window.KT_CONSULT_CONFIG || {}).FORM_ENDPOINT || "";
 
 
 
@@ -4120,7 +4124,7 @@ function saveToAdmin(data){
    CONSULT SUBMIT
 ========================================================= */
 
-function submitConsult(){
+async function submitConsult(){
 
   const name =
     document
@@ -4147,6 +4151,14 @@ function submitConsult(){
       )
       .checked;
 
+  const address =
+    document
+      .getElementById(
+        "consultAddress"
+      )
+      .value
+      .trim();
+
 
   if(!name){
 
@@ -4163,6 +4175,28 @@ function submitConsult(){
 
     showToast(
       "연락처를 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!/^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/.test(phone)){
+
+    showToast(
+      "연락처를 정확히 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!address){
+
+    showToast(
+      "설치 주소를 입력해주세요."
     );
 
     return;
@@ -4207,11 +4241,7 @@ function submitConsult(){
       phone,
 
     address:
-      document
-        .getElementById(
-          "consultAddress"
-        )
-        .value,
+      address,
 
     carrier:
       document
@@ -4234,46 +4264,73 @@ function submitConsult(){
   };
 
 
-  console.log(
-    "상담 신청",
-    data
-  );
+  if(!FORM_ENDPOINT){
+
+    showToast(
+      "상담 접수 서버를 연결 중입니다."
+    );
+
+    return;
+
+  }
 
 
-  
-  saveToAdmin(data);
-/*
-    =====================================
-    나중에 실제 서버 연결 위치
+  const submitButton =
+    document.querySelector(
+      "#consultPage .primary-button"
+    );
 
-    fetch("백엔드주소",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
+  submitButton.disabled = true;
+  submitButton.textContent = "접수 중...";
+
+  try{
+
+    const response = await fetch(
+      FORM_ENDPOINT,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+      }
+    );
+
+    const result = await response.json();
+
+    if(!response.ok || !result.success){
+      throw new Error(
+        result.message || "상담 접수에 실패했습니다."
+      );
+    }
+
+    saveToAdmin(data);
+
+    showToast(
+      "상담 신청이 접수되었습니다."
+    );
+
+    setTimeout(
+      function(){
+        goHomeAndNav();
       },
-      body:JSON.stringify(data)
-    })
+      1300
+    );
 
-    → DB 저장
-    → 관리자 페이지
-    → 텔레그램 알림
-    =====================================
-  */
+  }
+  catch(error){
 
+    showToast(
+      error.message || "잠시 후 다시 시도해주세요."
+    );
 
-  showToast(
-    "상담 신청이 접수되었습니다."
-  );
+  }
+  finally{
 
+    submitButton.disabled = false;
+    submitButton.textContent = "상담 신청하기";
 
-  setTimeout(
-    function(){
-
-      goHomeAndNav();
-
-    },
-    1300
-  );
+  }
 
 }
 
