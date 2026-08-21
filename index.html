@@ -3420,6 +3420,9 @@ let toastTimer;
 const FORM_ENDPOINT =
   (window.KT_CONSULT_CONFIG || {}).FORM_ENDPOINT || "";
 
+const SHEETS_ENDPOINT =
+  (window.KT_CONSULT_CONFIG || {}).SHEETS_ENDPOINT || "";
+
 
 
 /* =========================================================
@@ -4104,19 +4107,22 @@ function openKakao(){
    ADMIN LOCALSTORAGE LINK
 ========================================================= */
 
-function saveToAdmin(data){
+async function saveToAdmin(data){
 
-  const list =
-    JSON.parse(
-      localStorage.getItem("kt_consult_list") || "[]"
-    );
+  if(!SHEETS_ENDPOINT){
+    throw new Error("관리자 접수 목록이 연결되지 않았습니다.");
+  }
 
-  list.unshift(data);
+  const response = await fetch(SHEETS_ENDPOINT, {
+    method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    body:JSON.stringify({ action:"create", ...data })
+  });
 
-  localStorage.setItem(
-    "kt_consult_list",
-    JSON.stringify(list)
-  );
+  const result = await response.json();
+  if(!result.success){
+    throw new Error(result.message || "관리자 접수 목록 저장에 실패했습니다.");
+  }
 }
 
 
@@ -4304,7 +4310,7 @@ async function submitConsult(){
       );
     }
 
-    saveToAdmin(data);
+    await saveToAdmin(data);
 
     showToast(
       "상담 신청이 접수되었습니다."
@@ -4340,7 +4346,7 @@ async function submitConsult(){
    JOIN
 ========================================================= */
 
-function submitJoin(){
+async function submitJoin(){
 
   const name =
     document
@@ -4383,6 +4389,17 @@ function submitJoin(){
 
     showToast(
       "연락처를 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!/^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/.test(phone)){
+
+    showToast(
+      "연락처를 정확히 입력해주세요."
     );
 
     return;
@@ -4454,27 +4471,41 @@ function submitJoin(){
   };
 
 
-  console.log(
-    "가입 신청",
-    data
-  );
+  if(!FORM_ENDPOINT){
+    showToast("가입 접수 서버를 연결 중입니다.");
+    return;
+  }
 
+  const submitButton =
+    document.querySelector("#joinPage .primary-button");
 
-  
-  saveToAdmin(data);
-showToast(
-    "가입 신청이 접수되었습니다."
-  );
+  submitButton.disabled = true;
+  submitButton.textContent = "접수 중...";
 
+  try{
+    const response = await fetch(FORM_ENDPOINT, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify(data)
+    });
 
-  setTimeout(
-    function(){
+    const result = await response.json();
+    if(!response.ok || !result.success){
+      throw new Error(result.message || "가입 접수에 실패했습니다.");
+    }
 
-      goHomeAndNav();
+    await saveToAdmin(data);
 
-    },
-    1300
-  );
+    showToast("가입 신청이 접수되었습니다.");
+    setTimeout(function(){ goHomeAndNav(); }, 1300);
+  }
+  catch(error){
+    showToast(error.message || "잠시 후 다시 시도해주세요.");
+  }
+  finally{
+    submitButton.disabled = false;
+    submitButton.textContent = "가입 신청하기";
+  }
 
 }
 
@@ -4589,7 +4620,7 @@ function adminPasswordKey(event){
 }
 
 
-function checkAdminPassword(){
+async function checkAdminPassword(){
 
   const input =
     document.getElementById("adminPassword");
@@ -4597,18 +4628,29 @@ function checkAdminPassword(){
   const error =
     document.getElementById("adminError");
 
-  if(input.value === "1188154"){
-
-    error.classList.remove("active");
-
-    window.location.href = "admin.html";
-
+  if(!SHEETS_ENDPOINT || !input.value){
+    error.classList.add("active");
+    input.select();
     return;
   }
 
-  error.classList.add("active");
+  try{
+    const response = await fetch(SHEETS_ENDPOINT, {
+      method:"POST",
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body:JSON.stringify({ action:"list", password:input.value })
+    });
 
-  input.select();
+    const result = await response.json();
+    if(!result.success) throw new Error("unauthorized");
+    sessionStorage.setItem("kt_admin_password", input.value);
+    error.classList.remove("active");
+    window.location.href = "admin.html";
+  }
+  catch(error){
+    error.classList.add("active");
+    input.select();
+  }
 }
 
 
