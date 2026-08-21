@@ -735,6 +735,9 @@ img{
 
 .product-buttons{
   margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
 
@@ -2323,10 +2326,17 @@ img{
       <div class="product-buttons">
 
         <button
-          class="primary-button"
+          class="secondary-button"
           onclick="openConsult('인터넷 100M')"
         >
           상담 신청
+        </button>
+
+        <button
+          class="primary-button"
+          onclick="openProductJoin('인터넷 100M')"
+        >
+          가입 신청
         </button>
 
       </div>
@@ -2358,10 +2368,17 @@ img{
       <div class="product-buttons">
 
         <button
-          class="primary-button"
+          class="secondary-button"
           onclick="openConsult('인터넷 500M')"
         >
           상담 신청
+        </button>
+
+        <button
+          class="primary-button"
+          onclick="openProductJoin('인터넷 500M')"
+        >
+          가입 신청
         </button>
 
       </div>
@@ -2388,10 +2405,17 @@ img{
       <div class="product-buttons">
 
         <button
-          class="primary-button"
+          class="secondary-button"
           onclick="openConsult('인터넷 1G')"
         >
           상담 신청
+        </button>
+
+        <button
+          class="primary-button"
+          onclick="openProductJoin('인터넷 1G')"
+        >
+          가입 신청
         </button>
 
       </div>
@@ -2423,10 +2447,17 @@ img{
       <div class="product-buttons">
 
         <button
-          class="primary-button"
+          class="secondary-button"
           onclick="openConsult('인터넷 + TV')"
         >
           상담 신청
+        </button>
+
+        <button
+          class="primary-button"
+          onclick="openProductJoin('인터넷 + TV')"
+        >
+          가입 신청
         </button>
 
       </div>
@@ -2866,7 +2897,7 @@ img{
 
     <button
       class="back-button"
-      onclick="openPage('flyerPage')"
+      onclick="returnFromJoin()"
     >
       ‹
     </button>
@@ -2883,7 +2914,7 @@ img{
 
     <div class="form-group">
 
-      <label>
+      <label id="joinSourceLabel">
         가입 단지
       </label>
 
@@ -2926,7 +2957,7 @@ img{
 
     <div class="form-group">
 
-      <label>
+      <label id="joinUnitLabel">
         동 / 호수
       </label>
 
@@ -2947,7 +2978,15 @@ img{
       <select id="joinProduct">
 
         <option>
-          인터넷
+          인터넷 100M
+        </option>
+
+        <option>
+          인터넷 500M
+        </option>
+
+        <option>
+          인터넷 1G
         </option>
 
         <option>
@@ -3881,6 +3920,51 @@ function consultApartment(){
 }
 
 
+function returnFromJoin(){
+
+  openPage(previousPage || "internetPage");
+
+}
+
+
+function openProductJoin(product){
+
+  previousPage = "internetPage";
+
+  hideAllPages();
+
+  document
+    .getElementById("joinPage")
+    .classList
+    .add("active");
+
+  document
+    .getElementById("joinSourceLabel")
+    .textContent = "가입 유형";
+
+  document
+    .getElementById("joinApartmentName")
+    .value = "일반 상품";
+
+  document
+    .getElementById("joinUnitLabel")
+    .textContent = "설치 주소";
+
+  document
+    .getElementById("joinUnit")
+    .placeholder = "예: 대구광역시 수성구 ○○로 00";
+
+  document
+    .getElementById("joinProduct")
+    .value = product;
+
+  setNavigation("navInternet");
+
+  window.scrollTo(0, 0);
+
+}
+
+
 
 function joinApartment(){
 
@@ -3905,6 +3989,21 @@ function joinApartment(){
     )
     .value =
       currentApartment;
+
+
+  document
+    .getElementById("joinSourceLabel")
+    .textContent = "가입 단지";
+
+
+  document
+    .getElementById("joinUnitLabel")
+    .textContent = "동 / 호수";
+
+
+  document
+    .getElementById("joinUnit")
+    .placeholder = "예: 101동 1001호";
 
 
   setNavigation(
