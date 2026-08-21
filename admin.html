@@ -299,16 +299,59 @@
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
 let currentCategoryFilter = 'ALL';
+let dashboardData = [];
+let adminPassword = sessionStorage.getItem('kt_admin_password') || '';
+const SHEETS_ENDPOINT = (window.KT_CONSULT_CONFIG || {}).SHEETS_ENDPOINT || '';
 
 function getStorageData() {
-  return JSON.parse(localStorage.getItem('kt_consult_list') || '[]');
+  return dashboardData;
 }
 
-function setStorageData(data) {
-  localStorage.setItem('kt_consult_list', JSON.stringify(data));
-  render();
+async function apiRequest(method = 'GET', body, passwordOverride) {
+  const password = passwordOverride || adminPassword;
+  if (!SHEETS_ENDPOINT || !password) throw new Error('관리자 로그인이 필요합니다.');
+
+  const action = method === 'GET'
+    ? 'list'
+    : method === 'PATCH'
+      ? 'status'
+      : body && body.all
+        ? 'clear'
+        : 'delete';
+
+  const response = await fetch(SHEETS_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action, password, ...(body || {}) })
+  });
+
+  let result = {};
+  try { result = await response.json(); } catch (_) {}
+  if (!response.ok || !result.success) throw new Error(result.message || '관리자 서버 요청에 실패했습니다.');
+  return result;
+}
+
+async function loadData() {
+  if (!adminPassword) {
+    const entered = prompt('관리자 비밀번호를 입력해주세요.');
+    if (!entered) { window.location.href = 'index.html'; return; }
+    adminPassword = entered;
+  }
+
+  try {
+    const result = await apiRequest();
+    sessionStorage.setItem('kt_admin_password', adminPassword);
+    dashboardData = result.items || [];
+    render();
+  } catch (error) {
+    sessionStorage.removeItem('kt_admin_password');
+    adminPassword = '';
+    alert(error.message || '관리자 데이터를 불러오지 못했습니다.');
+    window.location.href = 'index.html';
+  }
 }
 
 function render() {
@@ -383,16 +426,19 @@ function renderTable() {
   `).join('');
 }
 
-function toggleStatus(id) {
-  const data = getStorageData();
-  const target = data.find(item => item.id === id);
+async function toggleStatus(id) {
+  const target = dashboardData.find(item => item.id === id);
   if (!target) return;
 
-  if (target.status === '접수') target.status = '완료';
-  else if (target.status === '완료') target.status = '취소';
-  else target.status = '접수';
+  const nextStatus = target.status === '접수' ? '완료' : target.status === '완료' ? '취소' : '접수';
 
-  setStorageData(data);
+  try {
+    await apiRequest('PATCH', { id, status: nextStatus });
+    target.status = nextStatus;
+    render();
+  } catch (error) {
+    alert(error.message || '상태를 변경하지 못했습니다.');
+  }
 }
 
 let pendingDeleteId = null;
@@ -427,26 +473,25 @@ function deleteLockKey(event) {
   if (event.key === 'Escape') closeDeleteLock();
 }
 
-function confirmDeleteWithPassword() {
+async function confirmDeleteWithPassword() {
   const input = document.getElementById('deleteLockPassword');
   const error = document.getElementById('deleteLockError');
-
-  if (input.value !== '1188154') {
-    error.classList.add('active');
-    input.select();
-    return;
-  }
 
   if (!pendingDeleteId) {
     closeDeleteLock();
     return;
   }
 
-  let data = getStorageData();
-  data = data.filter(item => item.id !== pendingDeleteId);
-
-  closeDeleteLock();
-  setStorageData(data);
+  const id = pendingDeleteId;
+  try {
+    await apiRequest('DELETE', { id }, input.value);
+    dashboardData = dashboardData.filter(item => item.id !== id);
+    closeDeleteLock();
+    render();
+  } catch (requestError) {
+    error.classList.add('active');
+    input.select();
+  }
 }
 
 function showDetail(id) {
@@ -484,19 +529,19 @@ function closeModal() {
   document.getElementById('detailModal').classList.remove('active');
 }
 
-function clearAllData() {
+async function clearAllData() {
   const password = prompt("전체 데이터를 초기화하려면 관리자 비밀번호를 입력해주세요.");
 
   if (password === null) return;
 
-  if (password !== '1188154') {
-    alert("비밀번호가 올바르지 않습니다.");
-    return;
-  }
-
   if (confirm("모든 신청 데이터를 정말 초기화하시겠습니까?")) {
-    localStorage.removeItem('kt_consult_list');
-    render();
+    try {
+      await apiRequest('DELETE', { all: true }, password);
+      dashboardData = [];
+      render();
+    } catch (error) {
+      alert(error.message || '전체 데이터를 초기화하지 못했습니다.');
+    }
   }
 }
 
@@ -522,18 +567,14 @@ function exportToCSV() {
 
 
 
-window.addEventListener('storage', (event) => {
-  if (event.key === 'kt_consult_list') render();
-});
-
-window.addEventListener('focus', render);
+window.addEventListener('focus', loadData);
 
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) render();
+  if (!document.hidden) loadData();
 });
 
 // 최초 렌더링
-render();
+loadData();
 </script>
 </body>
 </html>
