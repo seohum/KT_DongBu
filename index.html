@@ -3977,6 +3977,31 @@ function returnFromJoin(){
 }
 
 
+function setJoinProductOptions(products, selectedProduct){
+
+  const select =
+    document
+      .getElementById("joinProduct");
+
+  select.replaceChildren();
+
+  products.forEach(product=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value = product;
+    option.textContent = product;
+    option.selected =
+      product === selectedProduct;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
 function openProductJoin(product){
 
   previousPage = "internetPage";
@@ -4004,9 +4029,15 @@ function openProductJoin(product){
     .getElementById("joinUnit")
     .placeholder = "예: 대구광역시 수성구 ○○로 00";
 
-  document
-    .getElementById("joinProduct")
-    .value = product;
+  setJoinProductOptions(
+    [
+      "인터넷 100M",
+      "인터넷 500M",
+      "인터넷 1G",
+      "인터넷 + TV"
+    ],
+    product
+  );
 
   setNavigation("navInternet");
 
@@ -4054,6 +4085,15 @@ function joinApartment(){
   document
     .getElementById("joinUnit")
     .placeholder = "예: 101동 1001호";
+
+
+  setJoinProductOptions(
+    [
+      "인터넷",
+      "인터넷+TV"
+    ],
+    "인터넷"
+  );
 
 
   setNavigation(
