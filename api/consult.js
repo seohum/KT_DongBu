@@ -1,6 +1,9 @@
 const ALLOWED_TYPES = new Set([
   "상담 문의",
   "인터넷",
+  "인터넷 100M",
+  "인터넷 500M",
+  "인터넷 1G",
   "인터넷 + TV",
   "인터넷+TV",
   "기타 문의",
@@ -35,12 +38,17 @@ export default async function handler(request, response) {
 
   try {
     const body = request.body || {};
+    const category = clean(body.category, 20);
+    const isJoin = category === "가입신청";
     const name = clean(body.name, 30);
     const phone = String(body.phone || "").replace(/\D/g, "");
-    const type = clean(body.type || body.consultType, 40);
+    const type = clean(body.product || body.type || body.consultType, 40);
     const address = clean(body.address || body.area, 100);
     const carrier = clean(body.carrier, 30);
     const message = clean(body.message, 500);
+    const apartment = clean(body.apartment, 80);
+    const unit = clean(body.unit, 80);
+    const installDate = clean(body.installDate, 20);
 
     if (!name || !/^01\d{8,9}$/.test(phone) || !type || !address) {
       return response.status(400).json({ success: false, message: "입력 내용을 확인해주세요." });
@@ -56,17 +64,29 @@ export default async function handler(request, response) {
       timeStyle: "medium"
     }).format(new Date());
 
-    const text = [
-      "🔴 <b>KT동부법인지사 신규 상담</b>",
-      "",
-      `👤 <b>이름</b>  ${escapeHtml(name)}`,
-      `📞 <b>연락처</b>  ${escapeHtml(formatPhone(phone))}`,
-      `📡 <b>상담유형</b>  ${escapeHtml(type)}`,
-      `📍 <b>설치주소</b>  ${escapeHtml(address)}`,
-      `🔄 <b>현재 통신사</b>  ${escapeHtml(carrier || "미선택")}`,
-      `💬 <b>문의사항</b>  ${escapeHtml(message || "없음")}`,
-      `🕒 <b>접수시간</b>  ${escapeHtml(time)}`
-    ].join("\n");
+    const text = isJoin
+      ? [
+          "🔵 <b>KT동부법인지사 신규 가입신청</b>",
+          "",
+          `👤 <b>가입자</b>  ${escapeHtml(name)}`,
+          `📞 <b>연락처</b>  ${escapeHtml(formatPhone(phone))}`,
+          `📡 <b>가입상품</b>  ${escapeHtml(type)}`,
+          `📍 <b>설치주소</b>  ${escapeHtml(address)}`,
+          `🏢 <b>가입구분</b>  ${escapeHtml(apartment || "일반 상품")}`,
+          `📅 <b>설치희망일</b>  ${escapeHtml(installDate || "미지정")}`,
+          `🕒 <b>접수시간</b>  ${escapeHtml(time)}`
+        ].join("\n")
+      : [
+          "🔴 <b>KT동부법인지사 신규 상담신청</b>",
+          "",
+          `👤 <b>이름</b>  ${escapeHtml(name)}`,
+          `📞 <b>연락처</b>  ${escapeHtml(formatPhone(phone))}`,
+          `📡 <b>상담유형</b>  ${escapeHtml(type)}`,
+          `📍 <b>설치주소</b>  ${escapeHtml(address)}`,
+          `🔄 <b>현재 통신사</b>  ${escapeHtml(carrier || "미선택")}`,
+          `💬 <b>문의사항</b>  ${escapeHtml(message || "없음")}`,
+          `🕒 <b>접수시간</b>  ${escapeHtml(time)}`
+        ].join("\n");
 
     const telegram = await fetch(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
@@ -117,4 +137,4 @@ function formatPhone(value) {
     ? `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7)}`
     : `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(6)}`;
 }
-
+ㄱ
