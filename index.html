@@ -4888,3 +4888,22 @@ openSiteFromLink();
 
 </body>
 </html>
+
+<script>
+(function(){
+  function applicationUrl(product){
+    var site=new URLSearchParams(window.location.search).get("site")||"";
+    if(!site&&typeof SPECIAL_SITE_LINKS!=="undefined"&&typeof currentApartment!=="undefined"){
+      var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
+      if(match)site=match.slug;
+    }
+    var selected=String(product||"").replace(/\s/g,"").indexOf("TV")>-1?"인터넷+TV":"인터넷";
+    var query=new URLSearchParams();
+    if(site)query.set("site",site);
+    query.set("product",selected);
+    return "application.html?"+query.toString();
+  }
+  window.openProductJoin=function(product){window.location.href=applicationUrl(product);};
+  window.joinApartment=function(){window.location.href=applicationUrl("인터넷");};
+})();
+</script>
