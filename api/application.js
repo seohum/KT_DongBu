@@ -177,7 +177,11 @@ export default async function handler(req, res) {
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
 
-    await notifyTelegramAndAdmin(input, result.applicationId);
+    try {
+      await notifyTelegramAndAdmin(input, result.applicationId);
+    } catch (notificationError) {
+      console.error('application notification warning', notificationError && notificationError.message);
+    }
 
     return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
   } catch (error) {
