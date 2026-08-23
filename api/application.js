@@ -3,6 +3,9 @@ const ALLOWED_ORIGINS = new Set([
   'https://kt-dong-bu.vercel.app'
 ]);
 
+const SHEETS_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
+
 function cors(origin) {
   return {
     'Access-Control-Allow-Origin': ALLOWED_ORIGINS.has(origin) ? origin : 'https://seohum.github.io',
@@ -24,6 +27,88 @@ function text(value, max) {
 
 function validDataImage(value) {
   return /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function formatPhone(value) {
+  const phone = String(value || '').replace(/\D/g, '');
+  return phone.length === 11
+    ? `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7)}`
+    : phone;
+}
+
+async function notifyTelegramAndAdmin(input, applicationId) {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+    throw new Error('Telegram environment variables are missing');
+  }
+
+  const createdAt = new Intl.DateTimeFormat('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    dateStyle: 'medium',
+    timeStyle: 'medium'
+  }).format(new Date());
+  const siteLabel = text(input.siteLabel, 120) || '일반 가입';
+  const adminRecord = {
+    action: 'create',
+    category: '가입신청',
+    name: text(input.customerName, 40),
+    phone: String(input.phone || '').replace(/\D/g, ''),
+    product: text(input.product, 80),
+    address: text(input.address, 250),
+    carrier: text(input.currentCarrier, 50),
+    apartment: siteLabel,
+    unit: '',
+    installDate: text(input.preferredInstallDate, 30),
+    message: `전자신청 접수번호: ${applicationId}`,
+    status: '접수'
+  };
+
+  const telegramText = [
+    '🔵 <b>KT동부법인지사 전자 가입신청</b>',
+    '',
+    `🧾 <b>접수번호</b>  ${escapeHtml(applicationId)}`,
+    `👤 <b>가입자</b>  ${escapeHtml(adminRecord.name)}`,
+    `📞 <b>연락처</b>  ${escapeHtml(formatPhone(adminRecord.phone))}`,
+    `📡 <b>가입상품</b>  ${escapeHtml(adminRecord.product)}`,
+    `🏢 <b>가입구분</b>  ${escapeHtml(siteLabel)}`,
+    `📍 <b>설치주소</b>  ${escapeHtml(adminRecord.address)}`,
+    `📅 <b>설치희망일</b>  ${escapeHtml(adminRecord.installDate || '미지정')}`,
+    `🕒 <b>접수시간</b>  ${escapeHtml(createdAt)}`,
+    '',
+    '🔒 신분증·계좌정보·전자서명은 Telegram에 전송하지 않았습니다.'
+  ].join('\n');
+
+  const [telegram, sheets] = await Promise.all([
+    fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: process.env.TELEGRAM_CHAT_ID,
+        text: telegramText,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      })
+    }),
+    fetch(SHEETS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(adminRecord),
+      redirect: 'follow'
+    })
+  ]);
+
+  const telegramResult = await telegram.json().catch(() => ({}));
+  const sheetsResult = await sheets.json().catch(() => ({}));
+  if (!telegram.ok || !telegramResult.ok) throw new Error('Telegram notification failed');
+  if (!sheets.ok || !sheetsResult.success) throw new Error('Admin registration failed');
 }
 
 export default async function handler(req, res) {
@@ -70,6 +155,12 @@ export default async function handler(req, res) {
       email: text(input.email, 120),
       currentCarrier: text(input.currentCarrier, 50),
       billingMethod: text(input.billingMethod, 50),
+      paymentMethod: text(input.paymentMethod, 50),
+      accountHolder: text(input.accountHolder, 60),
+      bankName: text(input.bankName, 60),
+      accountNumber: text(input.accountNumber, 80),
+      holderRelation: text(input.holderRelation, 40),
+      payerBirth: text(input.payerBirth, 20),
       idType: text(input.idType, 40),
       consents: input.consents,
       idFront: input.idFront,
@@ -85,6 +176,8 @@ export default async function handler(req, res) {
     });
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
+
+    await notifyTelegramAndAdmin(input, result.applicationId);
 
     return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
   } catch (error) {
