@@ -28,6 +28,9 @@ function text(value, max) {
 function validDataImage(value) {
   return /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
 }
+function validDataPdf(value) {
+  return /^data:application\/pdf;base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
+}
 
 function escapeHtml(value) {
   return String(value || '')
@@ -127,6 +130,18 @@ export default async function handler(req, res) {
 
   try {
     const input = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    if (input.action === 'attachPdf') {
+      const applicationId = text(input.applicationId, 100);
+      if (!applicationId || !validDataPdf(input.pdfData)) return send(res, 400, { success: false, message: 'PDF 파일을 확인해주세요.' }, origin);
+      const upstream = await fetch(process.env.APPLICATION_ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'attachPdf', secret: process.env.APPLICATION_SECRET, applicationId, fileName: text(input.fileName, 180), pdfData: input.pdfData }),
+        redirect: 'follow'
+      });
+      const result = await upstream.json().catch(() => ({}));
+      if (!result.ok) throw new Error('PDF upload failed');
+      return send(res, 200, { success: true }, origin);
+    }
     const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
     if (requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
