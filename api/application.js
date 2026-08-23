@@ -41,11 +41,17 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
+function normalizeKoreanMobile(value) {
+  let phone = String(value || '').replace(/\D/g, '');
+  if (phone.startsWith('0082')) phone = phone.slice(2);
+  if (phone.startsWith('82')) phone = '0' + phone.slice(2);
+  if (phone.startsWith('10')) phone = '0' + phone;
+  return phone;
+}
+
 function formatPhone(value) {
-  const phone = String(value || '').replace(/\D/g, '');
-  return phone.length === 11
-    ? `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7)}`
-    : phone;
+  const phone = normalizeKoreanMobile(value);
+  return phone.length === 11 ? phone.slice(0,3) + '-' + phone.slice(3,7) + '-' + phone.slice(7) : phone;
 }
 
 async function notifyTelegramAndAdmin(input, applicationId) {
@@ -63,7 +69,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     action: 'create',
     category: '가입신청',
     name: text(input.customerName, 40),
-    phone: String(input.phone || '').replace(/\D/g, ''),
+    phone: normalizeKoreanMobile(input.phone),
     product: text(input.product, 80),
     address: text(input.address, 250),
     carrier: text(input.currentCarrier, 50),
