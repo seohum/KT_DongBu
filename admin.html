@@ -183,6 +183,11 @@
   .admin-login-actions button{height:45px;border:0;border-radius:10px;font-weight:800;cursor:pointer}
   .admin-login-home{background:#eef2f7;color:#334155}.admin-login-submit{background:#e31937;color:#fff}
 
+
+  .file-panel{margin-top:18px;padding:14px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0}
+  .file-panel-title{font-weight:800;margin-bottom:9px;color:#111}.file-actions{display:flex;flex-wrap:wrap;gap:8px}
+  .file-btn{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:0;border-radius:8px;background:#111;color:#fff;text-decoration:none;font-size:13px;font-weight:700;cursor:pointer}.file-btn.pdf{background:#e31937}.file-btn.id{background:#334155}.file-note{margin-top:9px;color:#64748b;font-size:12px}
+
 </style>
 </head>
 <body>
@@ -545,10 +550,36 @@ function showDetail(id) {
       <p><strong>동/호수:</strong> ${item.unit || '미입력'}</p>
       <p><strong>희망상품:</strong> ${item.product}</p>
       <p><strong>설치희망일:</strong> ${item.installDate || '미입력'}</p>
+      <div class="file-panel" id="applicationFiles"><div class="file-panel-title">전자신청 파일</div><div class="file-actions"><button class="file-btn" type="button" onclick="loadApplicationFiles('${item.id}')">PDF·신분증 불러오기</button></div><div class="file-note">Google 계정으로 로그인한 관리자만 비공개 Drive 파일을 열 수 있습니다.</div></div>
     `;
   }
 
   document.getElementById('detailModal').classList.add('active');
+}
+
+
+function applicationIdFor(item) {
+  if (/^KT-/.test(item.id || '')) return item.id;
+  const match=String(item.message||'').match(/KT-[0-9-]+-[A-Z0-9]+/);
+  return match?match[0]:'';
+}
+async function loadApplicationFiles(itemId) {
+  const item=getStorageData().find(row=>row.id===itemId), panel=document.getElementById('applicationFiles');
+  if(!item||!panel)return;
+  const applicationId=applicationIdFor(item);
+  if(!applicationId){panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-note">전자신청 접수번호가 없는 일반 가입신청입니다.</div>';return;}
+  panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-note">비공개 파일을 확인하고 있습니다...</div>';
+  try{
+    const response=await fetch('https://kt-dong-bu.vercel.app/api/application-files',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:adminPassword,applicationId})});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok||!result.success)throw new Error(result.message||'파일을 불러오지 못했습니다.');
+    const files=result.files||{},links=[];
+    if(files.pdfUrl)links.push('<a class="file-btn pdf" href="'+files.pdfUrl+'" target="_blank" rel="noopener">PDF 보기</a>');
+    if(files.idFrontUrl)links.push('<a class="file-btn id" href="'+files.idFrontUrl+'" target="_blank" rel="noopener">신분증 앞면</a>');
+    if(files.idBackUrl)links.push('<a class="file-btn id" href="'+files.idBackUrl+'" target="_blank" rel="noopener">신분증 뒷면</a>');
+    if(files.folderUrl)links.push('<a class="file-btn" href="'+files.folderUrl+'" target="_blank" rel="noopener">전체 폴더</a>');
+    panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-actions">'+(links.join('')||'<span class="file-note">저장된 파일이 없습니다.</span>')+'</div><div class="file-note">가입 처리 목적으로만 확인해주세요.</div>';
+  }catch(error){panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-note" style="color:#dc2626">'+(error.message||'파일을 불러오지 못했습니다.')+'</div>';}
 }
 
 function closeModal() {
