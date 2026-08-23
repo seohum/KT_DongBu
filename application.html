@@ -515,6 +515,21 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   const safeSite = (data.siteLabel || '현장').replace(/[\\/:*?"<>|]/g,'');
   const filename = `${applicationId || 'KT'}_${safeSite}_${safeName}_유선가입신청서.pdf`;
 
+
+  if (applicationId && applicationId !== '미접수') {
+    try {
+      const pdfData = await new Promise((resolve, reject) => {
+        const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob);
+      });
+      const uploadResponse = await fetch(APPLICATION_ENDPOINT, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'attachPdf', applicationId, fileName:filename, pdfData})
+      });
+      const uploadResult = await uploadResponse.json().catch(() => ({}));
+      if (!uploadResponse.ok || !uploadResult.success) throw new Error(uploadResult.message || 'PDF 업로드 실패');
+    } catch (uploadError) { console.error('관리자용 PDF 업로드 실패', uploadError); }
+  }
+
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
