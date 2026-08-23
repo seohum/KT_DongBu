@@ -11,7 +11,7 @@
   /* Header */
   header { background: #111; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
-  .admin-brand { display:flex; align-items:center; gap:10px; }
+  .admin-brand { display:flex; align-items:center; gap:10px; color:inherit; text-decoration:none; cursor:pointer; }
   .admin-logo { width:52px; height:31px; object-fit:contain; display:block; flex-shrink:0; }
   .admin-logo-fallback { display:none; width:52px; height:31px; align-items:center; justify-content:center; border-radius:7px; background:#2a2a2a; color:#aaa; font-size:10px; font-weight:800; }
   header h1 span { color: #e31937; font-size: 12px; background: rgba(227,25,55,0.2); padding: 3px 8px; border-radius: 4px; }
@@ -193,7 +193,7 @@
 <body>
 
 <header>
-  <div class="admin-brand">
+  <a class="admin-brand" href="admin.html" aria-label="KT 동부법인지사 관리자 홈">
     <img
       src="assets/kt-logo2.png"
       alt="KT"
@@ -206,7 +206,7 @@
       동부법인지사
       <span>관리자 시스템</span>
     </h1>
-  </div>
+  </a>
 
   <button onclick="clearAllData()" style="background:#333; color:#aaa; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">전체 데이터 초기화</button>
 </header>
