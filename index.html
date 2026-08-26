@@ -1980,6 +1980,9 @@ img{
   }
 }
 
+
+.product-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 16px 16px;padding:5px;background:#eef1f5;border-radius:14px}.product-mode-tab{height:46px;border:0;border-radius:10px;background:transparent;color:#667085;font-size:15px;font-weight:800;cursor:pointer}.product-mode-tab.active{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}.product-mode-panel{display:none}.product-mode-panel.active{display:block}.product-tier-list{padding-top:0}.product-tier.recommended{border:2px solid #e60012;box-shadow:0 8px 24px rgba(230,0,18,.09)}.monthly-price{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:16px 0;padding:14px;border-radius:12px;background:#f7f8fa}.monthly-price b{font-size:21px;color:#e60012}.monthly-price span{font-size:11px;color:#777;text-align:right}.bundle-builder{margin:0 16px 28px;padding:18px;background:#fff;border:1px solid #e4e7ec;border-radius:18px;box-shadow:0 8px 24px rgba(16,24,40,.07)}.bundle-step{display:grid;grid-template-columns:32px 1fr;gap:11px;align-items:start;margin-bottom:17px}.bundle-step>span{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#111;color:#fff;font-weight:900}.bundle-step label{display:block;margin:2px 0 7px;font-size:14px;font-weight:800}.bundle-step select{width:100%;height:46px;border:1px solid #d0d5dd;border-radius:10px;background:#fff;padding:0 11px;font-size:14px}.bundle-summary{margin-top:5px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#201214,#43070d);color:#fff}.bundle-summary span{font-size:12px;color:#ffb4bc}.bundle-summary strong{display:block;margin-top:4px;font-size:25px}.bundle-summary p{margin:7px 0 0;font-size:12px;color:#e8c8cc;line-height:1.55}.bundle-buttons{margin-top:14px}.pricing-note{margin:13px 2px 0;color:#667085;font-size:11px;line-height:1.6}@media(max-width:380px){.monthly-price{align-items:flex-start;flex-direction:column}.bundle-builder{margin-left:12px;margin-right:12px;padding:15px}}
+
 </style>
 </head>
 
@@ -2273,203 +2276,23 @@ img{
      INTERNET PAGE
 ===================================================== -->
 
-<section
-  id="internetPage"
-  class="sub-page"
->
-
-  <div class="page-header">
-
-    <button
-      class="back-button"
-      onclick="goHomeAndNav()"
-    >
-      ‹
-    </button>
-
-    <h2>
-      인터넷 / 인터넷+TV
-    </h2>
-
-  </div>
-
-
-  <p class="page-description">
-    원하시는 상품을 선택하면
-    해당 상품에 맞춰 상담이 접수됩니다.
-  </p>
-
-
-  <div class="mobile-list">
-
-
-    <article class="product-card">
-
-      <span class="product-badge">
-        인터넷
-      </span>
-
-      <h3>
-        KT 인터넷 100M
-      </h3>
-
-      <p>
-        웹서핑과 가벼운 영상 시청에 적합한
-        기본 인터넷 상품입니다.
-      </p>
-
-      <div class="product-info">
-        정확한 이용료와 혜택은
-        결합 조건에 따라 달라질 수 있습니다.
-      </div>
-
-      <div class="product-buttons">
-
-        <button
-          class="secondary-button"
-          onclick="openConsult('인터넷 100M')"
-        >
-          상담 신청
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="openProductJoin('인터넷 100M')"
-        >
-          가입 신청
-        </button>
-
-      </div>
-
-    </article>
-
-
-
-    <article class="product-card">
-
-      <span class="product-badge">
-        추천
-      </span>
-
-      <h3>
-        KT 인터넷 500M
-      </h3>
-
-      <p>
-        영상 스트리밍과 여러 기기를 함께 사용하는
-        환경에 적합한 상품입니다.
-      </p>
-
-      <div class="product-info">
-        설치 가능 여부와 결합 혜택을
-        상담으로 확인할 수 있습니다.
-      </div>
-
-      <div class="product-buttons">
-
-        <button
-          class="secondary-button"
-          onclick="openConsult('인터넷 500M')"
-        >
-          상담 신청
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="openProductJoin('인터넷 500M')"
-        >
-          가입 신청
-        </button>
-
-      </div>
-
-    </article>
-
-
-
-    <article class="product-card">
-
-      <span class="product-badge">
-        인터넷
-      </span>
-
-      <h3>
-        KT 인터넷 1G
-      </h3>
-
-      <p>
-        업무 및 고용량 사용에 적합한
-        초고속 인터넷 상품입니다.
-      </p>
-
-      <div class="product-buttons">
-
-        <button
-          class="secondary-button"
-          onclick="openConsult('인터넷 1G')"
-        >
-          상담 신청
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="openProductJoin('인터넷 1G')"
-        >
-          가입 신청
-        </button>
-
-      </div>
-
-    </article>
-
-
-
-    <article class="product-card">
-
-      <span class="product-badge">
-        인터넷 + TV
-      </span>
-
-      <h3>
-        KT 인터넷 + TV
-      </h3>
-
-      <p>
-        인터넷과 TV를 함께 이용하는
-        결합 상품입니다.
-      </p>
-
-      <div class="product-info">
-        인터넷 속도와 TV 상품을
-        환경에 맞춰 상담해드립니다.
-      </div>
-
-      <div class="product-buttons">
-
-        <button
-          class="secondary-button"
-          onclick="openConsult('인터넷 + TV')"
-        >
-          상담 신청
-        </button>
-
-        <button
-          class="primary-button"
-          onclick="openProductJoin('인터넷 + TV')"
-        >
-          가입 신청
-        </button>
-
-      </div>
-
-    </article>
-
-
-  </div>
-
-</section>
-
-
+<section id="internetPage" class="sub-page">
+<div class="page-header"><button class="back-button" onclick="goHomeAndNav()">‹</button><h2>인터넷 / 인터넷+TV</h2></div>
+<p class="page-description">상품 구성과 예상 월 이용료를 확인한 뒤 상담 또는 가입을 신청할 수 있습니다.</p>
+<div class="product-mode-tabs"><button id="internetOnlyTab" class="product-mode-tab active" onclick="switchInternetMode('internet')">인터넷 단독</button><button id="internetTvTab" class="product-mode-tab" onclick="switchInternetMode('tv')">인터넷 + TV</button></div>
+<div id="internetOnlyPanel" class="product-mode-panel active"><div class="mobile-list product-tier-list">
+<article class="product-card product-tier"><span class="product-badge">슬림</span><h3>100M 인터넷</h3><p>웹서핑·일상적인 영상 시청에 적합합니다.</p><div class="monthly-price"><b>월 22,000원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openConsult('인터넷 슬림 100M / 월 22,000원')">상담 신청</button><button class="primary-button" onclick="openProductJoin('인터넷 100M')">가입 신청</button></div></article>
+<article class="product-card product-tier recommended"><span class="product-badge">추천 · 베이직</span><h3>500M 인터넷</h3><p>여러 기기와 고화질 스트리밍에 적합합니다.</p><div class="monthly-price"><b>월 33,000원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openConsult('인터넷 베이직 500M / 월 33,000원')">상담 신청</button><button class="primary-button" onclick="openProductJoin('인터넷 500M')">가입 신청</button></div></article>
+<article class="product-card product-tier"><span class="product-badge">에센스</span><h3>1G 인터넷</h3><p>업무·대용량 전송·다중 사용 환경에 적합합니다.</p><div class="monthly-price"><b>월 38,500원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openConsult('인터넷 에센스 1G / 월 38,500원')">상담 신청</button><button class="primary-button" onclick="openProductJoin('인터넷 1G')">가입 신청</button></div></article>
+</div></div>
+<div id="internetTvPanel" class="product-mode-panel"><div class="bundle-builder">
+<div class="bundle-step"><span>1</span><div><label for="bundleInternet">인터넷 상품</label><select id="bundleInternet" onchange="updateBundleSummary()"><option value="100M" data-price="22000">슬림 100M · 월 22,000원</option><option value="500M" data-price="27500" selected>베이직 500M · 월 27,500원</option><option value="1G" data-price="33000">에센스 1G · 월 33,000원</option></select></div></div>
+<div class="bundle-step"><span>2</span><div><label for="bundleTv">TV 상품</label><select id="bundleTv" onchange="updateBundleSummary()"><option value="지니 TV 베이직" data-price="12100">지니 TV 베이직 · 월 12,100원</option><option value="지니 TV 라이트" data-price="13200" selected>지니 TV 라이트 · 월 13,200원</option><option value="지니 TV 에센스" data-price="16500">지니 TV 에센스 · 월 16,500원</option></select></div></div>
+<div class="bundle-step"><span>3</span><div><label for="bundleSettop">셋톱박스</label><select id="bundleSettop" onchange="updateBundleSummary()"><option value="지니 TV 셋톱박스 A" data-price="3300">셋톱박스 A · 월 3,300원</option><option value="지니 TV 셋톱박스 3" data-price="4400" selected>셋톱박스 3 · 월 4,400원</option><option value="지니 TV 셋톱박스 4" data-price="6600">셋톱박스 4 · 월 6,600원</option></select></div></div>
+<div class="bundle-summary"><span>예상 월 이용료</span><strong id="bundleTotal">월 45,100원</strong><p id="bundleBreakdown">인터넷 27,500원 + TV 13,200원 + 셋톱박스 4,400원</p></div>
+<div class="product-buttons bundle-buttons"><button class="secondary-button" onclick="openBundleConsult()">상담 신청</button><button class="primary-button" onclick="openBundleJoin()">가입 신청</button></div>
+<p class="pricing-note">3년 약정·인터넷/TV 결합·부가세 포함 기준입니다. 설치비, 추가 장비, 모바일 결합 및 현장별 혜택은 상담 시 달라질 수 있습니다.</p>
+</div></div></section>
 
 <!-- =====================================================
      BUSINESS PAGE
@@ -4001,6 +3824,53 @@ function setJoinProductOptions(products, selectedProduct){
 
 }
 
+
+
+function switchInternetMode(mode){
+  const isTv = mode === 'tv';
+  document.getElementById('internetOnlyTab').classList.toggle('active', !isTv);
+  document.getElementById('internetTvTab').classList.toggle('active', isTv);
+  document.getElementById('internetOnlyPanel').classList.toggle('active', !isTv);
+  document.getElementById('internetTvPanel').classList.toggle('active', isTv);
+  if(isTv) updateBundleSummary();
+}
+
+function selectedBundleData(){
+  const internet = document.getElementById('bundleInternet');
+  const tv = document.getElementById('bundleTv');
+  const settop = document.getElementById('bundleSettop');
+  const internetPrice = Number(internet.options[internet.selectedIndex].dataset.price);
+  const tvPrice = Number(tv.options[tv.selectedIndex].dataset.price);
+  const settopPrice = Number(settop.options[settop.selectedIndex].dataset.price);
+  return {
+    internet: internet.value, tv: tv.value, settop: settop.value,
+    internetPrice, tvPrice, settopPrice,
+    total: internetPrice + tvPrice + settopPrice
+  };
+}
+
+function bundleLabel(data){
+  return '인터넷+TV / 인터넷 ' + data.internet + ' / ' + data.tv + ' / ' + data.settop + ' / 예상 월 ' + data.total.toLocaleString('ko-KR') + '원';
+}
+
+function updateBundleSummary(){
+  const data = selectedBundleData();
+  document.getElementById('bundleTotal').textContent = '월 ' + data.total.toLocaleString('ko-KR') + '원';
+  document.getElementById('bundleBreakdown').textContent =
+    '인터넷 ' + data.internetPrice.toLocaleString('ko-KR') + '원 + TV ' +
+    data.tvPrice.toLocaleString('ko-KR') + '원 + 셋톱박스 ' +
+    data.settopPrice.toLocaleString('ko-KR') + '원';
+}
+
+function openBundleConsult(){
+  openConsult(bundleLabel(selectedBundleData()));
+}
+
+function openBundleJoin(){
+  const label = bundleLabel(selectedBundleData());
+  openProductJoin(label);
+  setJoinProductOptions([label], label);
+}
 
 function openProductJoin(product){
 
