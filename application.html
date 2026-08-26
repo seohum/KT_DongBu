@@ -653,7 +653,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const nameEl = document.getElementById('name');
+  const birthEl = document.getElementById('birth');
   const holderEl = document.getElementById('accountHolder');
+  const payerBirthEl = document.getElementById('payerBirth');
   const sameHolderEl = document.getElementById('sameHolder');
   const accountEl = document.getElementById('accountNumber');
 
@@ -663,13 +665,24 @@ document.addEventListener('DOMContentLoaded', () => {
       holderEl.value = (nameEl?.value || '').trim();
       holderEl.readOnly = true;
       holderEl.style.background = '#f6f7f9';
+      if(payerBirthEl){
+        const birthDigits = String(birthEl?.value || '').replace(/[^0-9]/g,'');
+        payerBirthEl.value = birthDigits.length === 8 ? birthDigits.slice(2) : birthDigits;
+        payerBirthEl.readOnly = true;
+        payerBirthEl.style.background = '#f6f7f9';
+      }
     }else{
       holderEl.readOnly = false;
       holderEl.style.background = '#fff';
+      if(payerBirthEl){
+        payerBirthEl.readOnly = false;
+        payerBirthEl.style.background = '#fff';
+      }
     }
   }
 
   if(nameEl) nameEl.addEventListener('input', syncHolder);
+  if(birthEl) birthEl.addEventListener('input', syncHolder);
   if(sameHolderEl) sameHolderEl.addEventListener('change', syncHolder);
   if(accountEl) accountEl.addEventListener('input', ()=>{accountEl.value = accountEl.value.replace(/[^0-9]/g,'')});
   syncHolder();
