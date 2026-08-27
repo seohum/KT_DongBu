@@ -183,7 +183,7 @@ function validate(){if(current===0)return requireValue('installDate','설치 희
 prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){await submitApplication();return}if(validate())showStep(current+1)};
 ['idFront','idBack'].forEach((id,i)=>document.getElementById(id).onchange=e=>{const file=e.target.files[0],img=document.getElementById(i?'backPreview':'frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'});
 const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
-function resizeCanvas(){const rect=canvas.getBoundingClientRect(),old=canvas.toDataURL();canvas.width=Math.round(rect.width*devicePixelRatio);canvas.height=Math.round(rect.height*devicePixelRatio);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.lineWidth=4.2;ctx.lineCap='round';ctx.strokeStyle='#111';if(signed){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,rect.width,rect.height);img.src=old}}
+function resizeCanvas(){const rect=canvas.getBoundingClientRect(),old=canvas.toDataURL();canvas.width=Math.round(rect.width*devicePixelRatio);canvas.height=Math.round(rect.height*devicePixelRatio);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.lineWidth=6;ctx.lineCap='round';ctx.strokeStyle='#111';if(signed){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,rect.width,rect.height);img.src=old}}
 function point(e){const r=canvas.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top}}
 function start(e){drawing=true;const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}function move(e){if(!drawing)return;const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();signed=true;e.preventDefault()}function end(){drawing=false}
 canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
@@ -204,7 +204,7 @@ async function submitApplication(){
     document.querySelector('.bottom').style.display='none';
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
 }
-const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}const requestedDetails=params.get('details')||'';if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{document.getElementById('selectedProductDetails').value='';document.getElementById('selectedProductWrap').style.display='none'}))
+const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}let requestedDetails=params.get('details')||'';if(SITE_NAMES[siteCode]&&!requestedDetails){requestedDetails=requestedProduct==='인터넷+TV'?'인터넷+TV / 인터넷 슬림 100M / 지니 TV 베이직':'인터넷 슬림 100M'}if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{document.getElementById('selectedProductDetails').value='';document.getElementById('selectedProductWrap').style.display='none'}))
 showStep(0);
 </script>
 
@@ -261,9 +261,10 @@ async function drawTextImage(pdfDoc, page, text, xPx, yPxTop, widthPx, heightPx,
 async function drawCheck(pdfDoc, page, xPx, yPxTop, sizePx=18) {
   const pngBytes = await textPngBytes('✓', {fontSize:24, weight:900, color:'#e31937'});
   const img = await pdfDoc.embedPng(pngBytes);
-  const x = pxToPtX(xPx);
-  const topPt = pxToPtY(yPxTop);
-  const s = sizePx * 842 / 1755;
+  const centeredSizePx = Math.min(sizePx, 16);
+  const x = pxToPtX(xPx + Math.max(0, (sizePx-centeredSizePx)/2));
+  const topPt = pxToPtY(yPxTop - 5);
+  const s = centeredSizePx * 842 / 1755;
   page.drawImage(img, {x, y:topPt-s, width:s, height:s});
 }
 
@@ -361,6 +362,29 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   // 1페이지 : KT 유선신청서
   // ----------------------------
 
+
+  // 선택 상품을 원본 PDF의 정확한 항목에 자동 표시
+  const selectedProductText = String(data.product||'');
+  const internetName = selectedProductText.includes('슬림 100M') || selectedProductText.includes('100M') ? '인터넷 슬림 100M'
+    : selectedProductText.includes('베이직 500M') || selectedProductText.includes('500M') ? '인터넷 베이직 500M'
+    : selectedProductText.includes('에센스 1G') || selectedProductText.includes('1G') ? '인터넷 에센스 1G' : '';
+  if (internetName) {
+    await drawCheck(pdfDoc, p1, 943, 397, 16);
+    await drawTextImageFit(pdfDoc, p1, internetName, 980, 391, 166, 18, {fontSize:13, weight:700, color:'#111'});
+  }
+  if (selectedProductText.includes('인터넷+TV')) {
+    if (selectedProductText.includes('지니 TV 베이직')) {
+      await drawCheck(pdfDoc, p1, 713, 211, 16);
+    } else if (selectedProductText.includes('지니 TV 에센스')) {
+      await drawCheck(pdfDoc, p1, 646, 211, 16);
+    } else {
+      await drawCheck(pdfDoc, p1, 1012, 211, 16);
+      const tvOtherName = selectedProductText.includes('지니 TV 라이트') ? '지니 TV 라이트' : '지니 TV';
+      await drawTextImageFit(pdfDoc, p1, tvOtherName, 1044, 205, 102, 18, {fontSize:12, weight:700, color:'#111'});
+    }
+  }
+  if (selectedProductText.includes('기가 와이파이 홈')) await drawCheck(pdfDoc, p1, 494, 493, 16);
+
   // 인터넷 약정기간 3년
   await drawCheck(pdfDoc, p1, 316, 535, 18);
 
@@ -368,7 +392,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   await drawCheck(pdfDoc, p1, 990, 535, 18);
 
   // 인터넷+TV 선택 시 TV 약정 3년 및 TV 서명란
-  if (data.product === '인터넷+TV') {
+  if (String(data.product||'').includes('인터넷+TV')) {
     await drawCheck(pdfDoc, p1, 460, 282, 18);
 
     // TV 서명란 3곳
