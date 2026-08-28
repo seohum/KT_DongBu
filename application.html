@@ -190,7 +190,7 @@ canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermov
 function value(id){return document.getElementById(id).value||'-'}
 function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}
 function renderReview(){const product=selectedApplicationProduct();const items=[['현장',value('site')],['가입상품',product],['성명',value('name')],['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')],['신분증',value('idType')+' 첨부 완료'],['필수동의','5개 확인'],['전자서명','작성 완료']];document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
-async function imageData(file){if(!file)return'';const bitmap=await createImageBitmap(file),max=1600,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bitmap.width*scale));c.height=Math.max(1,Math.round(bitmap.height*scale));c.getContext('2d').drawImage(bitmap,0,0,c.width,c.height);bitmap.close();return c.toDataURL('image/jpeg',.78)}
+async function imageData(file){if(!file)return'';const bitmap=await createImageBitmap(file),max=1280,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bitmap.width*scale));c.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(bitmap,0,0,c.width,c.height);bitmap.close();return c.toDataURL('image/jpeg',.72)}
 async function submitApplication(){
   submitting=true;next.disabled=true;prev.disabled=true;next.textContent='안전하게 전송 중...';
   try{
@@ -199,6 +199,7 @@ async function submitApplication(){
     const response=await fetch(APPLICATION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await response.json().catch(()=>({}));
     if(!response.ok||!result.success)throw new Error(result.message||'접수 서버에 연결할 수 없습니다.');
     let pdfName='';
+    next.textContent='PDF 저장 중...';
     try{ pdfName=await createFilledKtPdf(body,result.applicationId||'KT'); }catch(pdfError){ console.error('PDF 생성 실패',pdfError); }
     document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'원본 KT 신청서 PDF도 자동 저장되었습니다.<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="location.href='./'">홈으로 돌아가기</button></section>`;
     document.querySelector('.bottom').style.display='none';
