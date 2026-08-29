@@ -555,13 +555,19 @@ function showDetail(id) {
   }
 
   document.getElementById('detailModal').classList.add('active');
+  if (item.category === '가입신청') {
+    setTimeout(() => loadApplicationFiles(item.id), 0);
+  }
 }
 
 
 function applicationIdFor(item) {
-  if (/^KT-/.test(item.id || '')) return item.id;
-  const match=String(item.message||'').match(/KT-[0-9-]+-[A-Z0-9]+/);
-  return match?match[0]:'';
+  const direct = String(item.applicationId || item.application_id || '').trim();
+  if (/^KT-/i.test(direct)) return direct;
+  if (/^KT-/i.test(item.id || '')) return String(item.id).trim();
+  const combined = [item.message, item.product, item.apartment, item.unit].filter(Boolean).join(' ');
+  const match = combined.match(/KT-[0-9A-Z-]+/i);
+  return match ? match[0] : '';
 }
 async function loadApplicationFiles(itemId) {
   const item=getStorageData().find(row=>row.id===itemId), panel=document.getElementById('applicationFiles');
