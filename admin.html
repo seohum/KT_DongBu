@@ -55,6 +55,7 @@
   /* Actions */
   .btn-action { padding: 4px 8px; font-size: 11px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; margin-right: 4px; }
   .btn-action.delete { border-color: #fca5a5; color: #dc2626; }
+  .btn-action.pdf-row { background: #e31937; border-color: #e31937; color: #fff; font-weight: 700; }
 
   /* Modal */
   .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
@@ -448,6 +449,7 @@ function renderTable() {
       </td>
       <td>
         <button class="btn-action" onclick="showDetail('${item.id}')">상세</button>
+        ${item.category === '가입신청' ? `<button class="btn-action pdf-row" onclick="showDetail('${item.id}')">PDF</button>` : ''}
         <button class="btn-action delete" onclick="deleteItem('${item.id}')">삭제</button>
       </td>
     </tr>
