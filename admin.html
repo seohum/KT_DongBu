@@ -60,6 +60,8 @@
   .btn-action { padding: 4px 8px; font-size: 11px; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; margin-right: 4px; }
   .btn-action.delete { border-color: #fca5a5; color: #dc2626; }
   .btn-action.pdf-row { background: #e31937; border-color: #e31937; color: #fff; font-weight: 700; }
+  .join-location { color:#64748b; font-size:11px; margin-bottom:3px; }
+  .join-product { color:#111827; font-weight:700; white-space:normal; min-width:220px; max-width:380px; line-height:1.45; }
 
   /* Modal */
   .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
@@ -406,6 +408,10 @@ function setFilter(cat, btn) {
   renderTable();
 }
 
+function joinProductFor(item) {
+  return String(item.productDetails || item.selectedProductDetails || item.details || item.product || item.plan || '').trim() || '상품 정보 없음';
+}
+
 function renderTable() {
   const data = getStorageData();
   const query = document.getElementById('searchInput').value.toLowerCase();
@@ -444,7 +450,7 @@ function renderTable() {
       <td><a href="tel:${item.phone}" style="color:#0369a1; text-decoration:none;">${item.phone}</a></td>
       <td>
         ${item.category === '가입신청' 
-          ? `[${item.apartment}] ${item.unit || ''} (${item.product})` 
+          ? `<div class="join-location">[${item.apartment || '일반 가입'}] ${item.unit || ''}</div><div class="join-product">${joinProductFor(item)}</div>` 
           : `[${item.type}] ${item.carrier || ''}`}
       </td>
       <td>
@@ -557,7 +563,7 @@ function showDetail(id) {
       <p><strong>가입자명:</strong> ${item.name}</p>
       <p><strong>연락처:</strong> ${item.phone}</p>
       <p><strong>동/호수:</strong> ${item.unit || '미입력'}</p>
-      <p><strong>희망상품:</strong> ${item.product}</p>
+      <p><strong>가입상품:</strong><br><span class="join-product">${joinProductFor(item)}</span></p>
       <p><strong>설치희망일:</strong> ${item.installDate || '미입력'}</p>
       <div class="file-panel" id="applicationFiles"><div class="file-panel-title">전자신청 파일</div><div class="file-actions"><button class="file-btn" type="button" onclick="loadApplicationFiles('${item.id}')">PDF·신분증 불러오기</button></div><div class="file-note">Google 계정으로 로그인한 관리자만 비공개 Drive 파일을 열 수 있습니다.</div></div>
     `;
