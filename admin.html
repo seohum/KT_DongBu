@@ -36,10 +36,14 @@
   .btn-excel { background: #107c41; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
 
   /* Table */
-  .table-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-  table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+  .table-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: auto; max-height: 62vh; box-shadow: 0 2px 4px rgba(0,0,0,0.02); scrollbar-gutter: stable; }
+  .table-card::-webkit-scrollbar { width: 10px; height: 10px; }
+  .table-card::-webkit-scrollbar-track { background: #eef2f7; }
+  .table-card::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; border: 2px solid #eef2f7; }
+  .table-card::-webkit-scrollbar-thumb:hover { background: #64748b; }
+  table { width: 100%; min-width: 880px; border-collapse: collapse; text-align: left; font-size: 13px; }
   th, td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
-  th { background: #f8fafc; font-weight: 700; color: #475569; }
+  th { position: sticky; top: 0; z-index: 2; background: #f8fafc; font-weight: 700; color: #475569; }
   tr:hover { background: #f8fafc; }
 
   /* Status Badges */
@@ -169,7 +173,7 @@
   }
 
   @media (max-width: 768px) {
-    .table-card { overflow-x: auto; }
+    .table-card { max-height: 55vh; overflow: auto; }
   }
 
   .admin-login-overlay{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.58)}
