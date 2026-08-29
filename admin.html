@@ -240,6 +240,7 @@
       <button class="btn-filter active" onclick="setFilter('ALL', this)">전체보기</button>
       <button class="btn-filter" onclick="setFilter('상담신청', this)">상담신청</button>
       <button class="btn-filter" onclick="setFilter('가입신청', this)">가입신청</button>
+      <button class="btn-filter" onclick="setFilter('PDF관리', this)">PDF 관리</button>
       <button class="btn-filter" onclick="setFilter('접수', this)">미처리 건만</button>
     </div>
 
@@ -410,6 +411,8 @@ function renderTable() {
     // 필터링
     if (currentCategoryFilter === '접수') {
       if (item.status !== '접수') return false;
+    } else if (currentCategoryFilter === 'PDF관리') {
+      if (item.category !== '가입신청') return false;
     } else if (currentCategoryFilter !== 'ALL') {
       if (item.category !== currentCategoryFilter) return false;
     }
