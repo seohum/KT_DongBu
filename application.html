@@ -23,11 +23,11 @@
         <label class="choice"><input type="radio" name="product" value="인터넷+TV"><span><b>인터넷+TV</b><small>인터넷·TV 및 결합서비스 신청</small></span></label>
       </div>
       <div class="field" id="selectedProductWrap" style="margin-top:14px;display:none"><label>선택한 상품 구성</label><div id="selectedProductDisplay" class="selected-product-summary"></div><textarea id="selectedProductDetails" readonly style="display:none"></textarea></div>
-      <div class="field" style="margin-top:18px"><label class="required">설치 희망일</label><input id="installDate" type="date"></div>
+      
     </section>
 
     <section class="step" data-step="1">
-      <p class="eyebrow">2. 가입자 정보</p><h1 class="title">가입자 정보를 입력해주세요</h1><p class="desc">신청서의 고객정보 영역에 입력됩니다.</p>
+      <p class="eyebrow">1. 가입자 정보</p><h1 class="title">가입자 정보를 입력해주세요</h1><p class="desc">신청서의 고객정보 영역에 입력됩니다.</p>
       <div class="field"><label class="required">성명</label><input id="name" autocomplete="name" placeholder="가입자 이름"></div>
       <div class="grid"><div class="field"><label class="required">생년월일</label><input id="birth" inputmode="numeric" maxlength="8" placeholder="YYYYMMDD"></div><div class="field"><label class="required">성별</label><select id="gender"><option value="">선택</option><option>남</option><option>여</option></select></div></div>
       <div class="field"><label class="required">휴대폰 번호</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000"></div>
@@ -101,7 +101,7 @@
         background:rgba(0,0,0,.42);
         z-index:9998;
       "></div>
-      <div class="field"><label>이메일</label><input id="email" type="email" autocomplete="email" placeholder="선택 입력"></div>
+      <div class="field"><label class="required">이메일</label><input id="email" type="email" autocomplete="email" placeholder="example@email.com" required></div>
       <div class="field"><label>현재 통신사</label><select id="carrier"><option>없음</option><option>KT</option><option>SK브로드밴드</option><option>LG유플러스</option><option>지역 케이블</option><option>기타</option></select></div>
       <div class="field"><label class="required">명세서 수신</label><select id="bill"><option value="">선택해주세요</option><option>모바일</option><option>이메일</option><option>kt.com 웹</option></select></div>
 
@@ -132,16 +132,16 @@
     </section>
 
     <section class="step" data-step="2">
-      <p class="eyebrow">3. 신분증 첨부</p><h1 class="title">신분증을 촬영해주세요</h1><p class="desc">주민등록번호를 별도로 입력하거나 추출하지 않고, 원본 첨부파일로만 처리합니다.</p>
-      <div class="field"><label class="required">신분증 종류</label><select id="idType"><option value="">선택해주세요</option><option>주민등록증</option><option>운전면허증</option><option>외국인등록증</option><option>여권</option></select></div>
-      <label class="upload"><input id="idFront" type="file" accept="image/*" capture="environment"><b>신분증 앞면 촬영 또는 선택</b><span>빛 반사 없이 네 모서리가 모두 보이게 촬영해주세요.</span></label><img class="preview" id="frontPreview" alt="신분증 앞면 미리보기">
+      <p class="eyebrow">2. 신분증 등록</p><h1 class="title">신분증을 촬영해주세요</h1><p class="desc">주민등록번호를 별도로 입력하거나 추출하지 않고, 원본 첨부파일로만 처리합니다.</p>
+      <input id="idType" type="hidden" value="신분증">
+      <label class="upload"><input id="idFront" type="file" accept="image/*" capture="environment"><b>신분증 사진 촬영 및 등록</b><span>빛 반사 없이 네 모서리가 모두 보이게 촬영해주세요.</span></label><img class="preview" id="frontPreview" alt="신분증 앞면 미리보기">
       <div style="height:12px"></div>
-      <label class="upload"><input id="idBack" type="file" accept="image/*" capture="environment"><b>신분증 뒷면 추가 (필요한 경우)</b><span>외국인등록증 등 뒷면 확인이 필요한 경우 사용합니다.</span></label><img class="preview" id="backPreview" alt="신분증 뒷면 미리보기">
+      <label class="upload"><input id="idBack" type="file" accept="image/*" capture="environment"><b>신분증 뒷면 촬영 및 등록 (필요한 경우)</b><span>외국인등록증 등 뒷면 확인이 필요한 경우 사용합니다.</span></label><img class="preview" id="backPreview" alt="신분증 뒷면 미리보기">
       <div class="notice" style="margin-top:16px">사진은 이메일이나 텔레그램에 첨부하지 않습니다. 관리자 Google 계정만 접근 가능한 비공개 Drive 폴더에 저장됩니다.</div>
     </section>
 
     <section class="step" data-step="3">
-      <p class="eyebrow">4. 필수 동의</p><h1 class="title">필수 내용을 확인해주세요</h1><p class="desc">원본 신청서의 분홍색 표시 서명란에 대응하는 동의입니다.</p>
+      <p class="eyebrow">3. 필수 동의</p><h1 class="title">필수 내용을 확인해주세요</h1><p class="desc">원본 신청서의 분홍색 표시 서명란에 대응하는 동의입니다.</p>
       <label class="consent"><input type="checkbox" class="agree"><span><b>서비스 신청 및 이용약관 동의</b><span>가입상품, 약정, 설치 및 해지 시 할인반환금 관련 내용을 확인했습니다.</span></span></label>
       <label class="consent"><input type="checkbox" class="agree"><span><b>개인정보·신용정보 수집 및 이용 동의</b><span>서비스 가입·개통·요금청구와 고객지원에 필요한 필수 동의입니다.</span></span></label>
       <label class="consent"><input type="checkbox" class="agree"><span><b>고유식별정보 처리 동의</b><span>본인확인과 명의도용 방지를 위한 필수 동의입니다.</span></span></label>
@@ -150,14 +150,15 @@
     </section>
 
     <section class="step" data-step="4">
-      <p class="eyebrow">5. 전자서명</p><h1 class="title">아래 칸에 서명해주세요</h1><p class="desc">한 번 작성한 서명은 확인한 필수동의의 분홍색 서명란에 동일하게 적용됩니다.</p>
+      <p class="eyebrow">4. 전자서명</p><h1 class="title">아래 칸에 서명해주세요</h1><p class="desc">한 번 작성한 서명은 확인한 필수동의의 분홍색 서명란에 동일하게 적용됩니다.</p>
       <div class="canvas-wrap"><div class="canvas-top"><span>가입자 본인 서명</span><button type="button" class="clear" id="clearSig">다시 쓰기</button></div><canvas class="sig" id="signature"></canvas></div>
       <label class="consent" style="margin-top:12px"><input id="applySig" type="checkbox"><span><b>서명 적용에 동의합니다</b><span>위 서명을 필수 신청·동의 서명란에 동일하게 적용하는 것에 동의합니다.</span></span></label>
       <div class="security">서명과 동의 시각은 접수번호와 함께 저장됩니다. 제출 전 내용을 다시 확인해주세요.</div>
     </section>
 
     <section class="step" data-step="5">
-      <p class="eyebrow">6. 최종 확인</p><h1 class="title">신청 내용을 확인해주세요</h1><p class="desc">제출하면 원본 KT 신청서 PDF에 입력값과 전자서명이 자동 기입되고, 관리자 접수도 함께 진행됩니다.</p>
+      <p class="eyebrow">5. 개통 희망일 및 최종 확인</p><h1 class="title">신청 내용을 확인해주세요</h1><p class="desc">제출하면 원본 KT 신청서 PDF에 입력값과 전자서명이 자동 기입되고, 관리자 접수도 함께 진행됩니다.</p>
+      <div class="field" style="margin-top:18px"><label class="required">개통 희망일</label><input id="installDate" type="date"></div>
       <div class="review" id="review"></div>
         <button type="button" class="next full" id="savePdfBtn" style="margin-top:14px;background:#16181d">
           원본 KT 신청서 PDF 미리 저장
@@ -179,8 +180,8 @@ const bars=[...progress.children], prev=document.getElementById('prev'), next=do
 function showStep(index){current=index;steps.forEach((s,i)=>s.classList.toggle('on',i===current));bars.forEach((b,i)=>b.classList.toggle('on',i<=Math.min(current,4)));prev.style.visibility=current===0?'hidden':'visible';next.textContent=current===5?'신청서 제출':'다음';next.classList.toggle('full',current===0);window.scrollTo(0,0);if(current===4)requestAnimationFrame(resizeCanvas);if(current===5)renderReview()}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
 function requireValue(id,msg){if(!document.getElementById(id).value){toast(msg);return false}return true}
-function validate(){if(current===0)return requireValue('installDate','설치 희망일을 선택해주세요.');if(current===1){for(const [id,msg] of [['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.'],['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']])if(!requireValue(id,msg))return false}if(current===2){if(!requireValue('idType','신분증 종류를 선택해주세요.'))return false;if(!document.getElementById('idFront').files.length){toast('신분증 앞면을 첨부해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!signed){toast('전자서명을 작성해주세요.');return false}if(!document.getElementById('applySig').checked){toast('서명 적용에 동의해주세요.');return false}}return true}
-prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){await submitApplication();return}if(validate())showStep(current+1)};
+function validate(){if(current===0)return true;if(current===1){for(const [id,msg] of [['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.'],['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']])if(!requireValue(id,msg))return false;const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!signed){toast('전자서명을 작성해주세요.');return false}if(!document.getElementById('applySig').checked){toast('서명 적용에 동의해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
+prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){if(validate())await submitApplication();return}if(validate())showStep(current+1)};
 ['idFront','idBack'].forEach((id,i)=>document.getElementById(id).onchange=e=>{const file=e.target.files[0],img=document.getElementById(i?'backPreview':'frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'});
 const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
 function resizeCanvas(){const rect=canvas.getBoundingClientRect(),old=canvas.toDataURL();canvas.width=Math.round(rect.width*devicePixelRatio);canvas.height=Math.round(rect.height*devicePixelRatio);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.lineWidth=6;ctx.lineCap='round';ctx.strokeStyle='#111';if(signed){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,rect.width,rect.height);img.src=old}}
@@ -207,7 +208,7 @@ async function submitApplication(){
 }
 function renderSelectedProductDetails(text){const box=document.getElementById('selectedProductDisplay');box.textContent='';const parts=String(text||'').split('/').map(x=>x.trim()).filter(Boolean);parts.forEach((part,index)=>{let label='신청 유형';if(part.includes('예상 월'))label='예상 월 요금';else if(part.includes('셋톱'))label='셋톱박스';else if(part.includes('와이파이'))label='와이파이 패키지';else if(index>0&&part.includes('TV'))label='TV 상품';else if(index>0&&part.includes('인터넷'))label='인터넷 상품';const row=document.createElement('div');row.className='selected-product-row'+(label==='예상 월 요금'?' total':'');const key=document.createElement('span');key.textContent=label;const value=document.createElement('b');value.textContent=label==='예상 월 요금'?part.replace(/^예상 월\s*/,'월 '):part;row.append(key,value);box.appendChild(row)})}
 const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}let requestedDetails=params.get('details')||'';if(SITE_NAMES[siteCode]&&!requestedDetails){requestedDetails=requestedProduct==='인터넷+TV'?'인터넷+TV / 인터넷 슬림 100M / 지니 TV 베이직':'인터넷 슬림 100M'}if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;renderSelectedProductDetails(requestedDetails);document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{const detailEl=document.getElementById('selectedProductDetails');const displayEl=document.getElementById('selectedProductDisplay');const wrapEl=document.getElementById('selectedProductWrap');if(requestedDetails&&x.value===(requestedProduct||'인터넷')){detailEl.value=requestedDetails;renderSelectedProductDetails(requestedDetails);wrapEl.style.display='block'}else{detailEl.value='';displayEl.textContent='';wrapEl.style.display='none'}}))
-showStep(0);
+showStep(requestedProduct ? 1 : 0);
 </script>
 
 <script>
