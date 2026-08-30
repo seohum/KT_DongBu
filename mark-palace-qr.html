@@ -1,0 +1,4793 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>범어 마크팰리스 QR 전용 특판</title>
+
+<meta
+  name="description"
+  content="KT 동부법인지사 인터넷, 인터넷+TV, 아파트/오피스텔 특판 상담"
+>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:#eef0f3;
+  color:#171717;
+
+  -webkit-font-smoothing:antialiased;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+img{
+  display:block;
+  max-width:100%;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:auto;
+
+  margin:0 auto;
+
+  background:#fff;
+
+  position:relative;
+
+  padding-bottom:88px;
+
+  box-shadow:
+    0 0 35px
+    rgba(0,0,0,.06);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+  height:66px;
+
+  padding:0 17px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  position:sticky;
+  top:0;
+
+  z-index:100;
+
+  background:
+    rgba(255,255,255,.97);
+
+  backdrop-filter:blur(12px);
+
+  border-bottom:1px solid #eee;
+}
+
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  cursor:pointer;
+
+  user-select:none;
+}
+
+
+.kt-logo{
+  width:52px;
+  height:31px;
+
+  object-fit:contain;
+}
+
+
+.logo-placeholder{
+  display:none;
+
+  width:52px;
+  height:31px;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:8px;
+
+  background:#f1f2f4;
+
+  color:#777;
+
+  font-size:10px;
+  font-weight:800;
+}
+
+
+.branch-name{
+  font-size:18px;
+  font-weight:800;
+
+  letter-spacing:-.7px;
+}
+
+
+.menu-button{
+  width:42px;
+  height:42px;
+
+  border-radius:13px;
+
+  background:#f3f4f6;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
+
+  transition:.18s;
+}
+
+
+.menu-button:active{
+  transform:scale(.94);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  padding:
+    32px
+    20px
+    30px;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff 0%,
+      #fff 55%,
+      #f4f7fb 100%
+    );
+}
+
+
+.hero::after{
+  content:"";
+
+  position:absolute;
+
+  width:200px;
+  height:200px;
+
+  right:-125px;
+  top:-92px;
+
+  border-radius:50%;
+
+  border:40px solid
+    rgba(227,25,55,.05);
+}
+
+
+.hero-badge{
+  display:inline-flex;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  background:#fff0f2;
+
+  color:#e31937;
+
+  font-size:11px;
+  font-weight:800;
+
+  margin-bottom:13px;
+}
+
+
+.hero h1{
+  position:relative;
+  z-index:2;
+
+  font-size:29px;
+  line-height:1.28;
+
+  letter-spacing:-1.4px;
+}
+
+
+.hero h1 strong{
+  color:#e31937;
+}
+
+
+.hero p{
+  position:relative;
+  z-index:2;
+
+  margin-top:14px;
+
+  color:#707070;
+
+  font-size:14px;
+  line-height:1.65;
+}
+
+
+/* =========================================================
+   HOME SECTION
+========================================================= */
+
+.home-section{
+  padding:6px 14px 14px;
+}
+
+
+.section-heading{
+  text-align:center;
+
+  margin-bottom:19px;
+}
+
+
+.section-heading h2{
+  font-size:20px;
+  letter-spacing:-.7px;
+}
+
+
+.section-heading p{
+  margin-top:7px;
+
+  color:#858585;
+
+  font-size:12px;
+}
+
+
+/* =========================================================
+   SERVICE GRID
+========================================================= */
+
+.sector-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:9px;
+  margin-top:0;
+}
+
+
+.sector-card{
+  min-height:176px;
+
+  padding:16px;
+
+  border-radius:20px;
+
+  border:
+    1px solid
+    rgba(0,0,0,.045);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  text-align:left;
+
+  transition:.18s;
+}
+
+
+.sector-card:active{
+  transform:scale(.98);
+}
+
+
+.sector-card.red{
+  background:
+    linear-gradient(
+      145deg,
+      #fff2f4,
+      #fffafa
+    );
+}
+
+
+.sector-card.gray{
+  background:
+    linear-gradient(
+      145deg,
+      #f2f4f7,
+      #fff
+    );
+}
+
+
+.sector-card.green{
+  background:
+    linear-gradient(
+      145deg,
+      #edf9f3,
+      #fff
+    );
+}
+
+
+.sector-card.orange{
+  background:
+    linear-gradient(
+      145deg,
+      #fff6e9,
+      #fff
+    );
+}
+
+
+.sector-icon{
+  width:44px;
+  height:44px;
+
+  border-radius:14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:13px;
+
+  font-size:23px;
+}
+
+
+.red .sector-icon{
+  background:#ffe0e5;
+}
+
+
+.gray .sector-icon{
+  background:#e7e9ed;
+}
+
+
+.green .sector-icon{
+  background:#ddf4e7;
+}
+
+
+.orange .sector-icon{
+  background:#ffe8cc;
+}
+
+
+.sector-card h3{
+  font-size:17px;
+
+  line-height:1.32;
+
+  letter-spacing:-.6px;
+}
+
+
+.sector-card p{
+  margin-top:6px;
+
+  color:#757575;
+
+  font-size:11px;
+  line-height:1.45;
+}
+
+
+.sector-action{
+  margin-top:14px;
+
+  font-size:12px;
+  font-weight:800;
+
+  color:#333;
+}
+
+
+.opening-soon{
+  width:max-content;
+
+  margin-top:14px;
+
+  padding:6px 9px;
+
+  border-radius:999px;
+
+  background:#e7e7e7;
+
+  color:#777;
+
+  font-size:10px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   QUICK CONTACT
+========================================================= */
+
+.quick-contact{
+  margin:
+    0
+    17px
+    24px;
+
+  padding:18px;
+
+  border-radius:20px;
+
+  background:#f7f8fa;
+
+  border:1px solid #eceef1;
+}
+
+
+.quick-contact-title strong{
+  display:block;
+
+  font-size:16px;
+
+  letter-spacing:-.5px;
+}
+
+
+.quick-contact-title span{
+  display:block;
+
+  margin-top:5px;
+
+  color:#777;
+
+  font-size:11px;
+}
+
+
+.quick-contact-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin-top:12px;
+}
+
+.quick-contact-buttons .quick-phone,
+.quick-contact-buttons .quick-kakao{
+  width:100%;
+}
+
+
+.quick-phone,
+.quick-kakao{
+  min-height:51px;
+
+  border-radius:14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:6px;
+
+  font-size:12px;
+  font-weight:800;
+}
+
+
+.quick-phone{
+  background:#171717;
+  color:#fff;
+}
+
+
+.quick-kakao{
+  background:#fee500;
+  color:#111;
+}
+
+
+
+.kakao-icon-img{
+  width:27px;
+  height:27px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.side-kakao .kakao-icon-img{
+  width:30px;
+  height:30px;
+}
+
+
+/* =========================================================
+   SUB PAGE
+========================================================= */
+
+.sub-page{
+  display:none;
+  min-height:auto;
+  padding:0 14px 92px;
+
+  background:#f7f8fa;
+}
+
+
+.sub-page.active{
+  display:block;
+}
+
+
+.page-header{
+  position:sticky;
+
+  top:66px;
+
+  z-index:60;
+
+  height:65px;
+
+  margin:
+    0
+    -14px
+    14px;
+
+  padding:
+    0
+    14px;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  background:
+    rgba(255,255,255,.97);
+
+  backdrop-filter:blur(10px);
+
+  border-bottom:1px solid #ececec;
+}
+
+
+.back-button{
+  width:41px;
+  height:41px;
+
+  border-radius:13px;
+
+  background:#f2f3f5;
+
+  font-size:26px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+.page-header h2{
+  font-size:19px;
+
+  letter-spacing:-.7px;
+}
+
+
+.page-description{
+  margin:
+    0
+    2px
+    16px;
+
+  color:#767676;
+
+  font-size:12px;
+  line-height:1.55;
+}
+
+
+.mobile-list{
+  display:flex;
+  flex-direction:column;
+
+  gap:12px;
+}
+
+
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+.product-card{
+  width:100%;
+
+  padding:18px;
+
+  border-radius:20px;
+
+  background:#fff;
+
+  border:1px solid #ebebeb;
+
+  box-shadow:
+    0 6px 20px
+    rgba(0,0,0,.038);
+}
+
+
+.product-badge{
+  display:inline-flex;
+
+  padding:5px 9px;
+
+  border-radius:999px;
+
+  background:#fff0f2;
+
+  color:#e31937;
+
+  font-size:10px;
+  font-weight:800;
+
+  margin-bottom:10px;
+}
+
+
+.product-card h3{
+  font-size:18px;
+
+  line-height:1.35;
+
+  letter-spacing:-.6px;
+}
+
+
+.product-card p{
+  margin-top:7px;
+
+  color:#717171;
+
+  font-size:12px;
+  line-height:1.6;
+}
+
+
+.product-info{
+  margin-top:13px;
+
+  padding:12px 13px;
+
+  border-radius:13px;
+
+  background:#f6f7f9;
+
+  color:#555;
+
+  font-size:11px;
+  line-height:1.55;
+}
+
+
+.product-buttons{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+
+/* =========================================================
+   APARTMENT
+========================================================= */
+
+.apartment-card{
+  width:100%;
+
+  padding:18px;
+
+  border-radius:20px;
+
+  background:#fff;
+
+  border:1px solid #ebebeb;
+
+  box-shadow:
+    0 6px 20px
+    rgba(0,0,0,.038);
+}
+
+
+.apartment-label{
+  display:inline-flex;
+
+  margin-bottom:10px;
+
+  padding:5px 9px;
+
+  border-radius:999px;
+
+  background:#edf9f2;
+
+  color:#198051;
+
+  font-size:10px;
+  font-weight:800;
+}
+
+
+.apartment-card h3{
+  font-size:18px;
+
+  letter-spacing:-.6px;
+}
+
+
+.apartment-card p{
+  margin:
+    7px
+    0
+    14px;
+
+  color:#747474;
+
+  font-size:12px;
+
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.primary-button,
+.secondary-button{
+  width:100%;
+
+  min-height:51px;
+
+  padding:11px 12px;
+
+  border-radius:14px;
+
+  font-size:13px;
+  font-weight:800;
+}
+
+
+.primary-button{
+  background:#e31937;
+  color:#fff;
+}
+
+
+.secondary-button{
+  background:#eff0f2;
+  color:#222;
+}
+
+
+/* =========================================================
+   BUSINESS SOON
+========================================================= */
+
+.soon-page{
+  min-height:300px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+}
+
+
+.soon-icon{
+  width:72px;
+  height:72px;
+
+  border-radius:22px;
+
+  background:#eceef1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:36px;
+}
+
+
+.soon-page h2{
+  margin-top:17px;
+
+  font-size:21px;
+}
+
+
+.soon-page p{
+  margin-top:9px;
+
+  color:#777;
+
+  font-size:12px;
+  line-height:1.6;
+}
+
+
+/* =========================================================
+   FLYER
+========================================================= */
+
+.flyer-container{
+  width:100%;
+
+  min-height:470px;
+
+  border-radius:21px;
+
+  overflow:hidden;
+
+  background:#111;
+
+  margin-bottom:14px;
+
+  box-shadow:
+    0 7px 24px
+    rgba(0,0,0,.07);
+}
+
+
+.flyer-image{
+  display:none;
+
+  width:100%;
+  height:auto;
+}
+
+
+.flyer-placeholder{
+  min-height:470px;
+
+  padding:27px 21px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  color:#fff;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(227,25,55,.52),
+      transparent 38%
+    ),
+    linear-gradient(
+      150deg,
+      #101010,
+      #292929
+    );
+}
+
+
+.flyer-placeholder small{
+  color:#ff8b99;
+
+  font-size:11px;
+  font-weight:800;
+}
+
+
+.flyer-placeholder h2{
+  margin:
+    10px
+    0
+    14px;
+
+  font-size:28px;
+
+  line-height:1.28;
+
+  letter-spacing:-1px;
+}
+
+
+.flyer-placeholder p{
+  color:#ddd;
+
+  font-size:12px;
+
+  line-height:1.7;
+}
+
+
+.flyer-note{
+  margin-top:22px;
+
+  padding:13px;
+
+  border-radius:13px;
+
+  background:
+    rgba(255,255,255,.09);
+
+  font-size:10px;
+
+  line-height:1.6;
+}
+
+
+.flyer-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:8px;
+
+  position:sticky;
+
+  bottom:78px;
+
+  padding:
+    8px
+    0
+    3px;
+
+  background:#f7f8fa;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-box{
+  width:100%;
+
+  padding:17px;
+
+  border-radius:20px;
+
+  background:#fff;
+
+  border:1px solid #ebebeb;
+
+  box-shadow:
+    0 6px 20px
+    rgba(0,0,0,.035);
+}
+
+
+.form-group{
+  margin-bottom:14px;
+}
+
+
+.form-group label{
+  display:block;
+
+  margin-bottom:7px;
+
+  font-size:11px;
+  font-weight:800;
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+
+  min-height:48px;
+
+  padding:
+    11px
+    12px;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+
+  background:#fff;
+
+  outline:none;
+
+  font-size:13px;
+}
+
+
+.form-group textarea{
+  min-height:100px;
+
+  resize:vertical;
+}
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:#e31937;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(227,25,55,.07);
+}
+
+
+.privacy-row{
+  display:flex;
+  align-items:flex-start;
+
+  gap:8px;
+
+  margin:
+    6px
+    0
+    16px;
+
+  color:#666;
+
+  font-size:10px;
+  line-height:1.45;
+}
+
+
+.privacy-row input{
+  margin-top:2px;
+}
+
+
+/* =========================================================
+   BOTTOM APP NAVIGATION
+========================================================= */
+
+.app-navigation{
+  position:fixed;
+
+  left:50%;
+  bottom:0;
+
+  transform:translateX(-50%);
+
+  width:min(430px,100%);
+
+  height:76px;
+
+  padding:
+    8px
+    6px
+    max(8px,env(safe-area-inset-bottom));
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  background:
+    rgba(17,17,17,.98);
+
+  border-top:
+    1px solid
+    rgba(255,255,255,.08);
+
+  box-shadow:
+    0 -8px 24px
+    rgba(0,0,0,.12);
+
+  z-index:200;
+}
+
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  gap:4px;
+
+  min-width:0;
+
+  border-radius:13px;
+
+  background:transparent;
+
+  color:#aaa;
+
+  font-size:9px;
+  font-weight:700;
+
+  transition:.18s;
+}
+
+
+.nav-icon{
+  height:24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:21px;
+}
+
+
+.nav-item.active{
+  color:#e31937;
+}
+
+
+.nav-item.active .nav-icon{
+  transform:translateY(-1px);
+}
+
+
+.nav-item:active{
+  transform:scale(.94);
+}
+
+
+/* =========================================================
+   MOBILE FIXED SIDE MENU
+========================================================= */
+
+.menu-overlay{
+  position:fixed;
+
+  top:0;
+  bottom:0;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:min(430px,100%);
+
+  background:
+    rgba(0,0,0,.48);
+
+  opacity:0;
+
+  visibility:hidden;
+
+  transition:.25s;
+
+  z-index:300;
+}
+
+
+.menu-overlay.active{
+  opacity:1;
+
+  visibility:visible;
+}
+
+
+.side-menu{
+  position:fixed;
+  top:0;
+
+  /* PC에서도 중앙 430px 모바일 화면의 오른쪽 끝을 기준으로 동작 */
+  left:50%;
+  margin-left:215px;
+
+  width:min(355px,88vw);
+  height:100dvh;
+
+  background:#fff;
+
+  /* 평소에는 완전히 숨김 */
+  transform:translateX(110%);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    transform .3s cubic-bezier(.22,.61,.36,1),
+    opacity .2s ease,
+    visibility .2s ease;
+
+  z-index:301;
+
+  display:flex;
+  flex-direction:column;
+
+  overflow-y:auto;
+  overscroll-behavior:contain;
+
+  box-shadow:
+    -12px 0 35px
+    rgba(0,0,0,.16);
+}
+
+
+.side-menu.active{
+  /* 햄버거 버튼을 눌렀을 때만 모바일 화면 위로 슬라이드 */
+  transform:translateX(-100%);
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+
+.side-header{
+  height:70px;
+
+  padding:
+    0
+    17px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  border-bottom:1px solid #ededed;
+}
+
+
+.side-header-brand{
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+  cursor:pointer;
+}
+
+
+.side-header-logo{
+  width:44px;
+}
+
+
+.side-header strong{
+  font-size:16px;
+}
+
+
+.side-close{
+  width:40px;
+  height:40px;
+
+  border-radius:12px;
+
+  background:#f4f4f4;
+
+  font-size:25px;
+}
+
+
+.side-nav{
+  padding:14px;
+}
+
+
+.side-nav button{
+  width:100%;
+
+  min-height:58px;
+
+  padding:
+    0
+    12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:#fff;
+
+  border-bottom:1px solid #eee;
+
+  text-align:left;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+
+.side-nav button:active{
+  background:#f8f8f8;
+}
+
+
+.menu-disabled{
+  color:#999 !important;
+}
+
+
+.soon-pill{
+  display:inline-flex;
+
+  margin-left:5px;
+
+  padding:4px 6px;
+
+  border-radius:999px;
+
+  background:#eee;
+
+  color:#777;
+
+  font-size:9px;
+}
+
+
+.side-contact{
+  margin-top:auto;
+
+  padding:16px;
+
+  border-top:1px solid #eee;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:8px;
+}
+
+
+.side-phone,
+.side-kakao{
+  width:100%;
+
+  min-height:61px;
+
+  padding:11px 14px;
+
+  border-radius:14px;
+
+  display:flex;
+  align-items:center;
+
+  gap:11px;
+}
+
+
+.side-phone{
+  background:#151515;
+  color:#fff;
+}
+
+
+.side-kakao{
+  background:#fee500;
+  color:#111;
+}
+
+
+.side-contact-icon{
+  font-size:21px;
+}
+
+
+.side-contact-copy{
+  text-align:left;
+}
+
+
+.side-contact-copy strong{
+  display:block;
+
+  font-size:13px;
+}
+
+
+.side-contact-copy span{
+  display:block;
+
+  margin-top:3px;
+
+  font-size:9px;
+
+  opacity:.7;
+}
+
+
+
+/* =========================================================
+   ADMIN ACCESS
+========================================================= */
+
+.admin-menu-button{
+  width:100%;
+  min-height:54px;
+  margin-top:8px;
+  padding:0 14px;
+  border-radius:14px;
+  background:#f5f5f5;
+  color:#333;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:13px;
+  font-weight:800;
+}
+
+.admin-menu-button:active{
+  transform:scale(.99);
+}
+
+.admin-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  visibility:hidden;
+  transition:.22s;
+  z-index:600;
+}
+
+.admin-modal-overlay.active{
+  opacity:1;
+  visibility:visible;
+}
+
+.admin-modal{
+  width:min(360px,100%);
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.22);
+  transform:translateY(10px) scale(.98);
+  transition:.22s;
+}
+
+.admin-modal-overlay.active .admin-modal{
+  transform:translateY(0) scale(1);
+}
+
+.admin-modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.admin-modal-head h3{
+  font-size:18px;
+  letter-spacing:-.5px;
+}
+
+.admin-modal-close{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:#f3f4f6;
+  font-size:22px;
+}
+
+.admin-modal p{
+  color:#777;
+  font-size:11px;
+  line-height:1.5;
+  margin-bottom:12px;
+}
+
+.admin-password-input{
+  width:100%;
+  height:50px;
+  padding:0 13px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  outline:none;
+  font-size:15px;
+}
+
+.admin-password-input:focus{
+  border-color:#e31937;
+  box-shadow:0 0 0 3px rgba(227,25,55,.07);
+}
+
+.admin-error{
+  display:none;
+  margin-top:8px;
+  color:#e31937;
+  font-size:11px;
+  font-weight:700;
+}
+
+.admin-error.active{
+  display:block;
+}
+
+.admin-modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:16px;
+}
+
+.admin-cancel,
+.admin-submit{
+  min-height:48px;
+  border-radius:13px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.admin-cancel{
+  background:#f1f2f4;
+  color:#333;
+}
+
+.admin-submit{
+  background:#111;
+  color:#fff;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+  position:fixed;
+
+  left:50%;
+
+  bottom:98px;
+
+  transform:
+    translate(
+      -50%,
+      12px
+    );
+
+  width:
+    calc(
+      min(430px,100%)
+      - 38px
+    );
+
+  padding:
+    13px
+    14px;
+
+  border-radius:13px;
+
+  background:#111;
+
+  color:#fff;
+
+  text-align:center;
+
+  font-size:11px;
+  font-weight:700;
+
+  opacity:0;
+
+  visibility:hidden;
+
+  transition:.22s;
+
+  z-index:500;
+}
+
+
+.toast.active{
+  opacity:1;
+
+  visibility:visible;
+
+  transform:
+    translate(
+      -50%,
+      0
+    );
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+  padding:
+    30px
+    20px
+    45px;
+
+  text-align:center;
+
+  color:#999;
+
+  font-size:9px;
+
+  line-height:1.7;
+}
+
+
+
+@media(max-width:430px){
+
+  .side-menu{
+    left:100%;
+    margin-left:0;
+  }
+
+  .side-menu.active{
+    transform:translateX(-100%);
+  }
+
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:370px){
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .sector-card{
+    padding:14px;
+    min-height:168px;
+  }
+
+  .sector-card h3{
+    font-size:16px;
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media(min-width:700px){
+
+  body{
+    padding:
+      24px
+      0;
+  }
+
+  .app{
+    min-height:auto;
+
+    border-radius:26px;
+
+    overflow:hidden;
+  }
+
+  .app-navigation{
+    bottom:24px;
+
+    border-radius:
+      0
+      0
+      26px
+      26px;
+  }
+
+}
+
+
+/* =========================================================
+   HOME COMPACT OVERRIDES
+========================================================= */
+#homePage .hero{
+  padding:18px 18px 16px;
+}
+#homePage .hero-badge{
+  margin-bottom:8px;
+  padding:5px 9px;
+  font-size:10px;
+}
+#homePage .hero h1{
+  font-size:25px;
+  line-height:1.22;
+}
+#homePage .hero p{
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.45;
+}
+#homePage .sector-card{
+  min-height:128px;
+  padding:13px;
+  border-radius:17px;
+}
+#homePage .sector-icon{
+  width:34px;
+  height:34px;
+  margin-bottom:8px;
+  border-radius:11px;
+  font-size:18px;
+}
+#homePage .sector-card h3{
+  font-size:14px;
+  line-height:1.25;
+}
+#homePage .sector-card p{
+  margin-top:3px;
+  font-size:9px;
+}
+#homePage .sector-action{
+  margin-top:8px;
+  font-size:10px;
+}
+#homePage .opening-soon{
+  margin-top:7px;
+  padding:4px 7px;
+  font-size:9px;
+}
+#homePage .quick-contact{
+  margin:0 14px 12px;
+  padding:13px;
+  border-radius:16px;
+}
+#homePage .quick-contact-title strong{
+  font-size:14px;
+}
+#homePage .quick-contact-title span{
+  margin-top:3px;
+  font-size:9px;
+}
+#homePage .quick-contact-buttons{
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  gap:8px;
+}
+#homePage .quick-phone,
+#homePage .quick-kakao{
+  min-height:42px;
+  border-radius:12px;
+  font-size:10px;
+}
+#homePage .footer{
+  display:none;
+}
+
+
+/* =========================================================
+   HOME SECTOR CARDS - CENTER LAYOUT
+========================================================= */
+
+.sector-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px 10px;
+}
+
+.sector-card .sector-icon{
+  margin:0 0 8px 0;
+  align-self:center;
+}
+
+.sector-card h3{
+  width:100%;
+  margin:0;
+  text-align:center;
+  font-size:13px;
+  line-height:1.25;
+  letter-spacing:-.55px;
+  white-space:nowrap;
+}
+
+.sector-card p{
+  width:100%;
+  margin:5px 0 0;
+  text-align:center;
+  font-size:9px;
+  line-height:1.35;
+}
+
+.sector-card .sector-action{
+  position:static;
+  display:block;
+  width:100%;
+  margin-top:9px;
+  text-align:center;
+}
+
+@media(max-width:360px){
+  .sector-card h3{
+    font-size:11.5px;
+    letter-spacing:-.7px;
+  }
+
+  .sector-card{
+    padding-left:7px;
+    padding-right:7px;
+  }
+}
+
+
+.phone-icon-img{
+  width:28px;
+  height:28px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.side-phone .phone-icon-img{
+  width:30px;
+  height:30px;
+}
+
+
+/* =========================================================
+   HOME SECTOR IMAGE CARDS
+========================================================= */
+
+.sector-image{
+  width:66px;
+  height:66px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 9px;
+  flex:0 0 auto;
+}
+
+#homePage .sector-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+#homePage .sector-card > div{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+#homePage .sector-card h3,
+#homePage .sector-card p,
+#homePage .sector-action,
+#homePage .opening-soon{
+  text-align:center;
+}
+
+#homePage .sector-card h3{
+  white-space:nowrap;
+}
+
+#homePage .opening-soon{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+@media(max-width:360px){
+  .sector-image{
+    width:58px;
+    height:58px;
+  }
+
+  #homePage .sector-card h3{
+    font-size:11.5px;
+  }
+}
+
+
+/* PAGE HEIGHT FIT */
+#homePage{
+  min-height:auto;
+}
+
+.sub-page.active{
+  min-height:auto;
+}
+
+.sub-page > :last-child{
+  margin-bottom:0;
+}
+
+/* 마지막 콘텐츠와 하단 네비게이션 사이 여백 */
+.app{
+  padding-bottom:0;
+}
+
+#homePage{
+  padding-bottom:12px;
+}
+
+/* 서브페이지는 입주특판 페이지와 같은 기본 여백 규칙 사용 */
+.sub-page{
+  padding-bottom:92px;
+}
+
+@media(min-width:700px){
+  .app{
+    min-height:auto;
+    padding-bottom:0;
+  }
+}
+
+
+.product-mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 16px 16px;padding:5px;background:#eef1f5;border-radius:14px}.product-mode-tab{height:46px;border:0;border-radius:10px;background:transparent;color:#667085;font-size:15px;font-weight:800;cursor:pointer}.product-mode-tab.active{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12)}.product-mode-panel{display:none}.product-mode-panel.active{display:block}.product-tier-list{padding-top:0}.product-tier.recommended{border:2px solid #e60012;box-shadow:0 8px 24px rgba(230,0,18,.09)}.monthly-price{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:16px 0;padding:14px;border-radius:12px;background:#f7f8fa}.monthly-price b{font-size:21px;color:#e60012}.monthly-price span{font-size:11px;color:#777;text-align:right}.bundle-builder{margin:0 16px 28px;padding:18px;background:#fff;border:1px solid #e4e7ec;border-radius:18px;box-shadow:0 8px 24px rgba(16,24,40,.07)}.bundle-step{display:grid;grid-template-columns:32px 1fr;gap:11px;align-items:start;margin-bottom:17px}.bundle-step>span{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#111;color:#fff;font-weight:900}.bundle-step label{display:block;margin:2px 0 7px;font-size:14px;font-weight:800}.bundle-step select{width:100%;height:46px;border:1px solid #d0d5dd;border-radius:10px;background:#fff;padding:0 11px;font-size:14px}.bundle-summary{margin-top:5px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#201214,#43070d);color:#fff}.bundle-summary span{font-size:12px;color:#ffb4bc}.bundle-summary strong{display:block;margin-top:4px;font-size:25px}.bundle-summary p{margin:7px 0 0;font-size:12px;color:#e8c8cc;line-height:1.55}.bundle-buttons{margin-top:14px}.pricing-note{margin:13px 2px 0;color:#667085;font-size:11px;line-height:1.6}@media(max-width:380px){.monthly-price{align-items:flex-start;flex-direction:column}.bundle-builder{margin-left:12px;margin-right:12px;padding:15px}}
+
+.internet-wifi-option{margin:0 0 14px;padding:14px 16px;border:1px solid #e2e4e8;border-radius:16px;background:#f8f9fb}.internet-wifi-option label{display:block;margin-bottom:8px;font-size:14px;font-weight:900}.internet-wifi-option select{width:100%;padding:12px;border:1px solid #d9dce2;border-radius:12px;background:#fff;font-size:14px}
+
+/* QR 전용 간편 화면: 전단지와 신청 버튼만 표시 */
+.header,.bottom-nav{display:none!important}
+body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
+#flyerPage{padding:0 14px 24px}
+#flyerPage .page-header{display:none!important}
+#flyerPage .flyer-container{margin-top:0}
+#flyerPage .flyer-actions{margin-top:12px}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+  <div
+    class="brand"
+    onclick="goHomeAndNav()"
+  >
+
+    <img
+      src="assets/kt-logo.png"
+      class="kt-logo"
+      alt="KT"
+      id="mainLogo"
+      onerror="handleLogoError(this)"
+    >
+
+    <div
+      id="logoPlaceholder"
+      class="logo-placeholder"
+    >
+      KT CI
+    </div>
+
+    <span class="branch-name">
+      동부법인지사
+    </span>
+
+  </div>
+
+
+  <button
+    class="menu-button"
+    onclick="openMenu()"
+    aria-label="메뉴 열기"
+  >
+    ☰
+  </button>
+
+</header>
+
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<main id="homePage">
+
+
+<section class="hero">
+
+  <h1>
+    필요한 통신 서비스를<br>
+    <strong>한 곳에서 간편하게</strong>
+  </h1>
+
+  <p>
+    KT 동부법인지사가 최고의 혜택과 전문 상담으로 함께합니다.
+  </p>
+
+</section>
+
+
+
+<section class="home-section">
+
+
+
+  <div class="sector-grid">
+
+
+    <!-- 인터넷 -->
+
+    <button
+      class="sector-card red"
+      onclick="
+        navOpen(
+          'internetPage',
+          'navInternet'
+        )
+      "
+    >
+
+      <div>
+
+        <img
+          src="assets/home/internet.png"
+          alt="인터넷 / 인터넷+TV"
+          class="sector-image"
+        >
+
+        <h3>
+          인터넷 / 인터넷+TV
+        </h3>
+
+        <p>
+          상품별 혜택 및 상담
+        </p>
+
+      </div>
+
+      <span class="sector-action">
+        혜택 보기 →
+      </span>
+
+    </button>
+
+
+
+    <!-- 기업 -->
+
+    <button
+      class="sector-card gray"
+      onclick="openPage('businessPage')"
+    >
+
+      <div>
+
+        <img
+          src="assets/home/business.png"
+          alt="기업 / 소상공인"
+          class="sector-image"
+        >
+
+        <h3>
+          기업 / 소상공인
+        </h3>
+
+        <p>
+          기업 통신 솔루션
+        </p>
+
+      </div>
+
+      <span class="opening-soon">
+        오픈 준비중
+      </span>
+
+    </button>
+
+
+
+    <!-- 특판 -->
+
+    <button
+      class="sector-card green"
+      onclick="
+        navOpen(
+          'apartmentPage',
+          'navApartment'
+        )
+      "
+    >
+
+      <div>
+
+        <img
+          src="assets/home/apartment.png"
+          alt="아파트/오피스텔 특판"
+          class="sector-image"
+        >
+
+        <h3>
+          아파트/오피스텔 특판
+        </h3>
+
+        <p>
+          입주 단지별 특별 혜택
+        </p>
+
+      </div>
+
+      <span class="sector-action">
+        혜택 보기 →
+      </span>
+
+    </button>
+
+
+
+    <!-- 기타 -->
+
+    <button
+      class="sector-card orange"
+      onclick="navConsult('기타 문의')"
+    >
+
+      <div>
+
+        <img
+          src="assets/home/consult.png"
+          alt="기타 문의"
+          class="sector-image"
+        >
+
+        <h3>
+          기타 문의
+        </h3>
+
+        <p>
+          기타 상담 및 문의
+        </p>
+
+      </div>
+
+      <span class="sector-action">
+        상담 신청 →
+      </span>
+
+    </button>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     QUICK CONTACT
+===================================================== -->
+
+<div class="quick-contact">
+
+  <div class="quick-contact-title">
+
+    <strong>
+      지금 상담이 필요하신가요?
+    </strong>
+
+    <span>
+      편하신 방법으로 바로 상담해보세요.
+    </span>
+
+  </div>
+
+
+  <div class="quick-contact-buttons">
+
+    <!-- 실제 전화번호로 변경 -->
+
+    <a
+      href="tel:01088713121"
+      class="quick-phone"
+    >
+      <img src="assets/phone-call.png" alt="전화상담" class="phone-icon-img">
+      전화 상담
+    </a>
+
+
+    <button
+      class="quick-kakao"
+      onclick="openKakao()"
+    >
+      <img src="assets/kakao-talk.png" alt="카카오톡" class="kakao-icon-img">
+      카카오톡 상담
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<footer class="footer">
+
+  KT 동부법인지사<br>
+  인터넷 · TV · 입주특판 상담
+
+</footer>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     INTERNET PAGE
+===================================================== -->
+
+<section id="internetPage" class="sub-page">
+<div class="page-header"><button class="back-button" onclick="goHomeAndNav()">‹</button><h2>인터넷 / 인터넷+TV</h2></div>
+<p class="page-description">상품 구성과 예상 월 이용료를 확인한 뒤 상담 또는 가입을 신청할 수 있습니다.</p>
+<div class="product-mode-tabs"><button id="internetOnlyTab" class="product-mode-tab active" onclick="switchInternetMode('internet')">인터넷 단독</button><button id="internetTvTab" class="product-mode-tab" onclick="switchInternetMode('tv')">인터넷 + TV</button></div>
+<div id="internetOnlyPanel" class="product-mode-panel active"><div class="internet-wifi-option"><label for="internetOnlyWifi">와이파이 패키지</label><select id="internetOnlyWifi"><option value="와이파이 패키지 미포함" data-price="0">와이파이 패키지 미포함 · 추가요금 없음</option><option value="기가 와이파이 홈 ax 패키지" data-price="1100">기가 와이파이 홈 ax 패키지 · 월 1,100원</option></select></div><div class="mobile-list product-tier-list">
+<article class="product-card product-tier"><span class="product-badge">슬림</span><h3>100M 인터넷</h3><p>웹서핑·일상적인 영상 시청에 적합합니다.</p><div class="monthly-price"><b>월 22,000원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openInternetOnlyConsult('인터넷 슬림 100M',22000)">상담 신청</button><button class="primary-button" onclick="openInternetOnlyJoin('인터넷 100M',22000)">가입 신청</button></div></article>
+<article class="product-card product-tier recommended"><span class="product-badge">추천 · 베이직</span><h3>500M 인터넷</h3><p>여러 기기와 고화질 스트리밍에 적합합니다.</p><div class="monthly-price"><b>월 33,000원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openInternetOnlyConsult('인터넷 베이직 500M',33000)">상담 신청</button><button class="primary-button" onclick="openInternetOnlyJoin('인터넷 500M',33000)">가입 신청</button></div></article>
+<article class="product-card product-tier"><span class="product-badge">에센스</span><h3>1G 인터넷</h3><p>업무·대용량 전송·다중 사용 환경에 적합합니다.</p><div class="monthly-price"><b>월 38,500원</b><span>3년 약정 · 부가세 포함</span></div><div class="product-buttons"><button class="secondary-button" onclick="openInternetOnlyConsult('인터넷 에센스 1G',38500)">상담 신청</button><button class="primary-button" onclick="openInternetOnlyJoin('인터넷 1G',38500)">가입 신청</button></div></article>
+</div></div>
+<div id="internetTvPanel" class="product-mode-panel"><div class="bundle-builder">
+<div class="bundle-step"><span>1</span><div><label for="bundleInternet">인터넷 상품</label><select id="bundleInternet" onchange="updateBundleSummary()"><option value="100M" data-price="22000">슬림 100M · 월 22,000원</option><option value="500M" data-price="27500" selected>베이직 500M · 월 27,500원</option><option value="1G" data-price="33000">에센스 1G · 월 33,000원</option></select></div></div>
+<div class="bundle-step"><span>2</span><div><label for="bundleTv">TV 상품</label><select id="bundleTv" onchange="updateBundleSummary()"><option value="지니 TV 베이직" data-price="12100">지니 TV 베이직 · 월 12,100원</option><option value="지니 TV 라이트" data-price="13200" selected>지니 TV 라이트 · 월 13,200원</option><option value="지니 TV 에센스" data-price="16500">지니 TV 에센스 · 월 16,500원</option></select></div></div>
+<div class="bundle-step"><span>3</span><div><label for="bundleSettop">셋톱박스</label><select id="bundleSettop" onchange="updateBundleSummary()"><option value="지니 TV 셋톱박스 A" data-price="3300">셋톱박스 A · 월 3,300원</option><option value="지니 TV 셋톱박스 3" data-price="4400" selected>셋톱박스 3 · 월 4,400원</option><option value="지니 TV 셋톱박스 4" data-price="6600">셋톱박스 4 · 월 6,600원</option></select></div></div>
+<div class="bundle-step"><span>4</span><div><label for="bundleWifi">와이파이 패키지</label><select id="bundleWifi" onchange="updateBundleSummary()"><option value="와이파이 패키지 미포함" data-price="0" selected>와이파이 패키지 미포함 · 추가요금 없음</option><option value="기가 와이파이 홈 ax 패키지" data-price="1100">기가 와이파이 홈 ax 패키지 · 월 1,100원</option></select></div></div>
+<div class="bundle-summary"><span>예상 월 이용료</span><strong id="bundleTotal">월 45,100원</strong><p id="bundleBreakdown">인터넷 27,500원 + TV 13,200원 + 셋톱박스 4,400원</p></div>
+<div class="product-buttons bundle-buttons"><button class="secondary-button" onclick="openBundleConsult()">상담 신청</button><button class="primary-button" onclick="openBundleJoin()">가입 신청</button></div>
+<p class="pricing-note">3년 약정·인터넷/TV 결합·부가세 포함 기준입니다. 설치비, 추가 장비, 모바일 결합 및 현장별 혜택은 상담 시 달라질 수 있습니다.</p>
+</div></div></section>
+
+<!-- =====================================================
+     BUSINESS PAGE
+===================================================== -->
+
+<section
+  id="businessPage"
+  class="sub-page"
+>
+
+  <div class="page-header">
+
+    <button
+      class="back-button"
+      onclick="goHomeAndNav()"
+    >
+      ‹
+    </button>
+
+    <h2>
+      기업 / 소상공인
+    </h2>
+
+  </div>
+
+
+  <div class="soon-page">
+
+    <div class="soon-icon">
+      🏢
+    </div>
+
+    <h2>
+      오픈 준비중입니다
+    </h2>
+
+    <p>
+      기업 및 소상공인 전용 서비스는<br>
+      현재 페이지를 준비하고 있습니다.
+    </p>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     APARTMENT
+===================================================== -->
+
+<section
+  id="apartmentPage"
+  class="sub-page"
+>
+
+  <div class="page-header">
+
+    <button
+      class="back-button"
+      onclick="goHomeAndNav()"
+    >
+      ‹
+    </button>
+
+    <h2>
+      아파트/오피스텔 특판
+    </h2>
+
+  </div>
+
+
+  <p class="page-description">
+    입주 단지를 선택하면
+    해당 단지의 전단지를 확인할 수 있습니다.
+  </p>
+
+
+  <div class="mobile-list">
+
+
+    <article class="apartment-card">
+
+      <div class="apartment-label">
+        입주 특판 진행중
+      </div>
+
+      <h3>
+        동대구 부띠끄 테라스
+      </h3>
+
+      <p>
+        KT 인터넷 + TV
+        입주민 특별 상담
+      </p>
+
+      <button
+        class="primary-button"
+        onclick="
+          openFlyer(
+            '동대구 부띠끄 테라스',
+            'flyer-01'
+          )
+        "
+      >
+        가격 보기
+      </button>
+
+    </article>
+
+
+
+    <article class="apartment-card">
+
+      <div class="apartment-label">
+        입주 특판 진행중
+      </div>
+
+      <h3>
+        범어 마크팩리스
+      </h3>
+
+      <p>
+        신규 입주세대 대상
+        인터넷 · TV 특별 상담
+      </p>
+
+      <button
+        class="primary-button"
+        onclick="
+          openFlyer(
+            '범어 마크팩리스',
+            'flyer-02'
+          )
+        "
+      >
+        가격 보기
+      </button>
+
+    </article>
+
+
+
+    <article class="apartment-card">
+
+      <div class="apartment-label">
+        준비중
+      </div>
+
+      <h3>
+        특판 준비중
+      </h3>
+
+      <p>
+        새로운 입주 특판을
+        준비하고 있습니다.
+      </p>
+
+      <button
+        class="secondary-button"
+        onclick="showToast('현재 특판 준비중입니다.')"
+      >
+        준비중
+      </button>
+
+    </article>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FLYER PAGE
+===================================================== -->
+
+<section
+  id="flyerPage"
+  class="sub-page"
+>
+
+  <div class="page-header">
+
+    <button
+      class="back-button"
+      onclick="
+        navOpen(
+          'apartmentPage',
+          'navApartment'
+        )
+      "
+    >
+      ‹
+    </button>
+
+    <h2 id="flyerPageTitle">
+      입주 특판
+    </h2>
+
+  </div>
+
+
+  <div class="flyer-container">
+
+    <img
+      id="flyerImage"
+      class="flyer-image"
+      alt="입주 특판 전단지"
+    >
+
+
+    <div
+      id="flyerPlaceholder"
+      class="flyer-placeholder"
+    >
+
+      <small>
+        KT 입주민 특별 상담
+      </small>
+
+      <h2 id="placeholderTitle">
+        인터넷 + TV<br>
+        입주 특판
+      </h2>
+
+      <p>
+        입주 일정에 맞춘 설치 상담과<br>
+        상품별 혜택을 안내해드립니다.
+      </p>
+
+      <div class="flyer-note">
+        전단지 이미지가 등록되면
+        이 영역 대신 실제 전단지가 표시됩니다.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="flyer-actions">
+
+    <button
+      class="secondary-button"
+      onclick="consultApartment()"
+    >
+      상담 신청
+    </button>
+
+
+    <button
+      class="primary-button"
+      onclick="joinApartment()"
+    >
+      가입 신청
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONSULT PAGE
+===================================================== -->
+
+<section
+  id="consultPage"
+  class="sub-page"
+>
+
+  <div class="page-header">
+
+    <button
+      class="back-button"
+      onclick="goPreviousPage()"
+    >
+      ‹
+    </button>
+
+    <h2>
+      상담 신청
+    </h2>
+
+  </div>
+
+
+  <div class="form-box">
+
+
+    <div class="form-group">
+
+      <label>
+        상담 유형
+      </label>
+
+      <input
+        id="consultType"
+        readonly
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        이름
+      </label>
+
+      <input
+        id="consultName"
+        placeholder="이름을 입력해주세요"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        연락처
+      </label>
+
+      <input
+        id="consultPhone"
+        type="tel"
+        placeholder="010-0000-0000"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        설치 주소
+      </label>
+
+      <input
+        id="consultAddress"
+        placeholder="설치 주소를 입력해주세요"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        현재 이용 통신사
+      </label>
+
+      <select id="consultCarrier">
+
+        <option value="">
+          선택해주세요
+        </option>
+
+        <option>KT</option>
+        <option>SK브로드밴드</option>
+        <option>LG유플러스</option>
+        <option>없음</option>
+        <option>기타</option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        문의 내용
+      </label>
+
+      <textarea
+        id="consultMessage"
+        placeholder="추가 문의사항을 작성해주세요"
+      ></textarea>
+
+    </div>
+
+
+    <label class="privacy-row">
+
+      <input
+        id="consultPrivacy"
+        type="checkbox"
+      >
+
+      <span>
+        상담 진행을 위한 개인정보 수집 및 이용에 동의합니다.
+      </span>
+
+    </label>
+
+
+    <button
+      class="primary-button"
+      onclick="submitConsult()"
+    >
+      상담 신청하기
+    </button>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     JOIN PAGE
+===================================================== -->
+
+<section
+  id="joinPage"
+  class="sub-page"
+>
+
+  <div class="page-header">
+
+    <button
+      class="back-button"
+      onclick="returnFromJoin()"
+    >
+      ‹
+    </button>
+
+    <h2>
+      가입 신청
+    </h2>
+
+  </div>
+
+
+  <div class="form-box">
+
+
+    <div class="form-group">
+
+      <label id="joinSourceLabel">
+        가입 단지
+      </label>
+
+      <input
+        id="joinApartmentName"
+        readonly
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        가입자 이름
+      </label>
+
+      <input
+        id="joinName"
+        placeholder="가입자 이름"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        연락처
+      </label>
+
+      <input
+        id="joinPhone"
+        type="tel"
+        placeholder="010-0000-0000"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label id="joinUnitLabel">
+        동 / 호수
+      </label>
+
+      <input
+        id="joinUnit"
+        placeholder="예: 101동 1001호"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        희망 상품
+      </label>
+
+      <select id="joinProduct">
+
+        <option>
+          인터넷 100M
+        </option>
+
+        <option>
+          인터넷 500M
+        </option>
+
+        <option>
+          인터넷 1G
+        </option>
+
+        <option>
+          인터넷 + TV
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        설치 희망일
+      </label>
+
+      <input
+        id="joinDate"
+        type="date"
+      >
+
+    </div>
+
+
+    <label class="privacy-row">
+
+      <input
+        id="joinPrivacy"
+        type="checkbox"
+      >
+
+      <span>
+        가입 상담 진행을 위한 개인정보 수집 및 이용에 동의합니다.
+      </span>
+
+    </label>
+
+
+    <button
+      class="primary-button"
+      onclick="submitJoin()"
+    >
+      가입 신청하기
+    </button>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BOTTOM NAVIGATION
+===================================================== -->
+
+<nav class="app-navigation">
+
+
+  <button
+    class="nav-item active"
+    id="navHome"
+    onclick="navGoHome()"
+  >
+
+    <span class="nav-icon">
+      ⌂
+    </span>
+
+    <span>
+      홈
+    </span>
+
+  </button>
+
+
+
+  <button
+    class="nav-item"
+    id="navInternet"
+    onclick="
+      navOpen(
+        'internetPage',
+        'navInternet'
+      )
+    "
+  >
+
+    <span class="nav-icon">
+      ◉
+    </span>
+
+    <span>
+      인터넷
+    </span>
+
+  </button>
+
+
+
+  <button
+    class="nav-item"
+    id="navApartment"
+    onclick="
+      navOpen(
+        'apartmentPage',
+        'navApartment'
+      )
+    "
+  >
+
+    <span class="nav-icon">
+      ▥
+    </span>
+
+    <span>
+      입주특판
+    </span>
+
+  </button>
+
+
+
+  <button
+    class="nav-item"
+    id="navConsult"
+    onclick="navConsult('상담 문의')"
+  >
+
+    <span class="nav-icon">
+      ◌
+    </span>
+
+    <span>
+      상담문의
+    </span>
+
+  </button>
+
+
+</nav>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MENU OVERLAY
+===================================================== -->
+
+<div
+  id="menuOverlay"
+  class="menu-overlay"
+  onclick="closeMenu()"
+></div>
+
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<aside
+  id="sideMenu"
+  class="side-menu"
+>
+
+
+  <div class="side-header">
+
+
+    <div
+      class="side-header-brand"
+      onclick="menuHome()"
+    >
+
+      <img
+        src="assets/kt-logo.png"
+        class="side-header-logo"
+        alt="KT"
+        onerror="this.style.display='none'"
+      >
+
+      <strong>
+        동부법인지사
+      </strong>
+
+    </div>
+
+
+    <button
+      class="side-close"
+      onclick="closeMenu()"
+    >
+      ×
+    </button>
+
+
+  </div>
+
+
+
+  <nav class="side-nav">
+
+
+    <button onclick="menuHome()">
+
+      <span>
+        홈
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+
+    <button
+      onclick="
+        menuPage(
+          'internetPage',
+          'navInternet'
+        )
+      "
+    >
+
+      <span>
+        인터넷 / 인터넷+TV
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+
+    <button
+      class="menu-disabled"
+      onclick="menuBusiness()"
+    >
+
+      <span>
+
+        기업 / 소상공인
+
+        <span class="soon-pill">
+          준비중
+        </span>
+
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+
+    <button
+      onclick="
+        menuPage(
+          'apartmentPage',
+          'navApartment'
+        )
+      "
+    >
+
+      <span>
+        아파트/오피스텔 특판
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+
+    <button onclick="menuEtcConsult()">
+
+      <span>
+        기타 문의
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+    <button
+      class="admin-menu-button"
+      type="button"
+      onclick="openAdminModal()"
+    >
+      <span>🔒 관리자 페이지</span>
+      <span>›</span>
+    </button>
+
+
+  </nav>
+
+
+
+  <div class="side-contact">
+
+
+    <a
+      href="tel:01012345678"
+      class="side-phone"
+    >
+
+      <span class="side-contact-icon">
+        <img src="assets/phone-call.png" alt="전화상담" class="phone-icon-img">
+      </span>
+
+      <span class="side-contact-copy">
+
+        <strong>
+          전화 상담
+        </strong>
+
+        <span>
+          담당자에게 바로 연결
+        </span>
+
+      </span>
+
+    </a>
+
+
+
+    <button
+      class="side-kakao"
+      onclick="openKakao()"
+    >
+
+      <span class="side-contact-icon">
+        <img src="assets/kakao-talk.png" alt="카카오톡" class="kakao-icon-img">
+      </span>
+
+      <span class="side-contact-copy">
+
+        <strong>
+          카카오톡 상담
+        </strong>
+
+        <span>
+          카카오톡 채널 바로 연결
+        </span>
+
+      </span>
+
+    </button>
+
+
+  </div>
+
+
+</aside>
+
+
+
+
+<!-- =====================================================
+     ADMIN PASSWORD MODAL
+===================================================== -->
+
+<div
+  id="adminModal"
+  class="admin-modal-overlay"
+  onclick="adminOverlayClick(event)"
+>
+  <div class="admin-modal">
+
+    <div class="admin-modal-head">
+      <h3>관리자 인증</h3>
+
+      <button
+        class="admin-modal-close"
+        type="button"
+        onclick="closeAdminModal()"
+        aria-label="닫기"
+      >
+        ×
+      </button>
+    </div>
+
+    <p>
+      관리자 페이지로 이동하려면 비밀번호를 입력해주세요.
+    </p>
+
+    <input
+      id="adminPassword"
+      class="admin-password-input"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="비밀번호 입력"
+      onkeydown="adminPasswordKey(event)"
+    >
+
+    <div
+      id="adminError"
+      class="admin-error"
+    >
+      비밀번호가 올바르지 않습니다.
+    </div>
+
+    <div class="admin-modal-actions">
+
+      <button
+        class="admin-cancel"
+        type="button"
+        onclick="closeAdminModal()"
+      >
+        취소
+      </button>
+
+      <button
+        class="admin-submit"
+        type="button"
+        onclick="checkAdminPassword()"
+      >
+        관리자 페이지 이동
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+
+<script src="config.js"></script>
+<script>
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let previousPage = "homePage";
+
+let currentApartment = "";
+
+let currentFlyer = "";
+
+let toastTimer;
+
+const SPECIAL_SITE_LINKS = [
+  {
+    slug:"dongdaegu-boutique-terrace",
+    name:"동대구 부띠끄 테라스",
+    flyerId:"flyer-01"
+  },
+  {
+    slug:"mark-palace",
+    name:"범어 마크팩리스",
+    flyerId:"flyer-02"
+  }
+];
+
+const FORM_ENDPOINT =
+  (window.KT_CONSULT_CONFIG || {}).FORM_ENDPOINT || "";
+
+const SHEETS_ENDPOINT =
+  (window.KT_CONSULT_CONFIG || {}).SHEETS_ENDPOINT || "";
+
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+function handleLogoError(img){
+
+  img.style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "logoPlaceholder"
+    )
+    .style.display =
+      "flex";
+
+}
+
+
+
+/* =========================================================
+   PAGE CONTROL
+========================================================= */
+
+function hideAllPages(){
+
+  document
+    .getElementById(
+      "homePage"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .querySelectorAll(
+      ".sub-page"
+    )
+    .forEach(page=>{
+
+      page
+        .classList
+        .remove("active");
+
+    });
+
+}
+
+
+
+function getCurrentPage(){
+
+  const home =
+    document
+      .getElementById(
+        "homePage"
+      );
+
+
+  if(
+    home.style.display !== "none"
+  ){
+
+    return "homePage";
+
+  }
+
+
+  const active =
+    document
+      .querySelector(
+        ".sub-page.active"
+      );
+
+
+  return active
+    ? active.id
+    : "homePage";
+
+}
+
+
+
+function goHome(){
+
+  hideAllPages();
+
+
+  document
+    .getElementById(
+      "homePage"
+    )
+    .style.display =
+      "block";
+
+
+  previousPage =
+    "homePage";
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+
+function goHomeAndNav(){
+
+  goHome();
+
+  setNavigation(
+    "navHome"
+  );
+
+}
+
+
+
+function openPage(pageId){
+
+  const current =
+    getCurrentPage();
+
+
+  if(
+    current &&
+    current !== pageId
+  ){
+
+    previousPage =
+      current;
+
+  }
+
+
+  hideAllPages();
+
+
+  document
+    .getElementById(
+      pageId
+    )
+    .classList
+    .add("active");
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+
+function goPreviousPage(){
+
+  if(
+    previousPage ===
+    "homePage"
+  ){
+
+    goHomeAndNav();
+
+    return;
+
+  }
+
+
+  openPage(
+    previousPage
+  );
+
+}
+
+
+
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
+
+function clearNavigation(){
+
+  document
+    .querySelectorAll(
+      ".nav-item"
+    )
+    .forEach(item=>{
+
+      item
+        .classList
+        .remove("active");
+
+    });
+
+}
+
+
+
+function setNavigation(id){
+
+  clearNavigation();
+
+
+  const item =
+    document
+      .getElementById(id);
+
+
+  if(item){
+
+    item
+      .classList
+      .add("active");
+
+  }
+
+}
+
+
+
+function navGoHome(){
+
+  goHome();
+
+  setNavigation(
+    "navHome"
+  );
+
+}
+
+
+
+function navOpen(
+  pageId,
+  navId
+){
+
+  openPage(
+    pageId
+  );
+
+  setNavigation(
+    navId
+  );
+
+}
+
+
+
+function navConsult(
+  type = "상담 문의"
+){
+
+  openConsult(type);
+
+  setNavigation(
+    "navConsult"
+  );
+
+}
+
+
+
+/* =========================================================
+   CONSULT
+========================================================= */
+
+function openConsult(type){
+
+  previousPage =
+    getCurrentPage();
+
+
+  hideAllPages();
+
+
+  document
+    .getElementById(
+      "consultPage"
+    )
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById(
+      "consultType"
+    )
+    .value =
+      type;
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+
+/* =========================================================
+   APARTMENT / PNG FLYER
+========================================================= */
+
+function openFlyer(
+  apartmentName,
+  flyerId
+){
+
+  currentApartment =
+    apartmentName;
+
+
+  currentFlyer =
+    flyerId;
+
+
+  previousPage =
+    "apartmentPage";
+
+
+  hideAllPages();
+
+
+  document
+    .getElementById(
+      "flyerPage"
+    )
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById(
+      "flyerPageTitle"
+    )
+    .textContent =
+      apartmentName;
+
+
+  document
+    .getElementById(
+      "placeholderTitle"
+    )
+    .innerHTML =
+      apartmentName +
+      "<br>입주 특판";
+
+
+  loadFlyer(
+    flyerId
+  );
+
+
+  setNavigation(
+    "navApartment"
+  );
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+function openSiteFromLink(){
+
+  const site = "mark-palace";
+
+  if(!site){
+    return;
+  }
+
+  const normalizedSite =
+    site
+      .trim()
+      .toLowerCase();
+
+  const matchedSite =
+    SPECIAL_SITE_LINKS
+      .find(item=>
+        item.slug === normalizedSite ||
+        item.name === site.trim()
+      );
+
+  if(!matchedSite){
+    return;
+  }
+
+  openFlyer(
+    matchedSite.name,
+    matchedSite.flyerId
+  );
+
+}
+
+
+
+/*
+  PNG 전용
+
+  assets/flyers/flyer-01.png
+  assets/flyers/flyer-02.png
+*/
+
+function loadFlyer(
+  flyerId
+){
+
+  const image =
+    document
+      .getElementById(
+        "flyerImage"
+      );
+
+
+  const placeholder =
+    document
+      .getElementById(
+        "flyerPlaceholder"
+      );
+
+
+  const src =
+    "assets/flyers/" +
+    flyerId +
+    ".png";
+
+
+  image.style.display =
+    "none";
+
+
+  placeholder.style.display =
+    "flex";
+
+
+  image.onload =
+    function(){
+
+      image.style.display =
+        "block";
+
+
+      placeholder.style.display =
+        "none";
+
+    };
+
+
+  image.onerror =
+    function(){
+
+      image.style.display =
+        "none";
+
+
+      placeholder.style.display =
+        "flex";
+
+    };
+
+
+  image.src =
+    src;
+
+}
+
+
+
+function consultApartment(){
+
+  navConsult(
+    currentApartment +
+    " 입주 특판 상담"
+  );
+
+}
+
+
+function returnFromJoin(){
+
+  openPage(previousPage || "internetPage");
+
+}
+
+
+function setJoinProductOptions(products, selectedProduct){
+
+  const select =
+    document
+      .getElementById("joinProduct");
+
+  select.replaceChildren();
+
+  products.forEach(product=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value = product;
+    option.textContent = product;
+    option.selected =
+      product === selectedProduct;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+
+function selectedInternetWifi(){const wifi=document.getElementById('internetOnlyWifi');return{name:wifi.value,price:Number(wifi.options[wifi.selectedIndex].dataset.price)}}
+function internetOnlyLabel(product,internetPrice){const wifi=selectedInternetWifi();return product+' / '+wifi.name+' / 예상 월 '+(internetPrice+wifi.price).toLocaleString('ko-KR')+'원'}
+function openInternetOnlyConsult(product,internetPrice){openConsult(internetOnlyLabel(product,internetPrice))}
+function openInternetOnlyJoin(product,internetPrice){const label=internetOnlyLabel(product,internetPrice);openProductJoin(label);setJoinProductOptions([label],label)}
+function switchInternetMode(mode){
+  const isTv = mode === 'tv';
+  document.getElementById('internetOnlyTab').classList.toggle('active', !isTv);
+  document.getElementById('internetTvTab').classList.toggle('active', isTv);
+  document.getElementById('internetOnlyPanel').classList.toggle('active', !isTv);
+  document.getElementById('internetTvPanel').classList.toggle('active', isTv);
+  if(isTv) updateBundleSummary();
+}
+
+function selectedBundleData(){
+  const internet = document.getElementById('bundleInternet');
+  const tv = document.getElementById('bundleTv');
+  const settop = document.getElementById('bundleSettop');
+  const wifi = document.getElementById('bundleWifi');
+  const internetPrice = Number(internet.options[internet.selectedIndex].dataset.price);
+  const tvPrice = Number(tv.options[tv.selectedIndex].dataset.price);
+  const settopPrice = Number(settop.options[settop.selectedIndex].dataset.price);
+  const wifiPrice = Number(wifi.options[wifi.selectedIndex].dataset.price);
+  return {
+    internet: internet.value, tv: tv.value, settop: settop.value, wifi: wifi.value,
+    internetPrice, tvPrice, settopPrice, wifiPrice,
+    total: internetPrice + tvPrice + settopPrice + wifiPrice
+  };
+}
+
+function bundleLabel(data){
+  return '인터넷+TV / 인터넷 ' + data.internet + ' / ' + data.tv + ' / ' + data.settop + ' / ' + data.wifi + ' / 예상 월 ' + data.total.toLocaleString('ko-KR') + '원';
+}
+
+function updateBundleSummary(){
+  const data = selectedBundleData();
+  document.getElementById('bundleTotal').textContent = '월 ' + data.total.toLocaleString('ko-KR') + '원';
+  document.getElementById('bundleBreakdown').textContent =
+    '인터넷 ' + data.internetPrice.toLocaleString('ko-KR') + '원 + TV ' +
+    data.tvPrice.toLocaleString('ko-KR') + '원 + 셋톱박스 ' +
+    data.settopPrice.toLocaleString('ko-KR') + '원 + 와이파이 ' + data.wifiPrice.toLocaleString('ko-KR') + '원';
+}
+
+function openBundleConsult(){
+  openConsult(bundleLabel(selectedBundleData()));
+}
+
+function openBundleJoin(){
+  const label = bundleLabel(selectedBundleData());
+  openProductJoin(label);
+  setJoinProductOptions([label], label);
+}
+
+function openProductJoin(product){
+
+  previousPage = "internetPage";
+
+  hideAllPages();
+
+  document
+    .getElementById("joinPage")
+    .classList
+    .add("active");
+
+  document
+    .getElementById("joinSourceLabel")
+    .textContent = "가입 유형";
+
+  document
+    .getElementById("joinApartmentName")
+    .value = "일반 상품";
+
+  document
+    .getElementById("joinUnitLabel")
+    .textContent = "설치 주소";
+
+  document
+    .getElementById("joinUnit")
+    .placeholder = "예: 대구광역시 수성구 ○○로 00";
+
+  setJoinProductOptions(
+    [
+      "인터넷 100M",
+      "인터넷 500M",
+      "인터넷 1G",
+      "인터넷 + TV"
+    ],
+    product
+  );
+
+  setNavigation("navInternet");
+
+  window.scrollTo(0, 0);
+
+}
+
+
+
+function joinApartment(){
+
+  previousPage =
+    "flyerPage";
+
+
+  hideAllPages();
+
+
+  document
+    .getElementById(
+      "joinPage"
+    )
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById(
+      "joinApartmentName"
+    )
+    .value =
+      currentApartment;
+
+
+  document
+    .getElementById("joinSourceLabel")
+    .textContent = "가입 단지";
+
+
+  document
+    .getElementById("joinUnitLabel")
+    .textContent = "동 / 호수";
+
+
+  document
+    .getElementById("joinUnit")
+    .placeholder = "예: 101동 1001호";
+
+
+  setJoinProductOptions(
+    [
+      "인터넷",
+      "인터넷+TV"
+    ],
+    "인터넷"
+  );
+
+
+  setNavigation(
+    "navApartment"
+  );
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+function openMenu(){
+
+  document
+    .getElementById(
+      "menuOverlay"
+    )
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById(
+      "sideMenu"
+    )
+    .classList
+    .add("active");
+
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+
+function closeMenu(){
+
+  document
+    .getElementById(
+      "menuOverlay"
+    )
+    .classList
+    .remove("active");
+
+
+  document
+    .getElementById(
+      "sideMenu"
+    )
+    .classList
+    .remove("active");
+
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+
+function menuHome(){
+
+  closeMenu();
+
+
+  setTimeout(
+    function(){
+
+      goHomeAndNav();
+
+    },
+    120
+  );
+
+}
+
+
+
+function menuPage(
+  pageId,
+  navId
+){
+
+  closeMenu();
+
+
+  setTimeout(
+    function(){
+
+      navOpen(
+        pageId,
+        navId
+      );
+
+    },
+    120
+  );
+
+}
+
+
+
+function menuBusiness(){
+
+  closeMenu();
+
+
+  setTimeout(
+    function(){
+
+      openPage(
+        "businessPage"
+      );
+
+      clearNavigation();
+
+    },
+    120
+  );
+
+}
+
+
+
+function menuEtcConsult(){
+
+  closeMenu();
+
+
+  setTimeout(
+    function(){
+
+      navConsult(
+        "기타 문의"
+      );
+
+    },
+    120
+  );
+
+}
+
+
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closeMenu();
+
+    }
+
+  }
+);
+
+
+
+/* =========================================================
+   KAKAO
+========================================================= */
+
+function openKakao(){
+
+  /*
+    실제 카카오톡 채널 주소로 변경
+
+    예시:
+    https://pf.kakao.com/_xxxxxx
+  */
+
+  const kakaoUrl =
+    "https://pf.kakao.com/";
+
+
+  window.open(
+    kakaoUrl,
+    "_blank"
+  );
+
+}
+
+
+
+
+/* =========================================================
+   ADMIN LOCALSTORAGE LINK
+========================================================= */
+
+async function saveToAdmin(data){
+
+  if(!SHEETS_ENDPOINT){
+    throw new Error("관리자 접수 목록이 연결되지 않았습니다.");
+  }
+
+  const response = await fetch(SHEETS_ENDPOINT, {
+    method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    body:JSON.stringify({ action:"create", ...data })
+  });
+
+  const result = await response.json();
+  if(!result.success){
+    throw new Error(result.message || "관리자 접수 목록 저장에 실패했습니다.");
+  }
+}
+
+
+/* =========================================================
+   CONSULT SUBMIT
+========================================================= */
+
+async function submitConsult(){
+
+  const name =
+    document
+      .getElementById(
+        "consultName"
+      )
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById(
+        "consultPhone"
+      )
+      .value
+      .trim();
+
+
+  const privacy =
+    document
+      .getElementById(
+        "consultPrivacy"
+      )
+      .checked;
+
+  const address =
+    document
+      .getElementById(
+        "consultAddress"
+      )
+      .value
+      .trim();
+
+
+  if(!name){
+
+    showToast(
+      "이름을 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    showToast(
+      "연락처를 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!/^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/.test(phone)){
+
+    showToast(
+      "연락처를 정확히 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!address){
+
+    showToast(
+      "설치 주소를 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!privacy){
+
+    showToast(
+      "개인정보 동의가 필요합니다."
+    );
+
+    return;
+
+  }
+
+
+  const data = {
+
+    id:
+      "consult_" +
+      Date.now(),
+
+    category:
+      "상담신청",
+
+    status:
+      "접수",
+
+    type:
+      document
+        .getElementById(
+          "consultType"
+        )
+        .value,
+
+    name:
+      name,
+
+    phone:
+      phone,
+
+    address:
+      address,
+
+    carrier:
+      document
+        .getElementById(
+          "consultCarrier"
+        )
+        .value,
+
+    message:
+      document
+        .getElementById(
+          "consultMessage"
+        )
+        .value,
+
+    createdAt:
+      new Date()
+        .toLocaleString("ko-KR")
+
+  };
+
+
+  if(!FORM_ENDPOINT){
+
+    showToast(
+      "상담 접수 서버를 연결 중입니다."
+    );
+
+    return;
+
+  }
+
+
+  const submitButton =
+    document.querySelector(
+      "#consultPage .primary-button"
+    );
+
+  submitButton.disabled = true;
+  submitButton.textContent = "접수 중...";
+
+  try{
+
+    const response = await fetch(
+      FORM_ENDPOINT,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+      }
+    );
+
+    const result = await response.json();
+
+    if(!response.ok || !result.success){
+      throw new Error(
+        result.message || "상담 접수에 실패했습니다."
+      );
+    }
+
+    showToast(
+      "상담 신청이 접수되었습니다."
+    );
+
+    setTimeout(
+      function(){
+        goHomeAndNav();
+      },
+      1300
+    );
+
+  }
+  catch(error){
+
+    showToast(
+      error.message || "잠시 후 다시 시도해주세요."
+    );
+
+  }
+  finally{
+
+    submitButton.disabled = false;
+    submitButton.textContent = "상담 신청하기";
+
+  }
+
+}
+
+
+
+/* =========================================================
+   JOIN
+========================================================= */
+
+async function submitJoin(){
+
+  const name =
+    document
+      .getElementById(
+        "joinName"
+      )
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById(
+        "joinPhone"
+      )
+      .value
+      .trim();
+
+
+  const privacy =
+    document
+      .getElementById(
+        "joinPrivacy"
+      )
+      .checked;
+
+
+  if(!name){
+
+    showToast(
+      "가입자 이름을 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    showToast(
+      "연락처를 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!/^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/.test(phone)){
+
+    showToast(
+      "연락처를 정확히 입력해주세요."
+    );
+
+    return;
+
+  }
+
+
+  if(!privacy){
+
+    showToast(
+      "개인정보 동의가 필요합니다."
+    );
+
+    return;
+
+  }
+
+
+  const data = {
+
+    id:
+      "join_" +
+      Date.now(),
+
+    category:
+      "가입신청",
+
+    status:
+      "접수",
+
+    type:
+      document
+        .getElementById(
+          "joinProduct"
+        )
+        .value,
+
+    address:
+      [
+        document
+          .getElementById(
+            "joinApartmentName"
+          )
+          .value,
+        document
+          .getElementById(
+            "joinUnit"
+          )
+          .value
+      ]
+        .filter(Boolean)
+        .join(" "),
+
+    apartment:
+      document
+        .getElementById(
+          "joinApartmentName"
+        )
+        .value,
+
+    name:
+      name,
+
+    phone:
+      phone,
+
+    unit:
+      document
+        .getElementById(
+          "joinUnit"
+        )
+        .value,
+
+    product:
+      document
+        .getElementById(
+          "joinProduct"
+        )
+        .value,
+
+    installDate:
+      document
+        .getElementById(
+          "joinDate"
+        )
+        .value,
+
+    message:
+      document
+        .getElementById(
+          "joinDate"
+        )
+        .value
+        ? "설치 희망일: " +
+          document
+            .getElementById(
+              "joinDate"
+            )
+            .value
+        : "",
+
+    createdAt:
+      new Date()
+        .toLocaleString("ko-KR")
+
+  };
+
+
+  if(!FORM_ENDPOINT){
+    showToast("가입 접수 서버를 연결 중입니다.");
+    return;
+  }
+
+  const submitButton =
+    document.querySelector("#joinPage .primary-button");
+
+  submitButton.disabled = true;
+  submitButton.textContent = "접수 중...";
+
+  try{
+    const response = await fetch(FORM_ENDPOINT, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    if(!response.ok || !result.success){
+      throw new Error(result.message || "가입 접수에 실패했습니다.");
+    }
+
+    showToast("가입 신청이 접수되었습니다.");
+    setTimeout(function(){ goHomeAndNav(); }, 1300);
+  }
+  catch(error){
+    showToast(error.message || "잠시 후 다시 시도해주세요.");
+  }
+  finally{
+    submitButton.disabled = false;
+    submitButton.textContent = "가입 신청하기";
+  }
+
+}
+
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+  const toast =
+    document
+      .getElementById(
+        "toast"
+      );
+
+
+  toast.textContent =
+    message;
+
+
+  toast
+    .classList
+    .add("active");
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      function(){
+
+        toast
+          .classList
+          .remove("active");
+
+      },
+      2200
+    );
+
+}
+
+
+
+
+/* =========================================================
+   ADMIN ACCESS
+========================================================= */
+
+function openAdminModal(){
+
+  closeMenu();
+
+  const modal =
+    document.getElementById("adminModal");
+
+  const input =
+    document.getElementById("adminPassword");
+
+  const error =
+    document.getElementById("adminError");
+
+  error.classList.remove("active");
+  input.value = "";
+
+  modal.classList.add("active");
+
+  document.body.style.overflow = "hidden";
+
+  setTimeout(function(){
+    input.focus();
+  }, 120);
+
+}
+
+
+function closeAdminModal(){
+
+  const modal =
+    document.getElementById("adminModal");
+
+  modal.classList.remove("active");
+
+  document.body.style.overflow = "";
+
+}
+
+
+function adminOverlayClick(event){
+
+  if(event.target.id === "adminModal"){
+    closeAdminModal();
+  }
+
+}
+
+
+function adminPasswordKey(event){
+
+  if(event.key === "Enter"){
+    checkAdminPassword();
+  }
+
+  if(event.key === "Escape"){
+    closeAdminModal();
+  }
+
+}
+
+
+async function checkAdminPassword(){
+
+  const input =
+    document.getElementById("adminPassword");
+
+  const error =
+    document.getElementById("adminError");
+
+  if(!SHEETS_ENDPOINT || !input.value){
+    error.classList.add("active");
+    input.select();
+    return;
+  }
+
+  try{
+    const response = await fetch(SHEETS_ENDPOINT, {
+      method:"POST",
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body:JSON.stringify({ action:"list", password:input.value })
+    });
+
+    const result = await response.json();
+    if(!result.success) throw new Error("unauthorized");
+    sessionStorage.setItem("kt_admin_password", input.value);
+    error.classList.remove("active");
+    window.location.href = "admin.html";
+  }
+  catch(error){
+    error.classList.add("active");
+    input.select();
+  }
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+goHomeAndNav();
+openSiteFromLink();
+
+</script>
+
+
+</body>
+</html>
+
+<script>
+(function(){
+  function applicationUrl(product){
+    var site=new URLSearchParams(window.location.search).get("site")||"";
+    if(!site&&typeof SPECIAL_SITE_LINKS!=="undefined"&&typeof currentApartment!=="undefined"){
+      var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
+      if(match)site=match.slug;
+    }
+    var selected=String(product||"").replace(/\s/g,"").indexOf("TV")>-1?"인터넷+TV":"인터넷";
+    var query=new URLSearchParams();
+    if(site)query.set("site",site);
+    query.set("product",selected);
+    if(product)query.set("details",String(product));
+    return "application.html?"+query.toString();
+  }
+  window.openProductJoin=function(product){window.location.href=applicationUrl(product);};
+  window.joinApartment=function(){window.location.href=applicationUrl("인터넷");};
+})();
+</script>
