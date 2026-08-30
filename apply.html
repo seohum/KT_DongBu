@@ -11,11 +11,11 @@
 <header class="header"><div class="brand"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT 공식 로고"><span>동부법인지사</span></div><a class="home" href="./">홈으로</a></header>
 <section class="hero"><div class="eyebrow">● KT 공식 유선 전자가입신청</div><h1>가입하실 상품을<br>선택해주세요</h1><p>선택한 상품 구성은 전자가입신청서에 자동으로 표시됩니다.</p></section>
 <section class="content">
-<div class="section"><div class="section-head"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>인터넷</b></div><div><strong>인터넷</strong><span>인터넷 단독 가입신청</span></div></div><span class="label">인터넷 상품</span><div class="options">
-<a class="direct" href="application.html?product=%EC%9D%B8%ED%84%B0%EB%84%B7&amp;details=%EC%9D%B8%ED%84%B0%EB%84%B7%20%2F%20%EC%8A%AC%EB%A6%BC%20100M"><b>슬림</b><small>100M</small></a>
-<a class="direct" href="application.html?product=%EC%9D%B8%ED%84%B0%EB%84%B7&amp;details=%EC%9D%B8%ED%84%B0%EB%84%B7%20%2F%20%EB%B2%A0%EC%9D%B4%EC%A7%81%20500M"><b>베이직</b><small>500M</small></a>
-<a class="direct" href="application.html?product=%EC%9D%B8%ED%84%B0%EB%84%B7&amp;details=%EC%9D%B8%ED%84%B0%EB%84%B7%20%2F%20%EC%97%90%EC%84%BC%EC%8A%A4%201G"><b>에센스</b><small>1G</small></a>
-</div><label class="wifi-check"><input id="internetWifi" type="checkbox"><span><b>와이파이 패키지 추가</b><small>월 1,100원</small></span></label></div>
+<div class="section"><div class="section-head"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>인터넷</b></div><div><strong>인터넷</strong><span>인터넷 단독 가입신청</span></div></div><span class="label">인터넷 상품</span><div class="options" id="internetOnlyOptions">
+<button class="choice" data-value="슬림 100M"><b>슬림</b><small>100M</small></button>
+<button class="choice" data-value="베이직 500M"><b>베이직</b><small>500M</small></button>
+<button class="choice" data-value="에센스 1G"><b>에센스</b><small>1G</small></button>
+</div><label class="wifi-check"><input id="internetWifi" type="checkbox"><span><b>와이파이 패키지 추가</b><small>월 1,100원</small></span></label><div class="summary" id="internetSummary"></div><button class="continue" id="internetContinueBtn" disabled>인터넷 신청하기</button></div>
 <div class="section"><div class="section-head"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>지니TV</b></div><div><strong>인터넷 + TV</strong><span>인터넷·지니 TV 결합 가입신청</span></div></div>
 <span class="label">1. 인터넷 상품</span><div class="options" id="internetOptions"><button class="choice" data-value="슬림 100M"><b>슬림</b><small>100M</small></button><button class="choice" data-value="베이직 500M"><b>베이직</b><small>500M</small></button><button class="choice" data-value="에센스 1G"><b>에센스</b><small>1G</small></button></div>
 <span class="label">2. TV 상품</span><div class="options" id="tvOptions"><button class="choice" data-value="지니 TV 베이직"><b>베이직</b><small>TV 상품</small></button><button class="choice" data-value="지니 TV 라이트"><b>라이트</b><small>TV 상품</small></button><button class="choice" data-value="지니 TV 에센스"><b>에센스</b><small>TV 상품</small></button></div>
@@ -24,12 +24,13 @@
 <div class="notice"><strong>안전한 전자신청 안내</strong>작성된 신청서는 관리자 시스템으로 안전하게 접수되며, 접수 완료 알림이 전송됩니다.</div>
 </section><footer class="footer">KT 동부법인지사 · 유선 전자가입신청</footer></main>
 <script>
-let selectedInternet='',selectedTv='';
+let selectedInternetOnly='',selectedInternet='',selectedTv='';
 function wifiText(checked){return checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}
-function bindOptions(id,type){document.querySelectorAll('#'+id+' .choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('#'+id+' .choice').forEach(item=>item.classList.remove('selected'));button.classList.add('selected');if(type==='internet')selectedInternet=button.dataset.value;else selectedTv=button.dataset.value;updateSelection()}))}
+function bindOptions(id,type){document.querySelectorAll('#'+id+' .choice').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('#'+id+' .choice').forEach(item=>item.classList.remove('selected'));button.classList.add('selected');if(type==='internetOnly'){selectedInternetOnly=button.dataset.value;updateInternetOnly()}else if(type==='internet'){selectedInternet=button.dataset.value;updateSelection()}else{selectedTv=button.dataset.value;updateSelection()}}))}
+function updateInternetOnly(){const ready=!!selectedInternetOnly,summary=document.getElementById('internetSummary'),button=document.getElementById('internetContinueBtn'),wifi=wifiText(document.getElementById('internetWifi').checked);button.disabled=!ready;if(ready){summary.textContent='선택 상품: 인터넷 '+selectedInternetOnly+' / '+wifi;summary.classList.add('active')}else summary.classList.remove('active')}
 function updateSelection(){const ready=selectedInternet&&selectedTv,summary=document.getElementById('summary'),button=document.getElementById('continueBtn'),wifi=wifiText(document.getElementById('bundleWifi').checked);button.disabled=!ready;if(ready){summary.textContent='선택 상품: 인터넷 '+selectedInternet+' + '+selectedTv+' / '+wifi;summary.classList.add('active')}else summary.classList.remove('active')}
-bindOptions('internetOptions','internet');bindOptions('tvOptions','tv');
-document.getElementById('bundleWifi').addEventListener('change',updateSelection);
-document.querySelectorAll('a.direct').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();const url=new URL(link.href),base=url.searchParams.get('details')||'인터넷',details=base+' / '+wifiText(document.getElementById('internetWifi').checked);url.searchParams.set('details',details);location.href=url.href}));
+bindOptions('internetOnlyOptions','internetOnly');bindOptions('internetOptions','internet');bindOptions('tvOptions','tv');
+document.getElementById('internetWifi').addEventListener('change',updateInternetOnly);document.getElementById('bundleWifi').addEventListener('change',updateSelection);
+document.getElementById('internetContinueBtn').addEventListener('click',()=>{if(!selectedInternetOnly)return;const details='인터넷 / '+selectedInternetOnly+' / '+wifiText(document.getElementById('internetWifi').checked);location.href='application.html?product='+encodeURIComponent('인터넷')+'&details='+encodeURIComponent(details)});
 document.getElementById('continueBtn').addEventListener('click',()=>{if(!selectedInternet||!selectedTv)return;const details='인터넷+TV / 인터넷 '+selectedInternet+' / '+selectedTv+' / '+wifiText(document.getElementById('bundleWifi').checked);location.href='application.html?product='+encodeURIComponent('인터넷+TV')+'&details='+encodeURIComponent(details)});
 </script></body></html>
