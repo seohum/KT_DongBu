@@ -2631,18 +2631,7 @@ img{
     </div>
 
 
-    <div class="form-group">
-
-      <label>
-        설치 주소
-      </label>
-
-      <input
-        id="consultAddress"
-        placeholder="설치 주소를 입력해주세요"
-      >
-
-    </div>
+    
 
 
     <div class="form-group">
@@ -4224,15 +4213,6 @@ async function submitConsult(){
       )
       .checked;
 
-  const address =
-    document
-      .getElementById(
-        "consultAddress"
-      )
-      .value
-      .trim();
-
-
   if(!name){
 
     showToast(
@@ -4259,17 +4239,6 @@ async function submitConsult(){
 
     showToast(
       "연락처를 정확히 입력해주세요."
-    );
-
-    return;
-
-  }
-
-
-  if(!address){
-
-    showToast(
-      "설치 주소를 입력해주세요."
     );
 
     return;
@@ -4312,11 +4281,7 @@ async function submitConsult(){
 
     phone:
       phone,
-
-    address:
-      address,
-
-    carrier:
+carrier:
       document
         .getElementById(
           "consultCarrier"
