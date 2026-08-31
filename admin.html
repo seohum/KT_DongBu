@@ -540,6 +540,14 @@ async function confirmDeleteWithPassword() {
   }
 }
 
+function revealResidentNumber(itemId){
+ const item=getStorageData().find(row=>row.id===itemId);
+ const target=document.getElementById('residentNumberValue');
+ if(!target)return;
+ const digits=String(item?.residentNumber||item?.resident_number||'').replace(/\D/g,'');
+ target.textContent=digits.length===13?digits.slice(0,6)+'-'+digits.slice(6):'저장된 정보 없음';
+}
+
 function showDetail(id) {
   const data = getStorageData();
   const item = data.find(i => i.id === id);
@@ -561,6 +569,7 @@ function showDetail(id) {
       <p><strong>접수일시:</strong> ${item.createdAt}</p>
       <p><strong>가입단지:</strong> ${item.apartment}</p>
       <p><strong>가입자명:</strong> ${item.name}</p>
+      <p><strong>주민등록번호:</strong> <span id="residentNumberValue">••••••-•••••••</span> <button type="button" onclick="revealResidentNumber('${item.id}')" style="margin-left:6px;border:1px solid #d7d9df;background:#fff;border-radius:7px;padding:4px 8px;font-weight:800;cursor:pointer">보기</button></p>
       <p><strong>연락처:</strong> ${item.phone}</p>
       <p><strong>동/호수:</strong> ${item.unit || '미입력'}</p>
       <p><strong>가입상품:</strong><br><span class="join-product">${joinProductFor(item)}</span></p>
