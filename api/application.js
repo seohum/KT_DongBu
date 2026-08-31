@@ -70,6 +70,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     category: '가입신청',
     name: text(input.customerName, 40),
     phone: normalizeKoreanMobile(input.phone),
+    residentNumber: String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13),
     product: text(input.product, 80),
     address: text(input.address, 250),
     carrier: text(input.currentCarrier, 50),
@@ -148,7 +149,9 @@ export default async function handler(req, res) {
       if (!result.ok) throw new Error('PDF upload failed');
       return send(res, 200, { success: true }, origin);
     }
+    const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
     const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
+    if (residentNumber.length !== 13) return send(res, 400, { success: false, message: '주민등록번호를 확인해주세요.' }, origin);
     if (requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
     }
@@ -170,6 +173,7 @@ export default async function handler(req, res) {
       preferredInstallDate: text(input.preferredInstallDate, 30),
       customerName: text(input.customerName, 40),
       birthDate: text(input.birthDate, 8),
+      residentNumber,
       gender: text(input.gender, 10),
       phone: text(input.phone, 30),
       address: text(input.address, 250),
