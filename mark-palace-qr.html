@@ -2009,6 +2009,14 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
   .app-navigation{display:none!important;}
   .app{padding-bottom:0!important;}
 
+
+/* QR consultation success modal */
+.qr-success-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;padding:24px}
+.qr-success-overlay.active{display:flex}
+.qr-success-card{width:min(100%,360px);background:#fff;border-radius:22px;padding:30px 22px 22px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.qr-success-card h2{font-size:22px;margin:0 0 12px;color:#111}
+.qr-success-card p{font-size:16px;line-height:1.65;color:#555;margin:0 0 24px}
+.qr-success-close{width:100%;min-height:52px;border:0;border-radius:14px;background:#e60012;color:#fff;font-size:16px;font-weight:900;cursor:pointer}
 </style>
 </head>
 
@@ -2656,18 +2664,7 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
     </div>
 
 
-    <div class="form-group">
-
-      <label>
-        설치 주소
-      </label>
-
-      <input
-        id="consultAddress"
-        placeholder="설치 주소를 입력해주세요"
-      >
-
-    </div>
+    
 
 
     <div class="form-group">
@@ -4245,15 +4242,6 @@ async function submitConsult(){
       )
       .checked;
 
-  const address =
-    document
-      .getElementById(
-        "consultAddress"
-      )
-      .value
-      .trim();
-
-
   if(!name){
 
     showToast(
@@ -4280,17 +4268,6 @@ async function submitConsult(){
 
     showToast(
       "연락처를 정확히 입력해주세요."
-    );
-
-    return;
-
-  }
-
-
-  if(!address){
-
-    showToast(
-      "설치 주소를 입력해주세요."
     );
 
     return;
@@ -4333,11 +4310,7 @@ async function submitConsult(){
 
     phone:
       phone,
-
-    address:
-      address,
-
-    carrier:
+carrier:
       document
         .getElementById(
           "consultCarrier"
@@ -4398,16 +4371,7 @@ async function submitConsult(){
       );
     }
 
-    showToast(
-      "상담 신청이 접수되었습니다."
-    );
-
-    setTimeout(
-      function(){
-        goHomeAndNav();
-      },
-      1300
-    );
+    showQrConsultSuccess();
 
   }
   catch(error){
@@ -4785,6 +4749,18 @@ openSiteFromLink();
 </script>
 
 
+
+<div class="qr-success-overlay" id="qrConsultSuccess" role="dialog" aria-modal="true" aria-labelledby="qrSuccessTitle">
+ <div class="qr-success-card">
+  <h2 id="qrSuccessTitle">상담 신청이 완료되었습니다</h2>
+  <p>상담 신청해 주셔서 감사합니다.<br>담당 직원이 곧 연락드리겠습니다.</p>
+  <button type="button" class="qr-success-close" onclick="closeQrConsultSuccess()">창 닫기</button>
+ </div>
+</div>
+<script>
+function showQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.classList.add('active');document.body.style.overflow='hidden';}
+function closeQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.classList.remove('active');document.body.style.overflow='';goHomeAndNav();}
+</script>
 </body>
 </html>
 
