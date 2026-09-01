@@ -4726,6 +4726,12 @@ async function checkAdminPassword(){
 goHomeAndNav();
 openSiteFromLink();
 
+if(
+  new URLSearchParams(window.location.search).get("view") === "consult"
+){
+  navConsult("상담 문의");
+}
+
 </script>
 
 
