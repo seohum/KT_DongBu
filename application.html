@@ -110,7 +110,7 @@
       <div class="field"><label class="required">예금주</label><input id="accountHolder" autocomplete="name" placeholder="예금주 성명"></div>
 
       <label class="consent" style="padding-top:0;margin-bottom:14px">
-        <input id="sameHolder" type="checkbox" checked>
+        <input id="sameHolder" type="checkbox">
         <span><b>가입자와 예금주가 동일합니다</b><span>체크 해제 시 예금주 성명을 별도로 입력할 수 있습니다.</span></span>
       </label>
 
@@ -748,6 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(f.length<6||b.length<1){birth.value='';return;}
   const code=b.charAt(0),century=/[1256]/.test(code)?'19':/[3478]/.test(code)?'20':'';
   birth.value=century?century+f:'';
+  birth.dispatchEvent(new Event('input',{bubbles:true}));
   if(gender){if(/[1357]/.test(code))gender.value='남';else if(/[2468]/.test(code))gender.value='여';}
  }
  front.addEventListener('input',function(){syncResident();if(front.value.length===6)back.focus();});
