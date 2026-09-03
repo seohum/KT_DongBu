@@ -1,4 +1,4 @@
-<!doctype html>
+체크<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -402,12 +402,12 @@ async function createFilledKtPdf(data, applicationId='미접수') {
 
     // TV 서명란 3곳
     // 인터넷+TV 선택 시 각 서명칸에도 이름 + 서명을 함께 기입
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 284, 100, 23, {fontSize:16, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 282, 62, 26);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 323, 100, 20, {fontSize:15, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 321, 62, 23);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 351, 100, 20, {fontSize:15, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 349, 62, 23);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 320, 100, 23, {fontSize:16, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1091, 317, 62, 26);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 356, 100, 20, {fontSize:15, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1091, 353, 62, 23);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 390, 100, 20, {fontSize:15, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1091, 387, 62, 23);
   }
 
   // 인터넷 안내사항
