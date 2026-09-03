@@ -2017,6 +2017,36 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
 .qr-success-card h2{font-size:22px;margin:0 0 12px;color:#111}
 .qr-success-card p{font-size:16px;line-height:1.65;color:#555;margin:0 0 24px}
 .qr-success-close{width:100%;min-height:52px;border:0;border-radius:14px;background:#e60012;color:#fff;font-size:16px;font-weight:900;cursor:pointer}
+
+/* QR 전용 3개 문의 버튼 */
+#flyerPage .flyer-actions{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+
+.qr-kakao-button{
+  width:100%;
+  min-height:51px;
+  padding:11px 5px;
+  border-radius:14px;
+  background:#fee500;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+@media(max-width:350px){
+  #flyerPage .flyer-actions{gap:5px!important;}
+  #flyerPage .flyer-actions .secondary-button,
+  #flyerPage .flyer-actions .primary-button,
+  #flyerPage .flyer-actions .qr-kakao-button{font-size:10.5px;padding-left:3px;padding-right:3px;}
+}
+
 </style>
 </head>
 
@@ -2578,6 +2608,16 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
     >
       상담 신청
     </button>
+
+
+    <a
+      class="qr-kakao-button"
+      href="https://open.kakao.com/o/s1J8qJIi"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      카카오톡 문의
+    </a>
 
 
     <button
