@@ -402,30 +402,30 @@ async function createFilledKtPdf(data, applicationId='미접수') {
 
     // TV 서명란 3곳
     // 인터넷+TV 선택 시 각 서명칸에도 이름 + 서명을 함께 기입
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 320, 100, 23, {fontSize:16, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 317, 62, 26);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 356, 100, 20, {fontSize:15, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 353, 62, 23);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 986, 390, 100, 20, {fontSize:15, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1091, 387, 62, 23);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 315, 48, 18, {fontSize:16, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1017, 314, 52, 20);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 352, 48, 15, {fontSize:15, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1017, 351, 52, 17);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 380, 48, 15, {fontSize:15, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1017, 379, 52, 17);
   }
 
   // 인터넷 안내사항
   // 사용자가 dddddd로 표시한 정확한 위치에 고객 이름 + 전자서명 배치
   // 이름은 dddddd 자리, 서명은 오른쪽 '서명(인)' 칸 안쪽
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 975, 606, 105, 23, {fontSize:18, weight:700});
-  await drawSignature(pdfDoc, p1, data.signature, 1104, 604, 48, 21);
+  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 623, 48, 15, {fontSize:18, weight:700});
+  await drawSignature(pdfDoc, p1, data.signature, 1017, 622, 52, 17);
 
   // 바로 아래 '신청번호' 행에는 이름/서명을 절대 넣지 않음
 
   // 혜택 > 고객 사은품 : "신청/가입자(본인) | 이름 | 서명"
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 992, 1393, 105, 23, {fontSize:16, weight:700});
-  await drawSignature(pdfDoc, p1, data.signature, 1100, 1390, 55, 28);
+  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 1370, 48, 20, {fontSize:16, weight:700});
+  await drawSignature(pdfDoc, p1, data.signature, 1017, 1368, 52, 24);
 
   // 하단 신청란 : "신청/가입자(본인) | 이름 | 서명(인)"
   // 실제 빨간 박스 안쪽에 딱 맞도록 재정렬
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 995, 1637, 103, 23, {fontSize:16, weight:700});
-  await drawSignature(pdfDoc, p1, data.signature, 1102, 1633, 54, 29);
+  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 1603, 48, 20, {fontSize:16, weight:700});
+  await drawSignature(pdfDoc, p1, data.signature, 1017, 1601, 52, 24);
 
 
   // ----------------------------
@@ -499,25 +499,25 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   // 상단 통신범죄 예방 안내:
   // 첫 번째 칸은 판매자(본인) 서명란이므로 고객 서명을 넣지 않음.
   // 두 번째 / 세 번째 칸만 신청/가입자 이름 + 서명
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 214, 120, 26, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1104, 210, 61, 31);
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 278, 120, 26, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1104, 274, 61, 31);
+  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 232, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.signature, 1045, 230, 52, 24);
+  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 296, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.signature, 1045, 294, 52, 24);
 
   // 결합서비스 신청 하단 신청/가입자(대리인)란
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 985, 775, 115, 26, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1104, 771, 61, 31);
+  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 780, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.signature, 1045, 778, 52, 24);
 
   // 요금납부 동의 서명란
   // '신청/가입자(본인) | 이름 | 서명(인)' 구조에 맞춤
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 995, 1297, 108, 25, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1105, 1293, 60, 30);
+  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 1295, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.signature, 1045, 1293, 52, 24);
 
   // 페이지 하단 신청/가입자(본인)
   // 실제 빨간 박스(y 약 1618~1665) 안쪽에 정확히 맞춤
   // 이름은 라벨 뒤 빈칸, 전자서명은 우측 '서명(인)' 칸 내부
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 995, 1630, 108, 25, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1105, 1626, 60, 30);
+  await drawTextImageFit(pdfDoc, p2, data.customerName, 950, 1617, 55, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.signature, 1010, 1615, 50, 24);
 
 
   // ----------------------------
@@ -526,17 +526,17 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   // ----------------------------
   if (p3) {
     // 상단 고유식별정보 수집 이용 동의
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 154, 105, 25, {fontSize:17, weight:700});
-    await drawSignature(pdfDoc, p3, data.signature, 1120, 151, 60, 30);
+    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 174, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.signature, 1055, 172, 60, 22);
 
     // 개인정보 신용정보 수집 이용 동의
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 651, 105, 23, {fontSize:17, weight:700});
-    await drawSignature(pdfDoc, p3, data.signature, 1120, 648, 60, 28);
+    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 660, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.signature, 1055, 658, 60, 22);
 
     // 페이지 하단 필수동의 서명
     // 이름은 기존보다 위로 올리고 글씨 크기를 줄여 칸 중앙에 맞춤
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 1677, 105, 24, {fontSize:17, weight:700});
-    await drawSignature(pdfDoc, p3, data.signature, 1120, 1674, 60, 29);
+    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 1665, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.signature, 1055, 1663, 60, 22);
   }
 
   const bytes = await pdfDoc.save();
