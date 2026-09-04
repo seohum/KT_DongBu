@@ -782,5 +782,37 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+
+<script>
+// 휴대폰 번호: 숫자 입력/붙여넣기를 010-1234-5678 형식으로 표시합니다.
+(function () {
+  const phone = document.getElementById('phone');
+  if (!phone) return;
+  function formatPhoneInput(event) {
+    if (event && event.isComposing) return;
+    const raw = phone.value;
+    const start = phone.selectionStart;
+    const digitsBefore = start === null ? null : raw.slice(0, start).replace(/\D/g, '').length;
+    const digits = raw.replace(/\D/g, '').slice(0, 11);
+    const formatted = digits.length <= 3 ? digits : digits.length <= 7
+      ? digits.slice(0, 3) + '-' + digits.slice(3)
+      : digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7);
+    if (raw === formatted) return;
+    phone.value = formatted;
+    if (document.activeElement === phone && digitsBefore !== null) {
+      let caret = 0, seen = 0;
+      while (caret < formatted.length && seen < digitsBefore) {
+        if (/\d/.test(formatted[caret])) seen++;
+        caret++;
+      }
+      phone.setSelectionRange(caret, caret);
+    }
+  }
+  phone.addEventListener('input', formatPhoneInput);
+  phone.addEventListener('change', formatPhoneInput);
+  phone.addEventListener('compositionend', formatPhoneInput);
+  formatPhoneInput();
+})();
+</script>
 </body>
 </html>
