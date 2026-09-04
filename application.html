@@ -756,6 +756,31 @@ document.addEventListener('DOMContentLoaded', () => {
  front.addEventListener('input',function(){syncResident();if(front.value.length===6)back.focus();});
  back.addEventListener('input',syncResident);
 })();
+</script><script>
+// 마크팰리스 전용 신청서: 기본 주소 고정, 동·호수만 입력
+(function () {
+  if (new URLSearchParams(location.search).get('site') !== 'mark-palace') return;
+  const address = document.getElementById('address');
+  const detail = document.getElementById('addressDetail');
+  const search = document.getElementById('addressSearchBtn');
+  if (!address || !detail) return;
+  address.value = '대구시 수성구 동대구로 336';
+  address.readOnly = true;
+  address.style.background = '#f6f7f9';
+  address.setAttribute('aria-label', '마크팰리스 고정 설치주소');
+  address.parentElement.style.gridTemplateColumns = '1fr';
+  if (search) { search.hidden = true; search.disabled = true; }
+  const detailField = detail.closest('.field');
+  const label = detailField.querySelector('label');
+  if (label) { label.textContent = '동·호수'; label.htmlFor = 'addressDetail'; }
+  detail.placeholder = '예) 101동 1203호';
+  detail.setAttribute('aria-label', '동·호수');
+  const notice = detailField.nextElementSibling;
+  if (notice && notice.classList.contains('notice')) {
+    notice.textContent = '마크팰리스 전용 신청서입니다. 설치할 동·호수만 입력해주세요.';
+  }
+})();
 </script>
+
 </body>
 </html>
