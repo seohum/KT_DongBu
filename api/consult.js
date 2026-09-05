@@ -15,7 +15,10 @@ const SHEETS_ENDPOINT =
 
 export default async function handler(request, response) {
   const origin = request.headers.origin || "";
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || "https://seohum.github.io";
+  const configuredOrigins = String(process.env.ALLOWED_ORIGIN || "")
+    .split(",").map(value => value.trim()).filter(Boolean);
+  const allowedOrigins = new Set(["https://www.ktmns.store", "https://ktmns.store", "https://seohum.github.io", ...configuredOrigins]);
+  const allowedOrigin = allowedOrigins.has(origin) ? origin : "https://www.ktmns.store";
 
   response.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   response.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -24,14 +27,14 @@ export default async function handler(request, response) {
   response.setHeader("Cache-Control", "no-store");
 
   if (request.method === "OPTIONS") {
-    return response.status(origin === allowedOrigin ? 204 : 403).end();
+    return response.status(allowedOrigins.has(origin) ? 204 : 403).end();
   }
 
   if (request.method !== "POST") {
     return response.status(405).json({ success: false, message: "지원하지 않는 요청입니다." });
   }
 
-  if (origin !== allowedOrigin) {
+  if (!allowedOrigins.has(origin)) {
     return response.status(403).json({ success: false, message: "허용되지 않은 요청입니다." });
   }
 
@@ -53,7 +56,7 @@ export default async function handler(request, response) {
     const unit = clean(body.unit, 80);
     const installDate = clean(body.installDate, 20);
 
-    if (!name || !/^01\d{8,9}$/.test(phone) || !type || !address) {
+    if (!name || !/^01\d{8,9}$/.test(phone) || !type || (isJoin && !address)) {
       return response.status(400).json({ success: false, message: "입력 내용을 확인해주세요." });
     }
 
