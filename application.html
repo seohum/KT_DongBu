@@ -391,23 +391,23 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   if (selectedProductText.includes('와이파이 패키지 포함') || selectedProductText.includes('기가 와이파이 홈')) await drawCheck(pdfDoc, p1, 490, 598, 18);
 
   // 인터넷 약정기간 3년
-  await drawCheck(pdfDoc, p1, 292, 645, 18);
+  await drawCheck(pdfDoc, p1, 336, 552, 18);
 
   // 인터넷 설치방법 KT개통
-  await drawCheck(pdfDoc, p1, 1048, 645, 18);
+  await drawCheck(pdfDoc, p1, 972, 552, 18);
 
   // 인터넷+TV 선택 시 TV 약정 3년 및 TV 서명란
   if (String(data.product||'').includes('인터넷+TV')) {
-    await drawCheck(pdfDoc, p1, 460, 363, 18);
+    await drawCheck(pdfDoc, p1, 460, 313, 18);
 
     // TV 서명란 3곳
     // 인터넷+TV 선택 시 각 서명칸에도 이름 + 서명을 함께 기입
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 369, 70, 22, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1120, 365, 92, 28);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 423, 70, 20, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1120, 420, 92, 26);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 451, 70, 20, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1120, 448, 92, 26);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 309, 34, 22, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1074, 306, 50, 28);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 343, 34, 20, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1074, 341, 50, 26);
+    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 373, 34, 20, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.signature, 1074, 370, 50, 26);
   }
 
   // 인터넷 안내사항
@@ -447,12 +447,12 @@ async function createFilledKtPdf(data, applicationId='미접수') {
 
     // 인터넷+TV 결합서비스 신청 자동 체크
   if (String(data.product || '').includes('인터넷+TV')) {
-    await drawCheck(pdfDoc, p2, 218, 307, 18); // 신청사항: 신규가입
-    await drawCheck(pdfDoc, p2, 218, 344, 18); // 결합선택: 유선결합
-    await drawCheck(pdfDoc, p2, 218, 529, 18); // 유선 1번
-    await drawTextImageFit(pdfDoc, p2, data.customerName, 287, 522, 135, 22, {fontSize:18, weight:700}); // ID 옆 고객명
-    await drawCheck(pdfDoc, p2, 218, 750, 18); // 약정기간: 3년
-    await drawCheck(pdfDoc, p2, 218, 776, 18); // 추가결합할인: TV/모바일/하이오더/AI로봇
+    await drawCheck(pdfDoc, p2, 260, 370, 18); // 신청사항: 신규가입
+    await drawCheck(pdfDoc, p2, 260, 405, 18); // 결합선택: 유선결합
+    await drawCheck(pdfDoc, p2, 260, 568, 18); // 유선 1번
+    await drawTextImageFit(pdfDoc, p2, data.customerName, 350, 559, 95, 22, {fontSize:18, weight:700}); // ID 옆 고객명
+    await drawCheck(pdfDoc, p2, 260, 763, 18); // 약정기간: 3년
+    await drawCheck(pdfDoc, p2, 260, 790, 18); // 추가결합할인: TV/모바일/하이오더/AI로봇
   }
 
 // 설치주소 - 기존보다 작게, 위쪽으로 이동, 가로 늘림 제거
