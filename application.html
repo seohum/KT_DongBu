@@ -445,7 +445,17 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   // 휴대폰번호
   await drawTextImageFit(pdfDoc, p2, compactPhone(data.phone), 1035, 842, 160, 25, {fontSize:18, weight:600});
 
-  // 설치주소 - 기존보다 작게, 위쪽으로 이동, 가로 늘림 제거
+    // 인터넷+TV 결합서비스 신청 자동 체크
+  if (String(data.product || '').includes('인터넷+TV')) {
+    await drawCheck(pdfDoc, p2, 218, 307, 18); // 신청사항: 신규가입
+    await drawCheck(pdfDoc, p2, 218, 344, 18); // 결합선택: 유선결합
+    await drawCheck(pdfDoc, p2, 218, 529, 18); // 유선 1번
+    await drawTextImageFit(pdfDoc, p2, data.customerName, 287, 522, 135, 22, {fontSize:18, weight:700}); // ID 옆 고객명
+    await drawCheck(pdfDoc, p2, 218, 750, 18); // 약정기간: 3년
+    await drawCheck(pdfDoc, p2, 218, 776, 18); // 추가결합할인: TV/모바일/하이오더/AI로봇
+  }
+
+// 설치주소 - 기존보다 작게, 위쪽으로 이동, 가로 늘림 제거
   await drawTextImageFit(pdfDoc, p2, data.address, 285, 904, 555, 27, {fontSize:19, weight:600});
 
   // 이메일
