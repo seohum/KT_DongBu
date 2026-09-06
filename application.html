@@ -13,7 +13,7 @@
 </head>
 <body>
 <main class="app">
-  <header class="head"><div class="head-top"><div class="brand"><img class="logo" src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT 공식 Wordmark 로고"><strong>유선 전자신청서</strong></div><button type="button" class="back-btn" onclick="history.length>1?history.back():location.href='./'">← 뒤로가기</button></div><p>본인 확인 서류와 서명은 관리자 전용 비공개 저장소에 보관됩니다.</p><div class="progress" id="progress"></div></header>
+  <header class="head"><div class="head-top"><div class="brand"><img class="logo" src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT 공식 Wordmark 로고"><strong>유선 전자신청서</strong></div><button type="button" class="back-btn" onclick="new URLSearchParams(location.search).get('site')==='mark-palace'?location.href='special-apply.html?site=mark-palace':(history.length>1?history.back():location.href='./')">← 뒤로가기</button></div><p>본인 확인 서류와 서명은 관리자 전용 비공개 저장소에 보관됩니다.</p><div class="progress" id="progress"></div></header>
   <div class="content">
     <section class="step on" data-step="0">
       <p class="eyebrow">1. 가입상품</p><h1 class="title">신청할 상품을 선택해주세요</h1><p class="desc">현장명은 전용 링크를 통해 자동으로 입력됩니다.</p>
