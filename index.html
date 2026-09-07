@@ -4735,6 +4735,28 @@ if(
 </script>
 
 
+
+<script>
+// 상담 신청 연락처를 010-1234-5678 형식으로 자동 표시
+(function () {
+  const phone = document.getElementById('consultPhone');
+  if (!phone) return;
+  function formatConsultPhone(event) {
+    if (event && event.isComposing) return;
+    const digits = phone.value.replace(/\D/g, '').slice(0, 11);
+    phone.value = digits.length <= 3 ? digits
+      : digits.length <= 7 ? digits.slice(0, 3) + '-' + digits.slice(3)
+      : digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7);
+  }
+  phone.setAttribute('inputmode', 'numeric');
+  phone.setAttribute('maxlength', '13');
+  phone.setAttribute('placeholder', '010-1234-5678');
+  phone.addEventListener('input', formatConsultPhone);
+  phone.addEventListener('change', formatConsultPhone);
+  phone.addEventListener('compositionend', formatConsultPhone);
+  formatConsultPhone();
+})();
+</script>
 </body>
 </html>
 
