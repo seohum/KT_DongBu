@@ -1,4 +1,4 @@
-const ALLOWED_ORIGINS=new Set(['https://seohum.github.io','https://kt-dong-bu.vercel.app']);
+const ALLOWED_ORIGINS=new Set(['https://seohum.github.io','https://kt-dong-bu.vercel.app','https://www.ktmns.store','https://ktmns.store']);
 const SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
 function cors(origin){return{'Access-Control-Allow-Origin':ALLOWED_ORIGINS.has(origin)?origin:'https://seohum.github.io','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Cache-Control':'no-store','Vary':'Origin'};}
 function send(res,status,data,origin){Object.entries(cors(origin)).forEach(([k,v])=>res.setHeader(k,v));return res.status(status).json(data);}
