@@ -374,21 +374,19 @@ async function createFilledKtPdf(data, applicationId='미접수') {
     : selectedProductText.includes('베이직 500M') || selectedProductText.includes('500M') ? '인터넷 베이직 500M'
     : selectedProductText.includes('에센스 1G') || selectedProductText.includes('1G') ? '인터넷 에센스 1G' : '';
   if (internetName) {
-    await drawCheck(pdfDoc, p1, 991, 488, 18);
-    await drawTextImageFit(pdfDoc, p1, internetName, 1020, 481, 145, 22, {fontSize:15, weight:700, color:'#111'});
+    // 인터넷 요금제: 기타 체크 후 선택 상품명 기재
+    await drawCheck(pdfDoc, p1, 920, 420, 18);
+    await drawTextImageFit(pdfDoc, p1, internetName, 1015, 413, 165, 22, {fontSize:15, weight:700, color:'#111'});
   }
   if (selectedProductText.includes('인터넷+TV')) {
-    if (selectedProductText.includes('지니 TV 베이직')) {
-      await drawCheck(pdfDoc, p1, 713, 277, 18);
-    } else if (selectedProductText.includes('지니 TV 에센스')) {
-      await drawCheck(pdfDoc, p1, 561, 277, 18);
-    } else {
-      await drawCheck(pdfDoc, p1, 991, 277, 18);
-      const tvOtherName = selectedProductText.includes('지니 TV 라이트') ? '지니 TV 라이트' : '지니 TV';
-      await drawTextImageFit(pdfDoc, p1, tvOtherName, 1020, 270, 145, 22, {fontSize:15, weight:700, color:'#111'});
-    }
+    // Genie TV: 기타 체크 후 선택 상품명 기재
+    const tvOtherName = selectedProductText.includes('지니 TV 에센스') ? '지니 TV 에센스'
+      : selectedProductText.includes('지니 TV 라이트') ? '지니 TV 라이트' : '지니 TV 베이직';
+    await drawCheck(pdfDoc, p1, 960, 245, 18);
+    await drawTextImageFit(pdfDoc, p1, tvOtherName, 1030, 238, 150, 22, {fontSize:15, weight:700, color:'#111'});
   }
-  if (selectedProductText.includes('와이파이 패키지 포함') || selectedProductText.includes('기가 와이파이 홈')) await drawCheck(pdfDoc, p1, 490, 598, 18);
+  // 인터넷 WiFi: GiGA WiFi home 체크박스
+  if (selectedProductText.includes('와이파이 패키지 포함') || selectedProductText.includes('기가 와이파이 홈')) await drawCheck(pdfDoc, p1, 490, 512, 18);
 
   // 인터넷 약정기간 3년
   await drawCheck(pdfDoc, p1, 336, 552, 18);
@@ -407,11 +405,11 @@ async function createFilledKtPdf(data, applicationId='미접수') {
     // TV 서명란 3곳
     // 인터넷+TV 선택 시 각 서명칸에도 이름 + 서명을 함께 기입
     await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 309, 34, 22, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1115, 302, 70, 30);
+    await drawSignature(pdfDoc, p1, data.signature, 1070, 302, 70, 30);
     await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 343, 34, 20, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1115, 337, 70, 30);
+    await drawSignature(pdfDoc, p1, data.signature, 1070, 337, 70, 30);
     await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 373, 34, 20, {fontSize:18, weight:700});
-    await drawSignature(pdfDoc, p1, data.signature, 1115, 366, 70, 30);
+    await drawSignature(pdfDoc, p1, data.signature, 1070, 366, 70, 30);
   }
 
   // 인터넷 안내사항
