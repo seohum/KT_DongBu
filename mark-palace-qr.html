@@ -3141,6 +3141,24 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
 
 
     <button
+      onclick="openSmallBusinessApplication()"
+    >
+
+      <span>
+
+        소상공인 가입신청
+
+      </span>
+
+      <span>
+        ›
+      </span>
+
+    </button>
+
+
+
+    <button
       onclick="
         menuPage(
           'apartmentPage',
@@ -4162,6 +4180,21 @@ function menuBusiness(){
 
 }
 
+function openSmallBusinessApplication(){
+
+  closeMenu();
+
+  setTimeout(
+    function(){
+
+      window.location.href = "small-business-application.html";
+
+    },
+    120
+  );
+
+}
+
 
 
 function menuEtcConsult(){
@@ -4830,3 +4863,4 @@ function closeQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.cl
   };
 })();
 </script>
+
