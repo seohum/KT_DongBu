@@ -2,6 +2,9 @@
   "functions": {
     "api/consult.js": {
       "maxDuration": 10
+    },
+    "api/application-files.js": {
+      "maxDuration": 30
     }
   }
 }
