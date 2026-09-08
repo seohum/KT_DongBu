@@ -4811,3 +4811,97 @@ if(
   };
 })();
 </script>
+
+
+<script>
+/* KT_TAB_HISTORY_ROUTER */
+(function(){
+  var restoring=false;
+  var originalGoHomeAndNav=window.goHomeAndNav;
+  var originalNavGoHome=window.navGoHome;
+  var originalNavOpen=window.navOpen;
+  var originalNavConsult=window.navConsult;
+  var originalOpenFlyer=window.openFlyer;
+
+  function routeUrl(route){
+    var url=new URL(window.location.href);
+    url.hash="";
+    url.search="";
+    if(route.page==="flyer"&&route.site){
+      url.searchParams.set("site",route.site);
+    }else if(route.page!=="home"){
+      url.searchParams.set("view",route.page);
+    }
+    return url.pathname+url.search;
+  }
+
+  function remember(route,replace){
+    if(restoring)return;
+    var current=history.state&&history.state.ktRoute;
+    if(current&&JSON.stringify(current)===JSON.stringify(route))return;
+    history[replace?"replaceState":"pushState"]({ktRoute:route},"",routeUrl(route));
+  }
+
+  function siteSlug(name){
+    if(typeof SPECIAL_SITE_LINKS==="undefined")return "";
+    var item=SPECIAL_SITE_LINKS.find(function(x){return x.name===name;});
+    return item?item.slug:"";
+  }
+
+  window.goHomeAndNav=function(){
+    originalGoHomeAndNav();
+    remember({page:"home"});
+  };
+
+  window.navGoHome=function(){
+    originalNavGoHome();
+    remember({page:"home"});
+  };
+
+  window.navOpen=function(pageId,navId){
+    originalNavOpen(pageId,navId);
+    var page=pageId==="internetPage"?"internet":
+      pageId==="apartmentPage"?"apartment":
+      pageId==="businessPage"?"business":pageId;
+    remember({page:page});
+  };
+
+  window.navConsult=function(type){
+    originalNavConsult(type);
+    remember({page:"consult",type:type||"상담 문의"});
+  };
+
+  window.openFlyer=function(apartmentName,flyerId){
+    originalOpenFlyer(apartmentName,flyerId);
+    remember({page:"flyer",site:siteSlug(apartmentName),name:apartmentName,flyerId:flyerId});
+  };
+
+  function routeFromUrl(){
+    var query=new URLSearchParams(location.search);
+    var site=query.get("site");
+    if(site&&typeof SPECIAL_SITE_LINKS!=="undefined"){
+      var item=SPECIAL_SITE_LINKS.find(function(x){return x.slug===site;});
+      if(item)return {page:"flyer",site:item.slug,name:item.name,flyerId:item.flyerId};
+    }
+    return {page:query.get("view")||"home"};
+  }
+
+  function render(route){
+    restoring=true;
+    if(route.page==="internet")originalNavOpen("internetPage","navInternet");
+    else if(route.page==="apartment")originalNavOpen("apartmentPage","navApartment");
+    else if(route.page==="consult")originalNavConsult(route.type||"상담 문의");
+    else if(route.page==="flyer"&&route.name&&route.flyerId)originalOpenFlyer(route.name,route.flyerId);
+    else originalGoHomeAndNav();
+    restoring=false;
+  }
+
+  var initial=routeFromUrl();
+  render(initial);
+  remember(initial,true);
+
+  window.addEventListener("popstate",function(event){
+    render(event.state&&event.state.ktRoute?event.state.ktRoute:routeFromUrl());
+  });
+})();
+</script>
