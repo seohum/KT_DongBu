@@ -25,6 +25,13 @@
   .stat-card .value { font-size: 28px; font-weight: 800; margin-top: 8px; color: #111; }
   .stat-card .value.red { color: #e31937; }
 
+  /* ADMIN_SECTOR_TABS_V1 */
+  .sector-tabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:16px; }
+  .sector-tab { min-height:54px; padding:10px 12px; border:1px solid #dbe2ea; border-radius:12px; background:#fff; color:#475569; cursor:pointer; font-size:13px; font-weight:800; box-shadow:0 2px 4px rgba(0,0,0,.02); }
+  .sector-tab.active { background:#e31937; border-color:#e31937; color:#fff; }
+  .sector-tab span { display:block; margin-top:3px; font-size:10px; font-weight:600; opacity:.75; }
+  @media(max-width:720px){.sector-tabs{grid-template-columns:1fr 1fr}.sector-tab{min-height:50px;font-size:12px}}
+
   /* Controls */
   .controls { background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
   .filters { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -241,6 +248,14 @@
     </div>
   </div>
 
+  <!-- 관리자 섹터 구분 -->
+  <div class="sector-tabs" aria-label="신청 섹터 선택">
+    <button class="sector-tab active" type="button" onclick="setSector('ALL',this)">전체<span id="sectorCountAll">0건</span></button>
+    <button class="sector-tab" type="button" onclick="setSector('GENERAL',this)">일반 가입신청<span id="sectorCountGeneral">0건</span></button>
+    <button class="sector-tab" type="button" onclick="setSector('MARK_PALACE',this)">마크팰리스 특판<span id="sectorCountMark">0건</span></button>
+    <button class="sector-tab" type="button" onclick="setSector('BUSINESS',this)">소상공인·사업자<span id="sectorCountBusiness">0건</span></button>
+  </div>
+
   <!-- Controls -->
   <div class="controls">
     <div class="filters">
@@ -337,12 +352,41 @@
 <script src="config.js"></script>
 <script>
 let currentCategoryFilter = 'ALL';
+let currentSectorFilter = 'ALL';
 let dashboardData = [];
 let adminPassword = sessionStorage.getItem('kt_admin_password') || '';
 const SHEETS_ENDPOINT = (window.KT_CONSULT_CONFIG || {}).SHEETS_ENDPOINT || '';
 
 function getStorageData() {
   return dashboardData;
+}
+
+function sectorFor(item) {
+  const source = [
+    item.sector, item.category, item.type, item.apartment, item.site,
+    item.siteCode, item.siteLabel, item.businessType, item.message
+  ].map(value => String(value || '').toLowerCase()).join(' ');
+
+  if (source.includes('mark-palace') || source.includes('마크팰리스')) return 'MARK_PALACE';
+  if (
+    source.includes('소상공인') || source.includes('사업자신청') ||
+    source.includes('개인사업자') || source.includes('법인사업자') ||
+    source.includes('business')
+  ) return 'BUSINESS';
+  return 'GENERAL';
+}
+
+function sectorData(data = getStorageData()) {
+  return currentSectorFilter === 'ALL'
+    ? data
+    : data.filter(item => sectorFor(item) === currentSectorFilter);
+}
+
+function setSector(sector, button) {
+  currentSectorFilter = sector;
+  document.querySelectorAll('.sector-tab').forEach(tab => tab.classList.remove('active'));
+  if (button) button.classList.add('active');
+  render();
 }
 
 async function apiRequest(method = 'GET', body, passwordOverride) {
@@ -395,11 +439,16 @@ function render() {
 }
 
 function updateStats() {
-  const data = getStorageData();
+  const allData = getStorageData();
+  const data = sectorData(allData);
   document.getElementById('statTotal').textContent = data.length;
   document.getElementById('statPending').textContent = data.filter(d => d.status === '접수').length;
   document.getElementById('statConsult').textContent = data.filter(d => d.category === '상담신청').length;
   document.getElementById('statJoin').textContent = data.filter(d => d.category === '가입신청').length;
+  document.getElementById('sectorCountAll').textContent = allData.length + '건';
+  document.getElementById('sectorCountGeneral').textContent = allData.filter(d => sectorFor(d) === 'GENERAL').length + '건';
+  document.getElementById('sectorCountMark').textContent = allData.filter(d => sectorFor(d) === 'MARK_PALACE').length + '건';
+  document.getElementById('sectorCountBusiness').textContent = allData.filter(d => sectorFor(d) === 'BUSINESS').length + '건';
 }
 
 function setFilter(cat, btn) {
@@ -414,7 +463,7 @@ function joinProductFor(item) {
 }
 
 function renderTable() {
-  const data = getStorageData();
+  const data = sectorData();
   const query = document.getElementById('searchInput').value.toLowerCase();
   const tbody = document.getElementById('tableBody');
 
@@ -429,7 +478,7 @@ function renderTable() {
     }
     // 검색어
     if (query) {
-      return item.name.toLowerCase().includes(query) || item.phone.includes(query);
+      return String(item.name || '').toLowerCase().includes(query) || String(item.phone || '').includes(query);
     }
     return true;
   });
@@ -634,7 +683,7 @@ async function clearAllData() {
 }
 
 function exportToCSV() {
-  const data = getStorageData();
+  const data = sectorData();
   if (data.length === 0) { alert("다운로드할 데이터가 없습니다."); return; }
 
   let csv = "\uFEFF일시,구분,이름,연락처,유형/단지,상세내용/동호수,상태\n";
@@ -647,7 +696,7 @@ function exportToCSV() {
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.setAttribute("download", `KT_상담접수목록_${new Date().toISOString().slice(0,10)}.csv`);
+  link.setAttribute("download", `KT_${currentSectorFilter}_접수목록_${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
