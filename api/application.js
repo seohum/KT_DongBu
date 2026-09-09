@@ -67,10 +67,6 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     timeStyle: 'medium'
   }).format(new Date());
   const siteLabel = text(input.siteLabel, 120) || '일반 가입';
-  const siteCode = text(input.siteCode, 80);
-  const telegramChatId = siteCode === 'samjeong-greencore-the-city' || siteLabel === '삼정그린코아 더 시티'
-    ? (process.env.SAMJEONG_TELEGRAM_CHAT_ID || '@ktmnsDB')
-    : process.env.TELEGRAM_CHAT_ID;
   const adminRecord = {
     action: 'create',
     category: '가입신청',
@@ -136,7 +132,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: telegramChatId,
+        chat_id: process.env.TELEGRAM_CHAT_ID,
         text: telegramText,
         parse_mode: 'HTML',
         disable_web_page_preview: true
