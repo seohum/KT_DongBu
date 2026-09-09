@@ -575,13 +575,45 @@ async function createFilledKtPdf(data, applicationId='미접수') {
     } catch (uploadError) { console.error('관리자용 PDF 업로드 실패', uploadError); }
   }
 
+  const isAppleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isAppleMobile && typeof File !== 'undefined' && navigator.share) {
+    const pdfFile = new File([blob], filename, {type:'application/pdf'});
+    try {
+      if (!navigator.canShare || navigator.canShare({files:[pdfFile]})) {
+        await navigator.share({
+          files:[pdfFile],
+          title:filename,
+          text:'KT 유선가입신청서 PDF'
+        });
+        URL.revokeObjectURL(url);
+        return filename;
+      }
+    } catch (shareError) {
+      if (shareError && shareError.name === 'AbortError') {
+        URL.revokeObjectURL(url);
+        throw new Error('PDF 저장이 취소되었습니다.');
+      }
+      console.warn('아이폰 파일 공유 저장 실패, 미리보기 방식으로 전환합니다.', shareError);
+    }
+  }
+
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
+  a.rel = 'noopener';
   document.body.appendChild(a);
-  a.click();
+
+  if (isAppleMobile) {
+    const opened = window.open(url, '_blank');
+    if (!opened) window.location.href = url;
+  } else {
+    a.click();
+  }
+
   a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  setTimeout(()=>URL.revokeObjectURL(url), 60000);
 
   return filename;
 }
