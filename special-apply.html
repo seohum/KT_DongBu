@@ -34,9 +34,8 @@ document.querySelectorAll('.apply').forEach(button=>button.addEventListener('cli
   const product=bundle?'인터넷+TV':'인터넷';
   const monthly=formatPrice(calculatedPrice(bundle?'bundle':'internet'))+'원';
   const details=bundle?'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / '+wifiText('wifiBundle')+' / 월 '+monthly:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / '+wifiText('wifiInternet')+' / 월 '+monthly;
-  const q=new URLSearchParams({product,details});
+  const q=new URLSearchParams({product,details,return:location.pathname+location.search});
   if(site)q.set('site',site);
   location.href='application.html?'+q.toString();
 }));
 </script></body></html>
-
