@@ -826,17 +826,22 @@ document.addEventListener('DOMContentLoaded', () => {
  back.addEventListener('input',syncResident);
 })();
 </script><script>
-// 마크팰리스 전용 신청서: 기본 주소 고정, 동·호수만 입력
+// 단지 전용 신청서: 기본 주소 고정, 동·호수만 입력
 (function () {
-  if (new URLSearchParams(location.search).get('site') !== 'mark-palace') return;
+  const fixedSites = {
+    'mark-palace': {name: '마크팰리스', address: '대구시 수성구 동대구로 336'},
+    'samjeong-greencore-the-city': {name: '삼정그린코아 더 시티', address: '부산시 부산진구 중앙대로 797'}
+  };
+  const fixedSite = fixedSites[new URLSearchParams(location.search).get('site')];
+  if (!fixedSite) return;
   const address = document.getElementById('address');
   const detail = document.getElementById('addressDetail');
   const search = document.getElementById('addressSearchBtn');
   if (!address || !detail) return;
-  address.value = '대구시 수성구 동대구로 336';
+  address.value = fixedSite.address;
   address.readOnly = true;
   address.style.background = '#f6f7f9';
-  address.setAttribute('aria-label', '마크팰리스 고정 설치주소');
+  address.setAttribute('aria-label', fixedSite.name + ' 고정 설치주소');
   address.parentElement.style.gridTemplateColumns = '1fr';
   if (search) { search.hidden = true; search.disabled = true; }
   const detailField = detail.closest('.field');
@@ -846,7 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
   detail.setAttribute('aria-label', '동·호수');
   const notice = detailField.nextElementSibling;
   if (notice && notice.classList.contains('notice')) {
-    notice.textContent = '마크팰리스 전용 신청서입니다. 설치할 동·호수만 입력해주세요.';
+    notice.textContent = fixedSite.name + ' 전용 신청서입니다. 설치할 동·호수만 입력해주세요.';
   }
 })();
 </script>
