@@ -83,19 +83,48 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     status: '접수'
   };
 
+  const productText = adminRecord.product;
+  const isInternetTv = /(?:인터넷\s*\+\s*TV|인터넷\s*\+\s*티비)/i.test(productText);
+  const wifiIncluded = /(?:와이파이|Wi-?Fi).*(?:포함|체크)|(?:포함).*(?:와이파이|Wi-?Fi)/i.test(productText);
+  const contract = productText.match(/(\d+\s*년\s*약정)/)?.[1]?.replace(/\s+/g, '') || '';
+  const tvSettop = isInternetTv
+    ? (productText.match(/(지니\s*TV\s*셋톱박스\s*\d+|셋톱박스\s*\d+)/i)?.[1] || '')
+    : '';
+  const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
+  const formattedResident = residentNumber.length === 13
+    ? `${residentNumber.slice(0, 6)}-${residentNumber.slice(6)}`
+    : residentNumber;
+
   const telegramText = [
-    '🔵 <b>KT동부법인지사 전자 가입신청</b>',
+    '<b>■ 유선양식■</b>',
+    '＊서류발송여부(sos114@ktmns.com) : N',
+    '＊판매코드 :',
+    '＊프론티어 이름 :',
+    '＊공조(서포터) :',
     '',
-    `🧾 <b>접수번호</b>  ${escapeHtml(applicationId)}`,
-    `👤 <b>가입자</b>  ${escapeHtml(adminRecord.name)}`,
-    `📞 <b>연락처</b>  ${escapeHtml(formatPhone(adminRecord.phone))}`,
-    `📡 <b>가입상품</b>  ${escapeHtml(adminRecord.product)}`,
-    `🏢 <b>가입구분</b>  ${escapeHtml(siteLabel)}`,
-    `📍 <b>설치주소</b>  ${escapeHtml(adminRecord.address)}`,
-    `📅 <b>설치희망일</b>  ${escapeHtml(adminRecord.installDate || '미지정')}`,
-    `🕒 <b>접수시간</b>  ${escapeHtml(createdAt)}`,
+    '- 사업자명 :',
+    '- 사업자등록번호 :',
+    `- 고객명 : ${escapeHtml(adminRecord.name)}`,
+    `- 주민번호 : ${escapeHtml(formattedResident)}`,
+    '- 고객번호 :',
+    '- 건물코드 :',
+    `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
+    `- 자동이체(납부일) : ${escapeHtml(text(input.paymentMethod, 50) || '자동이체(은행)')}`,
+    '  ＊가입유형 : 신규가입',
+    `  ＊상품 : ${escapeHtml(productText)}`,
     '',
-    '🔒 신분증·계좌정보·전자서명은 Telegram에 전송하지 않았습니다.'
+    `* 약정 : ${escapeHtml(contract || '3년')}`,
+    `* WIFI여부 : ${wifiIncluded ? 'Y' : 'N'}`,
+    `* TV셋탑 : ${escapeHtml(tvSettop)}`,
+    '* 일반전화 :',
+    '* 센트릭스 :',
+    '* P/S 희망번호 :',
+    `  ＊가설날짜 : ${escapeHtml(adminRecord.installDate || '')}`,
+    `  ＊결 합 : ${isInternetTv ? '인터넷+TV' : ''}`,
+    `  ＊특이사항 : ${escapeHtml(siteLabel)} / 접수번호 ${escapeHtml(applicationId)}`,
+    '',
+    `연락처 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
+    `접수시간 : ${escapeHtml(createdAt)}`
   ].join('\n');
 
   const [telegram, sheets] = await Promise.all([
