@@ -93,9 +93,10 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     ? (productText.match(/(지니\s*TV\s*셋톱박스\s*\d+|셋톱박스\s*\d+)/i)?.[1] || '')
     : '';
   const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
-  const formattedResident = residentNumber.length === 13
-    ? `${residentNumber.slice(0, 6)}-${residentNumber.slice(6)}`
-    : residentNumber;
+  const birthDigits = String(input.birthDate || '').replace(/\D/g, '');
+  const notificationBirth = birthDigits.length === 8
+    ? `${birthDigits.slice(0, 4)}-${birthDigits.slice(4, 6)}-${birthDigits.slice(6, 8)}`
+    : residentNumber.slice(0, 6);
 
   const telegramText = [
     '<b>■ 유선양식■</b>',
@@ -107,8 +108,8 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     '- 사업자명 :',
     '- 사업자등록번호 :',
     `- 고객명 : ${escapeHtml(adminRecord.name)}`,
-    `- 주민번호 : ${isSamjeong ? '관리자 페이지에서 확인' : escapeHtml(formattedResident)}`,
-    '- 고객번호 :',
+    `- 주민번호 : ${escapeHtml(notificationBirth)}`,
+    `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     '- 건물코드 :',
     `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
     `- 자동이체(납부일) : ${escapeHtml(text(input.paymentMethod, 50) || '자동이체(은행)')}`,
