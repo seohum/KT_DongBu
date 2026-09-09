@@ -19,13 +19,21 @@ const pricing={
   'samjeong-greencore-the-city':{internet:15000,bundle:23400}
 };
 const selectedPricing=pricing[site]||pricing['mark-palace'];
-const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903'};
+const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903','samjeong-greencore-the-city':'samjeong-greencore-the-city-qr.html'};
 document.getElementById('siteName').textContent=sites[site]||'아파트·오피스텔 특판';
 document.getElementById('backLink').href=backUrls[site]||'./?site='+encodeURIComponent(site);
 function formatPrice(value){return Number(value).toLocaleString('ko-KR')}
 function wifiText(id){return document.getElementById(id).checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}
 function calculatedPrice(kind){const wifi=document.getElementById(kind==='bundle'?'wifiBundle':'wifiInternet').checked;return selectedPricing[kind]+(wifi?1100:0)}
 function updatePrices(){document.getElementById('internetPrice').textContent=formatPrice(calculatedPrice('internet'));document.getElementById('bundlePrice').textContent=formatPrice(calculatedPrice('bundle'))}
+function qrReturnTarget(){
+  if(backUrls[site]) return backUrls[site];
+  try{
+    const ref=new URL(document.referrer||'',location.href);
+    if(ref.origin===location.origin&&/-qr\.html$/i.test(ref.pathname)) return ref.pathname.replace(/^\//,'')+ref.search+ref.hash;
+  }catch(e){}
+  return location.pathname.replace(/^\//,'')+location.search;
+}
 document.getElementById('wifiInternet').addEventListener('change',updatePrices);
 document.getElementById('wifiBundle').addEventListener('change',updatePrices);
 updatePrices();
@@ -34,7 +42,7 @@ document.querySelectorAll('.apply').forEach(button=>button.addEventListener('cli
   const product=bundle?'인터넷+TV':'인터넷';
   const monthly=formatPrice(calculatedPrice(bundle?'bundle':'internet'))+'원';
   const details=bundle?'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / '+wifiText('wifiBundle')+' / 월 '+monthly:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / '+wifiText('wifiInternet')+' / 월 '+monthly;
-  const q=new URLSearchParams({product,details,return:location.pathname+location.search});
+  const q=new URLSearchParams({product,details,return:qrReturnTarget()});
   if(site)q.set('site',site);
   location.href='application.html?'+q.toString();
 }));
