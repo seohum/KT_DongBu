@@ -7,5 +7,36 @@
 <section class="content"><div class="card"><div class="title"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>인터넷</b></div><div><strong>인터넷 단독</strong><span>특판 기준 상품</span></div></div><div class="product"><b>인터넷 슬림 100M</b><br>3년 약정 기준<strong class="monthly">월 <span id="internetPrice">11,000</span>원</strong></div><label class="wifi"><input id="wifiInternet" type="checkbox">와이파이 패키지<small>월 1,100원</small></label><button class="apply" data-kind="internet">인터넷 가입신청</button></div>
 <div class="card"><div class="title"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>지니TV</b></div><div><strong>인터넷 + TV</strong><span>특판 기준 결합 상품</span></div></div><div class="product"><b>인터넷 슬림 + 지니TV 베이직</b><br>3년 약정 기준<strong class="monthly">월 <span id="bundlePrice">20,900</span>원</strong></div><label class="wifi"><input id="wifiBundle" type="checkbox">와이파이 패키지<small>월 1,100원</small></label><button class="apply" data-kind="bundle">인터넷 + TV 가입신청</button></div>
 <div class="notice"><strong>안전한 전자신청 안내</strong><br>작성된 신청서는 기존 관리자 시스템과 텔레그램 알림으로 동일하게 접수됩니다.</div></section><footer class="footer">KT 동부법인지사 · 특판 전용 전자가입신청</footer></main>
-<script>const params=new URLSearchParams(location.search),site=params.get('site')||'';const sites={'mark-palace':'범어 마크팰리스','dongdaegu-boutique-terrace':'동대구 부띠끄테라스'};const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903'};document.getElementById('siteName').textContent=sites[site]||'아파트·오피스텔 특판';document.getElementById('backLink').href=backUrls[site]||'./';function wifiText(id){return document.getElementById(id).checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}function updatePrices(){document.getElementById('internetPrice').textContent=document.getElementById('wifiInternet').checked?'12,100':'11,000';document.getElementById('bundlePrice').textContent=document.getElementById('wifiBundle').checked?'22,000':'20,900'}document.getElementById('wifiInternet').addEventListener('change',updatePrices);document.getElementById('wifiBundle').addEventListener('change',updatePrices);updatePrices();document.querySelectorAll('.apply').forEach(button=>button.addEventListener('click',()=>{const bundle=button.dataset.kind==='bundle';const product=bundle?'인터넷+TV':'인터넷';const monthly=bundle?(document.getElementById('wifiBundle').checked?'22,000원':'20,900원'):(document.getElementById('wifiInternet').checked?'12,100원':'11,000원');const details=bundle?'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / '+wifiText('wifiBundle')+' / 월 '+monthly:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / '+wifiText('wifiInternet')+' / 월 '+monthly;const q=new URLSearchParams({product,details});if(site)q.set('site',site);location.href='application.html?'+q.toString()}));</script></body></html>
+<script>
+const params=new URLSearchParams(location.search),site=params.get('site')||'';
+const sites={
+  'mark-palace':'범어 마크팰리스',
+  'dongdaegu-boutique-terrace':'동대구 부띠끄테라스',
+  'samjeong-greencore-the-city':'삼정그린코아 더 시티'
+};
+const pricing={
+  'mark-palace':{internet:11000,bundle:20900},
+  'samjeong-greencore-the-city':{internet:15000,bundle:23400}
+};
+const selectedPricing=pricing[site]||pricing['mark-palace'];
+const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903'};
+document.getElementById('siteName').textContent=sites[site]||'아파트·오피스텔 특판';
+document.getElementById('backLink').href=backUrls[site]||'./?site='+encodeURIComponent(site);
+function formatPrice(value){return Number(value).toLocaleString('ko-KR')}
+function wifiText(id){return document.getElementById(id).checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}
+function calculatedPrice(kind){const wifi=document.getElementById(kind==='bundle'?'wifiBundle':'wifiInternet').checked;return selectedPricing[kind]+(wifi?1100:0)}
+function updatePrices(){document.getElementById('internetPrice').textContent=formatPrice(calculatedPrice('internet'));document.getElementById('bundlePrice').textContent=formatPrice(calculatedPrice('bundle'))}
+document.getElementById('wifiInternet').addEventListener('change',updatePrices);
+document.getElementById('wifiBundle').addEventListener('change',updatePrices);
+updatePrices();
+document.querySelectorAll('.apply').forEach(button=>button.addEventListener('click',()=>{
+  const bundle=button.dataset.kind==='bundle';
+  const product=bundle?'인터넷+TV':'인터넷';
+  const monthly=formatPrice(calculatedPrice(bundle?'bundle':'internet'))+'원';
+  const details=bundle?'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / '+wifiText('wifiBundle')+' / 월 '+monthly:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / '+wifiText('wifiInternet')+' / 월 '+monthly;
+  const q=new URLSearchParams({product,details});
+  if(site)q.set('site',site);
+  location.href='application.html?'+q.toString();
+}));
+</script></body></html>
 

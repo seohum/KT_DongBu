@@ -2458,6 +2458,37 @@ img{
       </div>
 
       <h3>
+        삼정그린코아 더 시티
+      </h3>
+
+      <p>
+        인터넷 단독 · 인터넷 + TV
+        필요한 상품만 선택
+      </p>
+
+      <button
+        class="primary-button"
+        onclick="
+          openFlyer(
+            '삼정그린코아 더 시티',
+            'flyer-03'
+          )
+        "
+      >
+        가격 보기
+      </button>
+
+    </article>
+
+
+
+    <article class="apartment-card">
+
+      <div class="apartment-label">
+        입주 특판 진행중
+      </div>
+
+      <h3>
         범어 마크팩리스
       </h3>
 
@@ -3341,6 +3372,11 @@ const SPECIAL_SITE_LINKS = [
     slug:"mark-palace",
     name:"범어 마크팩리스",
     flyerId:"flyer-02"
+  },
+  {
+    slug:"samjeong-greencore-the-city",
+    name:"삼정그린코아 더 시티",
+    flyerId:"flyer-03"
   }
 ];
 
@@ -3790,7 +3826,7 @@ function loadFlyer(
   const src =
     "assets/flyers/" +
     flyerId +
-    ".png";
+    (flyerId === "flyer-03" ? ".jpg" : ".png");
 
 
   image.style.display =
