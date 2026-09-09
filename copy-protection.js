@@ -59,4 +59,89 @@
     childList: true,
     subtree: true
   });
+
+  /* QR landing -> electronic application common navigation. */
+  function setupQrApplicationNavigation() {
+    var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
+    if (fileName !== "application.html") return;
+
+    var params = new URLSearchParams(location.search);
+    var site = params.get("site") || "";
+    if (!site) return;
+
+    var dedicatedQrPages = {
+      "mark-palace": "mark-palace-qr.html?v=3button-20260903",
+      "samjeong-greencore-the-city": "samjeong-greencore-the-city-qr.html"
+    };
+
+    function safeReturnUrl(raw) {
+      if (!raw) return "";
+      try {
+        var target = new URL(raw, location.href);
+        if (target.origin !== location.origin) return "";
+        if (/\/application\.html$/i.test(target.pathname)) return "";
+        return target.pathname.replace(/^\//, "") + target.search + target.hash;
+      } catch (error) {
+        return "";
+      }
+    }
+
+    var passedReturnUrl = safeReturnUrl(params.get("return"));
+    var returnUrl = passedReturnUrl || dedicatedQrPages[site] || ("./?site=" + encodeURIComponent(site));
+
+    function goToQrLanding() {
+      location.href = returnUrl;
+    }
+
+    function closeOrReturn() {
+      window.close();
+      window.setTimeout(function () {
+        if (!document.hidden && !window.closed) goToQrLanding();
+      }, 420);
+    }
+
+    function installUi() {
+      document.body.classList.add("qr-application-mode");
+
+      if (!document.getElementById("qrApplicationNavStyle")) {
+        var navStyle = document.createElement("style");
+        navStyle.id = "qrApplicationNavStyle";
+        navStyle.textContent =
+          "body.qr-application-mode .bottom{bottom:70px}" +
+          "body.qr-application-mode .content{padding-bottom:190px}" +
+          ".qr-close-bar{position:fixed;left:50%;bottom:0;z-index:21;width:100%;max-width:430px;transform:translateX(-50%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.98);border-top:1px solid #eceef1;backdrop-filter:blur(10px)}" +
+          ".qr-close-btn{width:100%;min-height:48px;border:1px solid #dfe2e8;border-radius:13px;background:#f2f3f5;color:#3f444d;font:inherit;font-size:14px;font-weight:900;cursor:pointer}" +
+          ".qr-close-btn:active{background:#e8eaed}";
+        document.head.appendChild(navStyle);
+      }
+
+      var backButton = document.querySelector(".back-btn");
+      if (backButton && !backButton.dataset.qrReturnBound) {
+        backButton.dataset.qrReturnBound = "Y";
+        backButton.onclick = null;
+        backButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          goToQrLanding();
+        }, true);
+      }
+
+      if (!document.getElementById("qrCloseBar")) {
+        var closeBar = document.createElement("div");
+        closeBar.id = "qrCloseBar";
+        closeBar.className = "qr-close-bar";
+        closeBar.innerHTML = '<button type="button" class="qr-close-btn" id="qrCloseBtn">창 닫기</button>';
+        document.body.appendChild(closeBar);
+        document.getElementById("qrCloseBtn").addEventListener("click", closeOrReturn);
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", installUi, { once: true });
+    } else {
+      installUi();
+    }
+  }
+
+  setupQrApplicationNavigation();
 })();
