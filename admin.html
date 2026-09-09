@@ -253,6 +253,7 @@
     <button class="sector-tab active" type="button" onclick="setSector('ALL',this)">전체<span id="sectorCountAll">0건</span></button>
     <button class="sector-tab" type="button" onclick="setSector('GENERAL',this)">일반 가입신청<span id="sectorCountGeneral">0건</span></button>
     <button class="sector-tab" type="button" onclick="setSector('MARK_PALACE',this)">마크팰리스 특판<span id="sectorCountMark">0건</span></button>
+    <button class="sector-tab" type="button" onclick="setSector('SAMJEONG',this)">삼정그린코아 더 시티<span id="sectorCountSamjeong">0건</span></button>
     <button class="sector-tab" type="button" onclick="setSector('BUSINESS',this)">소상공인·사업자<span id="sectorCountBusiness">0건</span></button>
   </div>
 
@@ -368,6 +369,7 @@ function sectorFor(item) {
   ].map(value => String(value || '').toLowerCase()).join(' ');
 
   if (source.includes('mark-palace') || source.includes('마크팰리스')) return 'MARK_PALACE';
+  if (source.includes('samjeong-greencore-the-city') || source.replace(/\s/g, '').includes('삼정그린코아')) return 'SAMJEONG';
   if (
     source.includes('소상공인') || source.includes('사업자신청') ||
     source.includes('개인사업자') || source.includes('법인사업자') ||
@@ -448,6 +450,7 @@ function updateStats() {
   document.getElementById('sectorCountAll').textContent = allData.length + '건';
   document.getElementById('sectorCountGeneral').textContent = allData.filter(d => sectorFor(d) === 'GENERAL').length + '건';
   document.getElementById('sectorCountMark').textContent = allData.filter(d => sectorFor(d) === 'MARK_PALACE').length + '건';
+  document.getElementById('sectorCountSamjeong').textContent = allData.filter(d => sectorFor(d) === 'SAMJEONG').length + '건';
   document.getElementById('sectorCountBusiness').textContent = allData.filter(d => sectorFor(d) === 'BUSINESS').length + '건';
 }
 
