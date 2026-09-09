@@ -87,7 +87,8 @@
     }
 
     var passedReturnUrl = safeReturnUrl(params.get("return"));
-    var returnUrl = passedReturnUrl || dedicatedQrPages[site] || ("./?site=" + encodeURIComponent(site));
+    var referrerReturnUrl = safeReturnUrl(document.referrer);
+    var returnUrl = passedReturnUrl || referrerReturnUrl || dedicatedQrPages[site] || ("./?site=" + encodeURIComponent(site));
 
     function goToQrLanding() {
       location.href = returnUrl;
