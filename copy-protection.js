@@ -67,7 +67,6 @@
 
     var params = new URLSearchParams(location.search);
     var site = params.get("site") || "";
-    if (!site) return;
 
     var dedicatedQrPages = {
       "mark-palace": "mark-palace-qr.html?v=3button-20260903",
@@ -86,12 +85,14 @@
       }
     }
 
+    var dedicatedReturnUrl = site && dedicatedQrPages[site] ? dedicatedQrPages[site] : "";
     var passedReturnUrl = safeReturnUrl(params.get("return"));
     var referrerReturnUrl = safeReturnUrl(document.referrer);
-    var returnUrl = passedReturnUrl || referrerReturnUrl || dedicatedQrPages[site] || ("./?site=" + encodeURIComponent(site));
+    var returnUrl = dedicatedReturnUrl || passedReturnUrl || referrerReturnUrl || (site ? ("./?site=" + encodeURIComponent(site)) : "./");
 
     function goToQrLanding() {
-      location.href = returnUrl;
+      /* replace prevents a back-button loop back into the application form */
+      location.replace(returnUrl);
     }
 
     function closeOrReturn() {
@@ -102,6 +103,7 @@
     }
 
     function installUi() {
+      if (!document.body) return;
       document.body.classList.add("qr-application-mode");
 
       if (!document.getElementById("qrApplicationNavStyle")) {
@@ -110,21 +112,16 @@
         navStyle.textContent =
           "body.qr-application-mode .bottom{bottom:70px}" +
           "body.qr-application-mode .content{padding-bottom:190px}" +
-          ".qr-close-bar{position:fixed;left:50%;bottom:0;z-index:21;width:100%;max-width:430px;transform:translateX(-50%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.98);border-top:1px solid #eceef1;backdrop-filter:blur(10px)}" +
+          ".qr-close-bar{position:fixed;left:50%;bottom:0;z-index:9998;width:100%;max-width:430px;transform:translateX(-50%);padding:9px 18px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.98);border-top:1px solid #eceef1;backdrop-filter:blur(10px)}" +
           ".qr-close-btn{width:100%;min-height:48px;border:1px solid #dfe2e8;border-radius:13px;background:#f2f3f5;color:#3f444d;font:inherit;font-size:14px;font-weight:900;cursor:pointer}" +
           ".qr-close-btn:active{background:#e8eaed}";
         document.head.appendChild(navStyle);
       }
 
       var backButton = document.querySelector(".back-btn");
-      if (backButton && !backButton.dataset.qrReturnBound) {
-        backButton.dataset.qrReturnBound = "Y";
-        backButton.onclick = null;
-        backButton.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          goToQrLanding();
-        }, true);
+      if (backButton) {
+        backButton.removeAttribute("onclick");
+        backButton.setAttribute("data-qr-return", "Y");
       }
 
       if (!document.getElementById("qrCloseBar")) {
@@ -137,11 +134,27 @@
       }
     }
 
+    /* Capture phase: always win over the form's existing inline history.back(). */
+    document.addEventListener("click", function (event) {
+      var target = event.target && event.target.closest ? event.target.closest(".back-btn") : null;
+      if (!target) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      goToQrLanding();
+    }, true);
+
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", installUi, { once: true });
     } else {
       installUi();
     }
+
+    /* Re-apply after BFCache/page restoration or late DOM rewrites. */
+    window.addEventListener("pageshow", installUi);
+    new MutationObserver(function () {
+      var backButton = document.querySelector(".back-btn");
+      if (backButton && backButton.getAttribute("onclick")) installUi();
+    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["onclick"] });
   }
 
   setupQrApplicationNavigation();
