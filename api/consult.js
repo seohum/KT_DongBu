@@ -53,6 +53,7 @@ export default async function handler(request, response) {
     const carrier = clean(body.carrier, 30);
     const message = clean(body.message, 500);
     const apartment = clean(body.apartment, 80);
+    const siteCode = clean(body.siteCode, 80);
     const unit = clean(body.unit, 80);
     const installDate = clean(body.installDate, 20);
 
@@ -94,13 +95,17 @@ export default async function handler(request, response) {
           `🕒 <b>접수시간</b>  ${escapeHtml(time)}`
         ].join("\n");
 
+    const telegramChatId = siteCode === "samjeong-greencore-the-city" || apartment === "삼정그린코아 더 시티"
+      ? (process.env.SAMJEONG_TELEGRAM_CHAT_ID || "@ktmnsDB")
+      : process.env.TELEGRAM_CHAT_ID;
+
     const telegram = await fetch(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          chat_id: process.env.TELEGRAM_CHAT_ID,
+          chat_id: telegramChatId,
           text,
           parse_mode: "HTML",
           disable_web_page_preview: true
