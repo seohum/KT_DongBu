@@ -4860,12 +4860,7 @@ function closeQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.cl
   }
   window.openProductJoin=function(product){window.location.href=applicationUrl(product);};
   window.joinApartment=function(){
-    var site=new URLSearchParams(window.location.search).get("site")||"";
-    if(!site&&typeof SPECIAL_SITE_LINKS!=="undefined"&&typeof currentApartment!=="undefined"){
-      var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
-      if(match)site=match.slug;
-    }
-    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=qr" : applicationUrl("인터넷");
+    window.location.href="special-apply.html?site=samjeong-greencore-the-city&source=qr";
   };
 })();
 </script>
