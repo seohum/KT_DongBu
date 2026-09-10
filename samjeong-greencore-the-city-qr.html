@@ -2048,7 +2048,7 @@ body{background:#fff}.app{padding-bottom:22px;box-shadow:none}
 }
 
 </style>
-<script src="copy-protection.js" defer></script>
+<script src="copy-protection.js?v=20260910-route-source2" defer></script>
 </head>
 
 
@@ -4853,7 +4853,9 @@ function closeQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.cl
     if(site)query.set("site",site);
     query.set("product",selected);
     if(product)query.set("details",String(product));
-    query.set("v","20260910-restore1");
+    query.set("source","qr");
+    query.set("return","samjeong-greencore-the-city-qr.html");
+    query.set("v","20260910-route-source2");
     return "application.html?"+query.toString();
   }
   window.openProductJoin=function(product){window.location.href=applicationUrl(product);};
@@ -4863,7 +4865,7 @@ function closeQrConsultSuccess(){document.getElementById('qrConsultSuccess')?.cl
       var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
       if(match)site=match.slug;
     }
-    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site) : applicationUrl("인터넷");
+    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=qr" : applicationUrl("인터넷");
   };
 })();
 </script>
