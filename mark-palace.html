@@ -4777,6 +4777,7 @@ openSiteFromLink();
     if(site)query.set("site",site);
     query.set("product",selected);
     if(product)query.set("details",String(product));
+    query.set("v","20260910-restore1");
     return "application.html?"+query.toString();
   }
   window.openProductJoin=function(product){window.location.href=applicationUrl(product);};

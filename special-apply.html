@@ -44,6 +44,7 @@ document.querySelectorAll('.apply').forEach(button=>button.addEventListener('cli
   const details=bundle?'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / '+wifiText('wifiBundle')+' / 월 '+monthly:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / '+wifiText('wifiInternet')+' / 월 '+monthly;
   const q=new URLSearchParams({product,details,return:qrReturnTarget()});
   if(site)q.set('site',site);
+  q.set('v','20260910-restore1');
   location.href='application.html?'+q.toString();
 }));
 </script></body></html>
