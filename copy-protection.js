@@ -60,8 +60,8 @@
     subtree: true
   });
 
-  /* QR landing -> electronic application common navigation. */
-  function setupQrApplicationNavigation() {
+  /* Electronic application navigation separated by entry source. */
+  function setupApplicationNavigation() {
     var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
     if (fileName !== "application.html") return;
 
@@ -85,26 +85,30 @@
       }
     }
 
-    var dedicatedReturnUrl = site && dedicatedQrPages[site] ? dedicatedQrPages[site] : "";
     var passedReturnUrl = safeReturnUrl(params.get("return"));
     var referrerReturnUrl = safeReturnUrl(document.referrer);
-    var returnUrl = dedicatedReturnUrl || passedReturnUrl || referrerReturnUrl || (site ? ("./?site=" + encodeURIComponent(site)) : "./");
+    var explicitSource = params.get("source");
+    var legacyQrSource = !explicitSource && site && /-qr\.html(?:[?#]|$)/i.test(passedReturnUrl || referrerReturnUrl);
+    var source = explicitSource === "qr" || legacyQrSource ? "qr" : "main";
+    var qrReturnUrl = passedReturnUrl || (site && dedicatedQrPages[site] ? dedicatedQrPages[site] : "") || referrerReturnUrl || "./";
+    var mainReturnUrl = "./?view=internet";
 
-    function goToQrLanding() {
-      /* replace prevents a back-button loop back into the application form */
-      location.replace(returnUrl);
+    function goBack() {
+      /* replace prevents a back-button loop back into the application form. */
+      location.replace(source === "qr" ? qrReturnUrl : mainReturnUrl);
     }
 
-    function closeOrReturn() {
+    function closeApplicationWindow() {
       window.close();
       window.setTimeout(function () {
-        if (!document.hidden && !window.closed) goToQrLanding();
-      }, 420);
+        /* Browsers only allow scripted tab closing in some launch modes. */
+        if (!window.closed) location.replace("about:blank");
+      }, 250);
     }
 
     function installUi() {
       if (!document.body) return;
-      document.body.classList.add("qr-application-mode");
+      document.body.classList.toggle("qr-application-mode", source === "qr");
 
       if (!document.getElementById("qrApplicationNavStyle")) {
         var navStyle = document.createElement("style");
@@ -124,23 +128,34 @@
         backButton.setAttribute("data-qr-return", "Y");
       }
 
-      if (!document.getElementById("qrCloseBar")) {
+      if (source === "qr" && !document.getElementById("qrCloseBar")) {
         var closeBar = document.createElement("div");
         closeBar.id = "qrCloseBar";
         closeBar.className = "qr-close-bar";
         closeBar.innerHTML = '<button type="button" class="qr-close-btn" id="qrCloseBtn">창 닫기</button>';
         document.body.appendChild(closeBar);
-        document.getElementById("qrCloseBtn").addEventListener("click", closeOrReturn);
+        document.getElementById("qrCloseBtn").addEventListener("click", closeApplicationWindow);
+      }
+
+      var successButton = document.querySelector(".content .next.full");
+      var successTitle = document.querySelector(".content .step.on .title");
+      if (source === "qr" && successButton && successTitle && /접수되었습니다/.test(successTitle.textContent || "")) {
+        if (successButton.getAttribute("data-close-application") !== "Y") {
+          successButton.textContent = "창 닫기";
+          successButton.removeAttribute("onclick");
+          successButton.setAttribute("data-close-application", "Y");
+        }
       }
     }
 
     /* Capture phase: always win over the form's existing inline history.back(). */
     document.addEventListener("click", function (event) {
-      var target = event.target && event.target.closest ? event.target.closest(".back-btn") : null;
+      var target = event.target && event.target.closest ? event.target.closest(".back-btn,[data-close-application='Y']") : null;
       if (!target) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      goToQrLanding();
+      if (target.matches("[data-close-application='Y']")) closeApplicationWindow();
+      else goBack();
     }, true);
 
     if (document.readyState === "loading") {
@@ -152,10 +167,68 @@
     /* Re-apply after BFCache/page restoration or late DOM rewrites. */
     window.addEventListener("pageshow", installUi);
     new MutationObserver(function () {
-      var backButton = document.querySelector(".back-btn");
-      if (backButton && backButton.getAttribute("onclick")) installUi();
+      installUi();
     }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["onclick"] });
   }
 
-  setupQrApplicationNavigation();
+  /* Tag every application link as QR or main-site traffic. */
+  function setupApplicationEntryRouting() {
+    var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
+    if (!/^(?:index|mark-palace|mark-palace-qr|samjeong-greencore-the-city-qr)\.html$/.test(fileName)) return;
+    var source = /-qr\.html$/.test(fileName) ? "qr" : "main";
+
+    function currentSiteCode() {
+      var site = new URLSearchParams(location.search).get("site") || "";
+      if (!site && typeof SPECIAL_SITE_LINKS !== "undefined" && typeof currentApartment !== "undefined") {
+        var match = SPECIAL_SITE_LINKS.find(function (item) { return item.name === currentApartment; });
+        if (match) site = match.slug;
+      }
+      return site;
+    }
+
+    function applicationUrl(product) {
+      var site = currentSiteCode();
+      var selected = String(product || "").replace(/\s/g, "").indexOf("TV") > -1 ? "인터넷+TV" : "인터넷";
+      var query = new URLSearchParams({ product: selected, source: source, return: source === "qr" ? location.pathname.split("/").pop() + location.search : "./?view=internet", v: "20260910-route-source1" });
+      if (site) query.set("site", site);
+      if (product) query.set("details", String(product));
+      return "application.html?" + query.toString();
+    }
+
+    window.openProductJoin = function (product) { location.href = applicationUrl(product); };
+    window.joinApartment = function () {
+      var site = currentSiteCode();
+      if (!site) return location.href = applicationUrl("인터넷");
+      var query = new URLSearchParams({ site: site, source: source });
+      if (source === "main") query.set("return", "./?view=internet");
+      location.href = "special-apply.html?" + query.toString();
+    };
+  }
+
+  /* The same apartment can use independent flyer files on QR and main pages. */
+  function setupFlyerImageContext() {
+    var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
+    var context = /-qr\.html$/.test(fileName) ? "qr" : "main";
+    var config = window.KT_CONSULT_CONFIG || {};
+    var maps = config.FLYER_IMAGES || {};
+    var map = maps[context] || {};
+    if (!Object.keys(map).length) return;
+
+    function applyConfiguredFlyer() {
+      if (typeof currentFlyer === "undefined" || !currentFlyer || !map[currentFlyer]) return;
+      var image = document.getElementById("flyerImage");
+      if (!image || image.getAttribute("data-flyer-context") === context + ":" + currentFlyer) return;
+      image.setAttribute("data-flyer-context", context + ":" + currentFlyer);
+      image.src = map[currentFlyer];
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyConfiguredFlyer, { once: true });
+    else applyConfiguredFlyer();
+    window.addEventListener("pageshow", applyConfiguredFlyer);
+  }
+
+  setupApplicationNavigation();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", setupApplicationEntryRouting, { once: true });
+  else setupApplicationEntryRouting();
+  setupFlyerImageContext();
 })();
