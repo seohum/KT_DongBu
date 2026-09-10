@@ -8,7 +8,7 @@
 <div class="card"><div class="title"><div class="icon"><img src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT"><b>지니TV</b></div><div><strong>인터넷 + TV</strong><span>특판 기준 결합 상품</span></div></div><div class="product"><b>인터넷 슬림 + 지니TV 베이직</b><br>3년 약정 기준<strong class="monthly">월 <span id="bundlePrice">20,900</span>원</strong></div><label class="wifi"><input id="wifiBundle" type="checkbox">와이파이 패키지<small>월 1,100원</small></label><button class="apply" data-kind="bundle">인터넷 + TV 가입신청</button></div>
 </section><footer class="footer">KT 동부법인지사 · 특판 전용 전자가입신청</footer></main>
 <script>
-const params=new URLSearchParams(location.search),site=params.get('site')||'';
+const params=new URLSearchParams(location.search),site=params.get('site')||'',source=params.get('source')==='qr'?'qr':'main';
 const sites={
   'mark-palace':'범어 마크팰리스',
   'dongdaegu-boutique-terrace':'동대구 부띠끄테라스',
@@ -31,6 +31,7 @@ function calculatedPrice(kind){const wifi=document.getElementById(kind==='bundle
 function applicationDetails(kind){const bundle=kind==='bundle',monthly=formatPrice(calculatedPrice(kind))+'원';return ['아파트/오피스텔 특판',applicationStandard.internet,bundle?applicationStandard.tv:'',applicationStandard.contract,wifiText(bundle?'wifiBundle':'wifiInternet'),'월 '+monthly].filter(Boolean).join(' / ')}
 function updatePrices(){document.getElementById('internetPrice').textContent=formatPrice(calculatedPrice('internet'));document.getElementById('bundlePrice').textContent=formatPrice(calculatedPrice('bundle'))}
 function qrReturnTarget(){
+  if(source!=='qr') return params.get('return')||'./?view=internet';
   if(backUrls[site]) return backUrls[site];
   try{
     const ref=new URL(document.referrer||'',location.href);
@@ -45,9 +46,9 @@ document.querySelectorAll('.apply').forEach(button=>button.addEventListener('cli
   const bundle=button.dataset.kind==='bundle';
   const product=bundle?'인터넷+TV':'인터넷';
   const details=applicationDetails(bundle?'bundle':'internet');
-  const q=new URLSearchParams({product,details,return:qrReturnTarget()});
+  const q=new URLSearchParams({product,details,return:qrReturnTarget(),source});
   if(site)q.set('site',site);
-  q.set('v','20260910-mark-standard1');
+  q.set('v','20260910-route-source1');
   location.href='application.html?'+q.toString();
 }));
 </script></body></html>
