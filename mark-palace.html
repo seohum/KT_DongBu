@@ -1985,7 +1985,7 @@ img{
 
 .internet-wifi-option{margin:0 0 14px;padding:14px 16px;border:1px solid #e2e4e8;border-radius:16px;background:#f8f9fb}.internet-wifi-option label{display:block;margin-bottom:8px;font-size:14px;font-weight:900}.internet-wifi-option select{width:100%;padding:12px;border:1px solid #d9dce2;border-radius:12px;background:#fff;font-size:14px}
 </style>
-<script src="copy-protection.js" defer></script>
+<script src="copy-protection.js?v=20260910-route-source2" defer></script>
 </head>
 
 
@@ -4777,7 +4777,9 @@ openSiteFromLink();
     if(site)query.set("site",site);
     query.set("product",selected);
     if(product)query.set("details",String(product));
-    query.set("v","20260910-restore1");
+    query.set("source","main");
+    query.set("return","./?view=internet");
+    query.set("v","20260910-route-source2");
     return "application.html?"+query.toString();
   }
   window.openProductJoin=function(product){window.location.href=applicationUrl(product);};
@@ -4787,7 +4789,7 @@ openSiteFromLink();
       var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
       if(match)site=match.slug;
     }
-    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site) : applicationUrl("인터넷");
+    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=main&return="+encodeURIComponent("./?view=internet") : applicationUrl("인터넷");
   };
 })();
 </script>
