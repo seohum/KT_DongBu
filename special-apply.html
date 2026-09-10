@@ -24,7 +24,9 @@ const applicationStandard={internet:'인터넷 슬림 100M',tv:'지니 TV 베이
 const selectedPricing=pricing[site]||pricing['mark-palace'];
 const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903','samjeong-greencore-the-city':'samjeong-greencore-the-city-qr.html'};
 document.getElementById('siteName').textContent=sites[site]||'아파트·오피스텔 특판';
-document.getElementById('backLink').href=backUrls[site]||'./?site='+encodeURIComponent(site);
+document.getElementById('backLink').href=source==='qr'
+  ? (backUrls[site]||'./?site='+encodeURIComponent(site))
+  : (params.get('return')||'./?site='+encodeURIComponent(site));
 function formatPrice(value){return Number(value).toLocaleString('ko-KR')}
 function wifiText(id){return document.getElementById(id).checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}
 function calculatedPrice(kind){const wifi=document.getElementById(kind==='bundle'?'wifiBundle':'wifiInternet').checked;return selectedPricing[kind]+(wifi?1100:0)}

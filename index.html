@@ -4881,7 +4881,7 @@ if(
       var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
       if(match)site=match.slug;
     }
-    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=main&return="+encodeURIComponent("./?view=internet") : applicationUrl("인터넷");
+    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=main&return="+encodeURIComponent("./?site="+encodeURIComponent(site)) : applicationUrl("인터넷");
   };
 })();
 </script>
