@@ -174,7 +174,7 @@
   /* Tag every application link as QR or main-site traffic. */
   function setupApplicationEntryRouting() {
     var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
-    if (!/^(?:index|mark-palace|mark-palace-qr|samjeong-greencore-the-city-qr)\.html$/.test(fileName)) return;
+    if (fileName && !/^(?:index|mark-palace|mark-palace-qr|samjeong-greencore-the-city-qr)\.html$/.test(fileName)) return;
     var source = /-qr\.html$/.test(fileName) ? "qr" : "main";
 
     function currentSiteCode() {
@@ -210,7 +210,18 @@
     var fileName = String(location.pathname || "").split("/").pop().toLowerCase();
     var context = /-qr\.html$/.test(fileName) ? "qr" : "main";
     var config = window.KT_CONSULT_CONFIG || {};
-    var maps = config.FLYER_IMAGES || {};
+    var maps = config.FLYER_IMAGES || {
+      main: {
+        "flyer-01": "assets/flyers/flyer-01.png",
+        "flyer-02": "assets/flyers/flyer-02.png",
+        "flyer-03": "assets/flyers/flyer-03.jpg"
+      },
+      qr: {
+        "flyer-01": "assets/flyers/flyer-01.png",
+        "flyer-02": "assets/flyers/flyer-02.png",
+        "flyer-03": "assets/flyers/flyer-03.jpg"
+      }
+    };
     var map = maps[context] || {};
     if (!Object.keys(map).length) return;
 
