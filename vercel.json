@@ -4,10 +4,13 @@
       "maxDuration": 10
     },
     "api/application.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     },
     "api/application-files.js": {
-      "maxDuration": 30
+      "maxDuration": 60
+    },
+    "api/application-pdf.js": {
+      "maxDuration": 60
     }
   }
 }

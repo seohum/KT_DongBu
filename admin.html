@@ -481,7 +481,8 @@ function renderTable() {
     }
     // 검색어
     if (query) {
-      return String(item.name || '').toLowerCase().includes(query) || String(item.phone || '').includes(query);
+      return [item.name, item.phone, item.message, applicationIdFor(item)]
+        .some(value => String(value || '').toLowerCase().includes(query));
     }
     return true;
   });
@@ -657,12 +658,23 @@ async function loadApplicationFiles(itemId) {
     const result=await response.json().catch(()=>({}));
     if(!response.ok||!result.success)throw new Error(result.message||'파일을 불러오지 못했습니다.');
     const files=result.files||{},links=[];
-    if(files.pdfUrl)links.push('<a class="file-btn pdf" href="'+files.pdfUrl+'" target="_blank" rel="noopener">PDF 보기</a>');else links.push('<button class="file-btn pdf disabled" type="button" disabled>PDF 보기</button>');
+    if(files.pdfUrl){links.push('<a class="file-btn pdf" href="'+files.pdfUrl+'" target="_blank" rel="noopener">PDF 보기</a>');const downloadUrl=driveDownloadUrl(files.pdfUrl);if(downloadUrl)links.push('<a class="file-btn" href="'+downloadUrl+'" target="_blank" rel="noopener">PDF 다운로드</a>');}else links.push('<button class="file-btn pdf disabled" type="button" disabled>PDF 보기</button>');
     if(files.idFrontUrl)links.push('<a class="file-btn id" href="'+files.idFrontUrl+'" target="_blank" rel="noopener">신분증 앞면</a>');
     if(files.idBackUrl)links.push('<a class="file-btn id" href="'+files.idBackUrl+'" target="_blank" rel="noopener">신분증 뒷면</a>');
     if(files.folderUrl)links.push('<a class="file-btn" href="'+files.folderUrl+'" target="_blank" rel="noopener">전체 폴더</a>');
     panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-actions">'+(links.join('')||'<span class="file-note">저장된 파일이 없습니다.</span>')+'</div><div class="file-note">가입 처리 목적으로만 확인해주세요.</div>';
   }catch(error){panel.innerHTML='<div class="file-panel-title">전자신청 파일</div><div class="file-actions"><button class="file-btn pdf disabled" type="button" disabled>PDF 보기</button></div><div class="file-note" style="color:#dc2626">'+(error.message||'파일을 불러오지 못했습니다.')+'</div>';}
+}
+
+function driveDownloadUrl(fileUrl) {
+  try {
+    const url = new URL(fileUrl);
+    const pathMatch = url.pathname.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    const fileId = pathMatch?.[1] || url.searchParams.get('id');
+    return fileId ? `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}` : '';
+  } catch (_) {
+    return '';
+  }
 }
 
 function closeModal() {

@@ -175,11 +175,15 @@ export default async function handler(req, res) {
       const password = text(input.password, 200);
       const applicationId = text(input.applicationId, 100);
       if (!password || !applicationId) return send(res, 400, { success: false, message: '접수번호와 관리자 인증을 확인해주세요.' }, origin);
-      const auth = await fetch(SHEETS_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'list', password }), redirect: 'follow' });
-      const authResult = await auth.json().catch(() => ({}));
+      const [auth, upstream] = await Promise.all([
+        fetch(SHEETS_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'list', password }), redirect: 'follow' }),
+        fetch(process.env.APPLICATION_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getApplicationFiles', secret: process.env.APPLICATION_SECRET, applicationId }), redirect: 'follow' })
+      ]);
+      const [authResult, result] = await Promise.all([
+        auth.json().catch(() => ({})),
+        upstream.json().catch(() => ({}))
+      ]);
       if (!auth.ok || !authResult.success) return send(res, 401, { success: false, message: '관리자 비밀번호가 올바르지 않습니다.' }, origin);
-      const upstream = await fetch(process.env.APPLICATION_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getApplicationFiles', secret: process.env.APPLICATION_SECRET, applicationId }), redirect: 'follow' });
-      const result = await upstream.json().catch(() => ({}));
       if (!upstream.ok || !result.ok) return send(res, 404, { success: false, message: '저장된 신청 파일을 찾지 못했습니다.' }, origin);
       return send(res, 200, { success: true, files: { folderUrl: result.folderUrl || '', pdfUrl: result.pdfUrl || '', idFrontUrl: result.idFrontUrl || '', idBackUrl: result.idBackUrl || '' } }, origin);
     }
