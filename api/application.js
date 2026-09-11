@@ -87,7 +87,8 @@ async function notifyTelegramAndAdmin(input, applicationId) {
 
   const productText = adminRecord.product;
   const isInternetTv = /(?:인터넷\s*\+\s*TV|인터넷\s*\+\s*티비)/i.test(productText);
-  const wifiIncluded = /(?:와이파이|Wi-?Fi).*(?:포함|체크)|(?:포함).*(?:와이파이|Wi-?Fi)/i.test(productText);
+  const wifiExcluded = /(?:와이파이|Wi-?Fi).*(?:미포함|제외|없음)|(?:미포함|제외|없음).*(?:와이파이|Wi-?Fi)/i.test(productText);
+  const wifiIncluded = !wifiExcluded && /(?:와이파이|Wi-?Fi).*(?:포함|체크)|(?:포함|체크).*(?:와이파이|Wi-?Fi)/i.test(productText);
   const contract = productText.match(/(\d+\s*년\s*약정)/)?.[1]?.replace(/\s+/g, '') || '';
   const tvSettop = isInternetTv
     ? (productText.match(/(지니\s*TV\s*셋톱박스\s*\d+|셋톱박스\s*\d+)/i)?.[1] || '')
@@ -97,6 +98,11 @@ async function notifyTelegramAndAdmin(input, applicationId) {
   const notificationBirth = birthDigits.length === 8
     ? `${birthDigits.slice(0, 4)}-${birthDigits.slice(4, 6)}-${birthDigits.slice(6, 8)}`
     : residentNumber.slice(0, 6);
+  const paymentSummary = [
+    text(input.paymentMethod, 50) || '자동이체(은행)',
+    text(input.bankName, 60) ? `은행명: ${text(input.bankName, 60)}` : '',
+    text(input.accountNumber, 80) ? `계좌번호: ${text(input.accountNumber, 80)}` : ''
+  ].filter(Boolean).join(' / ');
 
   const telegramText = [
     '<b>■ 유선양식■</b>',
@@ -112,7 +118,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     '- 건물코드 :',
     `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
-    `- 자동이체(납부일) : ${escapeHtml(text(input.paymentMethod, 50) || '자동이체(은행)')}`,
+    `- 자동이체(납부일) : ${escapeHtml(paymentSummary)}`,
     '  ＊가입유형 : 신규가입',
     `  ＊상품 : ${escapeHtml(productText)}`,
     '',
@@ -251,17 +257,4 @@ export default async function handler(req, res) {
     });
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
-
-    try {
-      await notifyTelegramAndAdmin(input, result.applicationId);
-    } catch (notificationError) {
-      console.error('application notification warning', notificationError && notificationError.message);
-    }
-
-    return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
-  } catch (error) {
-    console.error('application submission failed', error && error.message);
-    return send(res, 502, { success: false, message: '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' }, origin);
-  }
-}
 
