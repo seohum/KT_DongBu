@@ -11,6 +11,9 @@
     },
     "api/application-pdf.js": {
       "maxDuration": 60
+    },
+    "api/highorder.js": {
+      "maxDuration": 60
     }
   }
 }
