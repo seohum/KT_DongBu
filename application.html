@@ -174,6 +174,12 @@ const APPLICATION_ENDPOINT='https://kt-dong-bu.vercel.app/api/application';
 const PDF_UPLOAD_ENDPOINT='https://kt-dong-bu.vercel.app/api/application-pdf';
 const SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
 const SITE_NAMES={'mark-palace':'범어 마크팰리스','dongdaegu-boutique-terrace':'동대구역 부띠크시티 테라스','samjeong-greencore-the-city':'삼정그린코아 더 시티'};
+// 마크팰리스 전자신청 작성 기준을 삼정그린코아 더 시티에도 동일하게 적용한다.
+// 현장별 월 요금만 유지하고, 상품명·약정·와이파이 표기 순서는 같은 형식으로 고정한다.
+const SITE_APPLICATION_DEFAULTS={
+  'mark-palace':{internet:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / 와이파이 패키지 미포함 / 월 11,000원',bundle:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / 와이파이 패키지 미포함 / 월 20,900원'},
+  'samjeong-greencore-the-city':{internet:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / 와이파이 패키지 미포함 / 월 15,000원',bundle:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / 와이파이 패키지 미포함 / 월 23,400원'}
+};
 const params=new URLSearchParams(location.search);
 const steps=[...document.querySelectorAll('.step')], progress=document.getElementById('progress');let current=0,signed=false,submitting=false;
 steps.slice(0,5).forEach(()=>progress.insertAdjacentHTML('beforeend','<span class="bar"></span>'));
@@ -181,16 +187,17 @@ const bars=[...progress.children], prev=document.getElementById('prev'), next=do
 function showStep(index){current=index;steps.forEach((s,i)=>s.classList.toggle('on',i===current));bars.forEach((b,i)=>b.classList.toggle('on',i<=Math.min(current,4)));prev.style.visibility=current===0?'hidden':'visible';next.textContent=current===5?'신청서 제출':'다음';next.classList.toggle('full',current===0);window.scrollTo(0,0);if(current===4)requestAnimationFrame(resizeCanvas);if(current===5)renderReview()}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
 function requireValue(id,msg){if(!document.getElementById(id).value){toast(msg);return false}return true}
-function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}for(const [id,msg] of [['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.'],['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']])if(!requireValue(id,msg))return false;const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!signed){toast('전자서명을 작성해주세요.');return false}if(!document.getElementById('applySig').checked){toast('서명 적용에 동의해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
+function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}for(const [id,msg] of [['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.'],['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']])if(!requireValue(id,msg))return false;const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
 prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){if(validate())await submitApplication();return}if(validate())showStep(current+1)};
 document.getElementById('idFront').onchange=e=>{const file=e.target.files[0],img=document.getElementById('frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'};
 const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
 function resizeCanvas(){const rect=canvas.getBoundingClientRect(),old=canvas.toDataURL();canvas.width=Math.round(rect.width*devicePixelRatio);canvas.height=Math.round(rect.height*devicePixelRatio);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.lineWidth=6;ctx.lineCap='round';ctx.strokeStyle='#111';if(signed){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,rect.width,rect.height);img.src=old}}
 function point(e){const r=canvas.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top}}
-function start(e){drawing=true;const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}function move(e){if(!drawing)return;const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();signed=true;e.preventDefault()}function end(){drawing=false}
-canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
+function hasSignatureInk(){try{const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;for(let i=3;i<pixels.length;i+=4){if(pixels[i]>0)return true}}catch(error){console.warn('서명 확인 실패',error)}return signed}
+function start(e){drawing=true;if(e.pointerId!==undefined&&canvas.setPointerCapture){try{canvas.setPointerCapture(e.pointerId)}catch(_){}}const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+.1,p.y+.1);ctx.stroke();signed=true;e.preventDefault()}function move(e){if(!drawing)return;const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();signed=true;e.preventDefault()}function end(e){drawing=false;if(e&&e.pointerId!==undefined&&canvas.releasePointerCapture){try{canvas.releasePointerCapture(e.pointerId)}catch(_){}}}
+canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
 function value(id){return document.getElementById(id).value||'-'}
-function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}
+function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}function isInternetTvProduct(product){return /인터넷\s*\+\s*(?:TV|티비)/i.test(String(product||''))}
 function renderReview(){const product=selectedApplicationProduct();const items=[['현장',value('site')],['가입상품',product],['성명',value('name')],['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')],['신분증',value('idType')+' 첨부 완료'],['필수동의','5개 확인'],['전자서명','작성 완료']];document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
 async function imageData(file){if(!file)return'';const bitmap=await createImageBitmap(file),max=1280,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bitmap.width*scale));c.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(bitmap,0,0,c.width,c.height);bitmap.close();return c.toDataURL('image/jpeg',.72)}
 async function submitApplication(){
@@ -214,7 +221,7 @@ async function submitApplication(){
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
 }
 function renderSelectedProductDetails(text){const box=document.getElementById('selectedProductDisplay');box.textContent='';const parts=String(text||'').split('/').map(x=>x.trim()).filter(Boolean);parts.forEach((part,index)=>{let label='신청 유형';if(part.includes('예상 월'))label='예상 월 요금';else if(part.includes('셋톱'))label='셋톱박스';else if(part.includes('와이파이'))label='와이파이 패키지';else if(index>0&&part.includes('TV'))label='TV 상품';else if(index>0&&part.includes('인터넷'))label='인터넷 상품';const row=document.createElement('div');row.className='selected-product-row'+(label==='예상 월 요금'?' total':'');const key=document.createElement('span');key.textContent=label;const value=document.createElement('b');value.textContent=label==='예상 월 요금'?part.replace(/^예상 월\s*/,'월 '):part;row.append(key,value);box.appendChild(row)})}
-const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}let requestedDetails=params.get('details')||'';if(SITE_NAMES[siteCode]&&!requestedDetails){requestedDetails=requestedProduct==='인터넷+TV'?'인터넷+TV / 인터넷 슬림 100M / 지니 TV 베이직':'인터넷 슬림 100M'}if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;renderSelectedProductDetails(requestedDetails);document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{const detailEl=document.getElementById('selectedProductDetails');const displayEl=document.getElementById('selectedProductDisplay');const wrapEl=document.getElementById('selectedProductWrap');if(requestedDetails&&x.value===(requestedProduct||'인터넷')){detailEl.value=requestedDetails;renderSelectedProductDetails(requestedDetails);wrapEl.style.display='block'}else{detailEl.value='';displayEl.textContent='';wrapEl.style.display='none'}}))
+const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}let requestedDetails=params.get('details')||'';if(SITE_APPLICATION_DEFAULTS[siteCode]&&!requestedDetails){requestedDetails=isInternetTvProduct(requestedProduct)?SITE_APPLICATION_DEFAULTS[siteCode].bundle:SITE_APPLICATION_DEFAULTS[siteCode].internet}else if(SITE_NAMES[siteCode]&&!requestedDetails){requestedDetails=isInternetTvProduct(requestedProduct)?'인터넷+TV / 인터넷 슬림 100M / 지니 TV 베이직':'인터넷 슬림 100M'}if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;renderSelectedProductDetails(requestedDetails);document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{const detailEl=document.getElementById('selectedProductDetails');const displayEl=document.getElementById('selectedProductDisplay');const wrapEl=document.getElementById('selectedProductWrap');if(requestedDetails&&x.value===(requestedProduct||'인터넷')){detailEl.value=requestedDetails;renderSelectedProductDetails(requestedDetails);wrapEl.style.display='block'}else{detailEl.value='';displayEl.textContent='';wrapEl.style.display='none'}}))
 showStep(requestedProduct ? 1 : 0);
 </script>
 
@@ -331,7 +338,7 @@ function currentFormDataForPdf() {
   const agrees=[...document.querySelectorAll('.agree')];
   return {
     siteLabel:value('site'),
-    product:document.querySelector('[name="product"]:checked')?.value || '',
+    product:selectedApplicationProduct(),
     preferredInstallDate:value('installDate'),
     customerName:value('name'),
     birthDate:value('birth'),
@@ -392,7 +399,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
     await drawCheck(pdfDoc, p1, 920, 420, 18);
     await drawTextImageFit(pdfDoc, p1, internetName, 1015, 413, 165, 22, {fontSize:15, weight:700, color:'#111'});
   }
-  if (selectedProductText.includes('인터넷+TV')) {
+  if (isInternetTvProduct(selectedProductText)) {
     // Genie TV: 기타 체크 후 선택 상품명 기재
     const tvOtherName = selectedProductText.includes('지니 TV 에센스') ? '지니 TV 에센스'
       : selectedProductText.includes('지니 TV 라이트') ? '지니 TV 라이트' : '지니 TV 베이직';
@@ -409,7 +416,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   await drawCheck(pdfDoc, p1, 972, 552, 18);
 
   // 인터넷+TV 선택 시 TV 약정 3년 및 TV 서명란
-  if (String(data.product||'').includes('인터넷+TV')) {
+  if (isInternetTvProduct(data.product)) {
     // 서비스선택 1: 기타 체크 후 지정 STB 모델 기재
     await drawCheck(pdfDoc, p1, 330, 198, 18);
     await drawTextImageFit(pdfDoc, p1, '지니TV STB A', 390, 191, 220, 22, {fontSize:16, weight:700, color:'#111'});
@@ -462,7 +469,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   await drawTextImageFit(pdfDoc, p2, compactPhone(data.phone), 1035, 842, 160, 25, {fontSize:18, weight:600});
 
     // 인터넷+TV 결합서비스 신청 자동 체크
-  if (String(data.product || '').includes('인터넷+TV')) {
+  if (isInternetTvProduct(data.product)) {
     await drawCheck(pdfDoc, p2, 260, 370, 18); // 신청사항: 신규가입
     await drawCheck(pdfDoc, p2, 260, 405, 18); // 결합선택: 유선결합
     await drawCheck(pdfDoc, p2, 260, 568, 18); // 유선 1번
