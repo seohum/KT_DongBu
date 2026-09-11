@@ -2175,8 +2175,8 @@ img{
 
       </div>
 
-      <span class="opening-soon">
-        오픈 준비중
+      <span class="sector-action">
+        서비스 보기 →
       </span>
 
     </button>
@@ -2365,21 +2365,25 @@ img{
   </div>
 
 
-  <div class="soon-page">
-
-    <div class="soon-icon">
-      🏢
-    </div>
-
-    <h2>
-      오픈 준비중입니다
-    </h2>
-
-    <p>
-      기업 및 소상공인 전용 서비스는<br>
-      현재 페이지를 준비하고 있습니다.
-    </p>
-
+  <p class="page-description">사업장에 필요한 KT 기업·소상공인 서비스를 선택해주세요.</p>
+  <div class="mobile-list">
+    <article class="product-card">
+      <span class="product-badge">전자신청 가능</span>
+      <h3>하이오더</h3>
+      <p>테이블오더 단말, 알림판, 카드리더기와 거치대 구성을 선택해 원본 하이오더 신청서를 작성합니다.</p>
+      <div class="product-info">KT 하이오더 신청서 v20260309 기준 · 모바일 전자서명 및 원본 PDF 생성</div>
+      <div class="product-buttons" style="grid-template-columns:1fr">
+        <button class="primary-button" type="button" onclick="location.href='highorder-application.html'">하이오더 신청서 작성</button>
+      </div>
+    </article>
+    <article class="product-card">
+      <span class="product-badge" style="background:#f2f4f7;color:#667085">상담 접수</span>
+      <h3>기업 인터넷·전화·CCTV</h3>
+      <p>사업장 통신 구성은 사용 환경을 확인한 후 맞춤 상담으로 안내합니다.</p>
+      <div class="product-buttons" style="grid-template-columns:1fr">
+        <button class="secondary-button" type="button" onclick="openConsult('기업·소상공인 상담')">상담 신청</button>
+      </div>
+    </article>
   </div>
 
 </section>
@@ -3119,18 +3123,11 @@ img{
 
 
 
-    <button
-      class="menu-disabled"
-      onclick="menuBusiness()"
-    >
+    <button onclick="menuBusiness()">
 
       <span>
 
         기업 / 소상공인
-
-        <span class="soon-pill">
-          준비중
-        </span>
 
       </span>
 
@@ -4881,7 +4878,7 @@ if(
       var match=SPECIAL_SITE_LINKS.find(function(item){return item.name===currentApartment;});
       if(match)site=match.slug;
     }
-    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=main&return="+encodeURIComponent("./?site="+encodeURIComponent(site)) : applicationUrl("인터넷");
+    window.location.href=site ? "special-apply.html?site="+encodeURIComponent(site)+"&source=main&return="+encodeURIComponent("./?view=internet") : applicationUrl("인터넷");
   };
 })();
 </script>
@@ -4964,6 +4961,7 @@ if(
     restoring=true;
     if(route.page==="internet")originalNavOpen("internetPage","navInternet");
     else if(route.page==="apartment")originalNavOpen("apartmentPage","navApartment");
+    else if(route.page==="business")openPage("businessPage");
     else if(route.page==="consult")originalNavConsult(route.type||"상담 문의");
     else if(route.page==="flyer"&&route.name&&route.flyerId)originalOpenFlyer(route.name,route.flyerId);
     else originalGoHomeAndNav();
