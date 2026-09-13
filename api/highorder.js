@@ -91,16 +91,23 @@ export default async function handler(req, res) {
       signature: input.signature
     };
 
+    const startedAt = Date.now();
     const upstream = await fetch(process.env.APPLICATION_ENDPOINT, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload),
       redirect: 'follow'
     });
-    const result = await upstream.json().catch(() => ({}));
+    const upstreamText = await upstream.text();
+    let result = {};
+    try {
+      result = JSON.parse(upstreamText);
+    } catch (_) {
+      throw new Error(`접수 서버 응답 형식 오류 (${upstream.status}, ${Date.now() - startedAt}ms)`);
+    }
     if (!upstream.ok || !result.ok || !result.applicationId) {
       const detail = text(result.message || result.error, 160);
-      throw new Error(detail || `Drive folder creation failed (${upstream.status})`);
+      throw new Error(detail || `접수 서버가 저장을 거부했습니다 (${upstream.status}, ${Date.now() - startedAt}ms)`);
     }
     return send(res, 200, {success:true, applicationId:result.applicationId}, origin);
   } catch (error) {
@@ -108,7 +115,7 @@ export default async function handler(req, res) {
     const detail = text(error && error.message, 160);
     return send(res, 502, {
       success:false,
-      message: detail && !/^Drive folder creation failed/.test(detail)
+      message: detail
         ? `하이오더 Drive 저장 실패: ${detail}`
         : '하이오더 Drive 접수 폴더 생성에 실패했습니다.'
     }, origin);
