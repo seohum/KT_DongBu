@@ -5,6 +5,10 @@ const ALLOWED_ORIGINS = new Set([
   'https://kt-dong-bu.vercel.app'
 ]);
 
+// Google Drive folder creation can take longer when both business documents
+// are uploaded. Keep this endpoint alive long enough for Apps Script to finish.
+export const maxDuration = 60;
+
 function cors(origin) {
   return {
     'Access-Control-Allow-Origin': ALLOWED_ORIGINS.has(origin) ? origin : 'https://www.ktmns.store',
@@ -94,10 +98,19 @@ export default async function handler(req, res) {
       redirect: 'follow'
     });
     const result = await upstream.json().catch(() => ({}));
-    if (!upstream.ok || !result.ok || !result.applicationId) throw new Error('Drive folder creation failed');
+    if (!upstream.ok || !result.ok || !result.applicationId) {
+      const detail = text(result.message || result.error, 160);
+      throw new Error(detail || `Drive folder creation failed (${upstream.status})`);
+    }
     return send(res, 200, {success:true, applicationId:result.applicationId}, origin);
   } catch (error) {
     console.error('highorder application failed', error && error.message);
-    return send(res, 502, {success:false, message:'하이오더 Drive 접수 폴더 생성에 실패했습니다.'}, origin);
+    const detail = text(error && error.message, 160);
+    return send(res, 502, {
+      success:false,
+      message: detail && !/^Drive folder creation failed/.test(detail)
+        ? `하이오더 Drive 저장 실패: ${detail}`
+        : '하이오더 Drive 접수 폴더 생성에 실패했습니다.'
+    }, origin);
   }
 }
