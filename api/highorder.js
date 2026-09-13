@@ -50,9 +50,9 @@ export default async function handler(req, res) {
     if (required.some(key => !text(input[key], 300))) {
       return send(res, 400, {success:false, message:'필수 입력 내용을 확인해주세요.'}, origin);
     }
-    if (!validDocument(input.businessLicense) || !validImage(input.idFront) || !validImage(input.signature)) {
-      return send(res, 400, {success:false, message:'사업자등록증, 신분증 앞면과 서명을 확인해주세요.'}, origin);
-    }
+    if (!validImage(input.signature)) return send(res, 400, {success:false, message:'서명을 확인해주세요.'}, origin);
+    if (input.businessLicense && !validDocument(input.businessLicense)) return send(res, 400, {success:false, message:'사업자등록증 파일을 확인해주세요.'}, origin);
+    if (input.idFront && !validImage(input.idFront)) return send(res, 400, {success:false, message:'신분증 앞면 파일을 확인해주세요.'}, origin);
 
     const payload = {
       action: 'submitApplication',
