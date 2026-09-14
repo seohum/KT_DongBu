@@ -258,3 +258,15 @@ export default async function handler(req, res) {
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
 
+    try {
+      await notifyTelegramAndAdmin(input, result.applicationId);
+    } catch (notificationError) {
+      console.error('application notification warning', notificationError && notificationError.message);
+    }
+
+    return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
+  } catch (error) {
+    console.error('application submission failed', error && error.message);
+    return send(res, 502, { success: false, message: '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' }, origin);
+  }
+}
