@@ -208,15 +208,15 @@ async function submitApplication(){
     const response=await fetch(APPLICATION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await response.json().catch(()=>({}));
     if(!response.ok||!result.success)throw new Error(result.message||'접수 서버에 연결할 수 없습니다.');
     fetch(SHEETS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'resident',applicationId:result.applicationId,residentNumber:body.residentNumber,name:body.customerName,phone:body.phone})}).catch(error=>console.error('주민번호 보완 저장 실패',error));
-    let pdfName='';
+    let pdfName='',pdfWarning='';
     next.textContent='관리자 PDF 저장 중...';
     try {
       pdfName=await createFilledKtPdf(body,result.applicationId||'KT');
     } catch (pdfError) {
       console.error('관리자 PDF 자동 저장 실패',pdfError);
-      throw new Error('접수정보는 저장되었지만 관리자 PDF 저장에 실패했습니다. 잠시 후 관리자에게 확인해주세요.');
+      pdfWarning='접수는 완료되었습니다. PDF는 관리자 페이지에서 확인해주세요.';
     }
-    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'완성된 신청서 PDF가 관리자 페이지에 자동 저장되었습니다.<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="location.href='./'">홈으로 돌아가기</button></section>`;
+    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'완성된 신청서 PDF가 관리자 페이지에 자동 저장되었습니다.<br><br>':pdfWarning?pdfWarning+'<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="location.href='./'">홈으로 돌아가기</button></section>`;
     document.querySelector('.bottom').style.display='none';
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
 }
@@ -586,7 +586,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
     const uploadUrl = `${PDF_UPLOAD_ENDPOINT}?applicationId=${encodeURIComponent(applicationId)}&fileName=${encodeURIComponent(filename)}`;
     for (let attempt = 1; attempt <= 2; attempt += 1) {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 55000);
+      const timeout = setTimeout(() => controller.abort(), 65000);
       try {
         const uploadResponse = await fetch(uploadUrl, {
           method:'POST',
@@ -603,6 +603,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
       } catch (uploadError) {
         lastUploadError = uploadError;
         console.error('관리자용 PDF 업로드 실패 (' + attempt + '/2)', uploadError);
+        if (uploadError && uploadError.name === 'AbortError') break;
         if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1200));
       } finally {
         clearTimeout(timeout);
