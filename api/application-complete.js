@@ -1,4 +1,5 @@
 import { waitUntil } from '@vercel/functions';
+import applicationHandler from './application.js';
 
 const ALLOWED_ORIGINS = new Set([
   'https://seohum.github.io',
@@ -50,9 +51,17 @@ function parseCombinedBody(raw) {
   return { input, pdf };
 }
 
-function applicationApiUrl() {
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}/api/application`;
-  return 'https://kt-dong-bu.vercel.app/api/application';
+async function submitApplication(input, origin) {
+  let statusCode = 500;
+  let payload = { success: false, message: '접수 서버에 연결할 수 없습니다.' };
+  const response = {
+    setHeader() {},
+    status(value) { statusCode = value; return this; },
+    json(value) { payload = value; return this; },
+    end() { return this; }
+  };
+  await applicationHandler({ method: 'POST', headers: { origin }, body: input }, response);
+  return { statusCode, payload };
 }
 
 async function attachPdf(applicationId, fileName, pdf) {
@@ -86,14 +95,10 @@ export default async function handler(req, res) {
 
   try {
     const { input, pdf } = parseCombinedBody(await readBody(req));
-    const applicationResponse = await fetch(applicationApiUrl(), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Origin': origin },
-      body: JSON.stringify(input)
-    });
-    const applicationResult = await applicationResponse.json().catch(() => ({}));
-    if (!applicationResponse.ok || !applicationResult.success) {
-      return send(res, applicationResponse.status || 502, {
+    const applicationResponse = await submitApplication(input, origin);
+    const applicationResult = applicationResponse.payload;
+    if (applicationResponse.statusCode !== 200 || !applicationResult.success) {
+      return send(res, applicationResponse.statusCode || 502, {
         success: false,
         message: applicationResult.message || '접수 서버에 연결할 수 없습니다.'
       }, origin);
