@@ -20,7 +20,7 @@ const pricing={
 };
 // 두 현장은 마크팰리스와 동일한 전자가입 작성 기준을 사용한다.
 // 현장별 차이는 월 요금뿐이며 상품명, 약정, 와이파이 표기 순서는 동일하다.
-const applicationStandard={internet:'인터넷 슬림 100M',tv:'지니 TV 베이직',contract:'3년 약정'};
+const applicationStandard={internet:'인터넷 슬림 100M',tv:'지니 TV 베이직',settop:'지니 TV 셋톱박스 A',contract:'3년 약정'};
 const selectedPricing=pricing[site]||pricing['mark-palace'];
 const backUrls={'mark-palace':'mark-palace-qr.html?v=3button-20260903','samjeong-greencore-the-city':'samjeong-greencore-the-city-qr.html'};
 document.getElementById('siteName').textContent=sites[site]||'아파트·오피스텔 특판';
@@ -30,7 +30,7 @@ document.getElementById('backLink').href=source==='qr'
 function formatPrice(value){return Number(value).toLocaleString('ko-KR')}
 function wifiText(id){return document.getElementById(id).checked?'와이파이 패키지 포함 (+1,100원/월)':'와이파이 패키지 미포함'}
 function calculatedPrice(kind){const wifi=document.getElementById(kind==='bundle'?'wifiBundle':'wifiInternet').checked;return selectedPricing[kind]+(wifi?1100:0)}
-function applicationDetails(kind){const bundle=kind==='bundle',monthly=formatPrice(calculatedPrice(kind))+'원';return ['아파트/오피스텔 특판',applicationStandard.internet,bundle?applicationStandard.tv:'',applicationStandard.contract,wifiText(bundle?'wifiBundle':'wifiInternet'),'월 '+monthly].filter(Boolean).join(' / ')}
+function applicationDetails(kind){const bundle=kind==='bundle',monthly=formatPrice(calculatedPrice(kind))+'원';return ['아파트/오피스텔 특판',applicationStandard.internet,bundle?applicationStandard.tv:'',bundle?applicationStandard.settop:'',applicationStandard.contract,wifiText(bundle?'wifiBundle':'wifiInternet'),'월 '+monthly].filter(Boolean).join(' / ')}
 function updatePrices(){document.getElementById('internetPrice').textContent=formatPrice(calculatedPrice('internet'));document.getElementById('bundlePrice').textContent=formatPrice(calculatedPrice('bundle'))}
 function qrReturnTarget(){
   if(source!=='qr') return params.get('return')||'./?view=internet';

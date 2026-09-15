@@ -123,12 +123,12 @@ async function notifyTelegramAndAdmin(input, applicationId) {
   };
 
   const productText = adminRecord.product;
-  const isInternetTv = /(?:인터넷\s*\+\s*TV|인터넷\s*\+\s*티비)/i.test(productText);
+  const isInternetTv = /(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(productText);
   const wifiExcluded = /(?:와이파이|Wi-?Fi).*(?:미포함|제외|없음)|(?:미포함|제외|없음).*(?:와이파이|Wi-?Fi)/i.test(productText);
   const wifiIncluded = !wifiExcluded && /(?:와이파이|Wi-?Fi).*(?:포함|체크)|(?:포함|체크).*(?:와이파이|Wi-?Fi)/i.test(productText);
   const contract = productText.match(/(\d+\s*년\s*약정)/)?.[1]?.replace(/\s+/g, '') || '';
   const tvSettop = isInternetTv
-    ? (productText.match(/(지니\s*TV\s*셋톱박스\s*\d+|셋톱박스\s*\d+)/i)?.[1] || '')
+    ? (productText.match(/(?:지니\s*TV\s*)?(셋톱박스\s*[A-Za-z0-9]+)/i)?.[1] || '')
     : '';
   const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
   const birthDigits = String(input.birthDate || '').replace(/\D/g, '');
@@ -142,7 +142,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     text(input.accountNumber, 80) ? `계좌번호: ${text(input.accountNumber, 80)}` : ''
   ].filter(Boolean).join(' / ');
 
-  const telegramText = [
+  const standardTelegramText = [
     '<b>■ 유선양식■</b>',
     '＊서류발송여부(sos114@ktmns.com) : N',
     '＊판매코드 :',
@@ -175,6 +175,36 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     `연락처 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     `접수시간 : ${escapeHtml(createdAt)}`
   ].join('\n');
+
+  const samjeongTelegramText = [
+    '<b>■ 유선양식■</b>',
+    '＊서류발송여부(sos114@ktmns.com) : N',
+    '＊판매코드 :',
+    '＊프론티어 이름 :',
+    '＊공조(서포터) :',
+    '',
+    `- 사업자명 : ${escapeHtml(businessName)}`,
+    `- 사업자등록번호 : ${escapeHtml(businessNumber)}`,
+    `- 고객명 : ${escapeHtml(adminRecord.name)}`,
+    `- 주민번호 : ${escapeHtml(notificationBirth)}`,
+    `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
+    '- 건물코드 : B0002836953',
+    `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
+    `- 자동이체(납부일) : ${escapeHtml(paymentSummary)}`,
+    `- E-MAIL : ${escapeHtml(text(input.email, 120))}`,
+    '＊가입유형 : 신규가입',
+    `＊상품 : ${escapeHtml(productText)}`,
+    ` * 약정 : ${escapeHtml(contract || '3년')}`,
+    ` * WIFI여부 : ${wifiIncluded ? 'Y' : 'N'}`,
+    ` * TV셋탑 : ${escapeHtml(tvSettop)}`,
+    ' * 일반전화 :',
+    ' * 센트릭스 :',
+    ' * P/S 희망번호 :',
+    `＊가설날짜 : ${escapeHtml(adminRecord.installDate || '')}`,
+    `＊결 합 : ${isInternetTv ? '인터넷+TV' : ''}`,
+    `＊특이사항 : ${escapeHtml(siteLabel)} / 접수번호 ${escapeHtml(applicationId)}`
+  ].join('\n');
+  const telegramText = isSamjeong ? samjeongTelegramText : standardTelegramText;
 
   const [telegram, sheets] = await Promise.all([
     fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
