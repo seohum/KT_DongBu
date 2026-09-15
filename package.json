@@ -2,5 +2,8 @@
   "name": "kt-dongbu-consult",
   "private": true,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "@vercel/functions": "^3.9.7"
+  }
 }

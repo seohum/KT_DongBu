@@ -1,3 +1,5 @@
+import { waitUntil } from '@vercel/functions';
+
 const ALLOWED_ORIGINS = new Set([
   'https://seohum.github.io',
   'https://ktmns.store',
@@ -323,11 +325,12 @@ export default async function handler(req, res) {
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
 
-    try {
-      await withTimeout(notifyTelegramAndAdmin(input, result.applicationId), 8000);
-    } catch (notificationError) {
-      console.error('application notification warning', notificationError && notificationError.message);
-    }
+    waitUntil(
+      withTimeout(notifyTelegramAndAdmin(input, result.applicationId), 8000)
+        .catch(notificationError => {
+          console.error('application notification warning', notificationError && notificationError.message);
+        })
+    );
 
     return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
   } catch (error) {
