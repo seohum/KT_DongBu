@@ -7,14 +7,14 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#16181d;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{width:100%;max-width:430px;min-height:100vh;margin:auto;background:#fff}.head{position:sticky;top:0;z-index:10;padding:15px 18px 12px;background:#fff;border-bottom:1px solid #eceef1}.brand{display:flex;align-items:center;gap:9px}.logo{width:52px;height:auto;display:block;object-fit:contain}.brand strong{font-size:16px}.head p{margin:6px 0 0;font-size:11px;color:#727780}.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:12px}.bar{height:4px;border-radius:9px;background:#e8eaf0}.bar.on{background:#e31937}.content{padding:20px 18px 110px}.step{display:none}.step.on{display:block}.eyebrow{margin:0 0 7px;font-size:12px;font-weight:900;color:#e31937}.title{margin:0 0 7px;font-size:23px;line-height:1.25}.desc{margin:0 0 22px;color:#6d727b;font-size:13px;line-height:1.6}.field{margin-bottom:16px}.field label,.label{display:block;margin-bottom:7px;font-size:13px;font-weight:800}.required:after{content:" *";color:#e31937}input,select{width:100%;height:50px;padding:0 13px;border:1px solid #d9dde4;border-radius:12px;background:#fff;font:inherit;font-size:14px;outline:none}input:focus,select:focus{border-color:#e31937;box-shadow:0 0 0 3px rgba(227,25,55,.08)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choices{display:grid;gap:10px}.choice{position:relative;display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #dfe2e8;border-radius:14px}.choice:has(input:checked){border-color:#e31937;background:#fff7f8}.choice input{width:18px;height:18px;margin:1px 0 0}.choice b{display:block;font-size:14px}.choice small{display:block;margin-top:4px;color:#747984;line-height:1.45}.upload{display:block;padding:18px;border:1.5px dashed #c9ced7;border-radius:15px;background:#f8f9fb;text-align:center;cursor:pointer}.upload input{display:none}.upload b{display:block;font-size:14px}.upload span{display:block;margin-top:5px;color:#7b8089;font-size:12px}.preview{display:none;width:100%;max-height:210px;margin-top:10px;border-radius:12px;object-fit:contain;background:#eceff3}.notice{padding:13px 14px;border-radius:12px;background:#f4f6f9;color:#5d636d;font-size:12px;line-height:1.55}.consent{display:flex;gap:10px;padding:13px 0;border-bottom:1px solid #eceef2}.consent input{width:19px;height:19px;margin:1px 0 0}.consent b{display:block;font-size:13px}.consent span{display:block;margin-top:4px;color:#6f747d;font-size:11px;line-height:1.45}.canvas-wrap{border:1px solid #d9dde4;border-radius:14px;overflow:hidden;background:#fff}.canvas-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f6f7f9;font-size:12px;font-weight:800}.clear{border:0;background:none;color:#e31937;font-weight:800}.sig{display:block;width:100%;height:185px;touch-action:none}.review{display:grid;gap:9px}.row{display:flex;justify-content:space-between;gap:16px;padding:12px 13px;border-radius:11px;background:#f6f7f9;font-size:13px}.row span{color:#747984}.row b{text-align:right}.security{margin-top:17px;padding:14px;border-radius:12px;background:#fff4f5;color:#6a343b;font-size:12px;line-height:1.55}.bottom{position:fixed;left:50%;bottom:0;z-index:20;width:100%;max-width:430px;transform:translateX(-50%);display:grid;grid-template-columns:1fr 1.5fr;gap:9px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #eceef1;backdrop-filter:blur(10px)}button{min-height:50px;border:0;border-radius:13px;font:inherit;font-size:14px;font-weight:900;cursor:pointer}.prev{background:#eef0f3;color:#353940}.next{background:#e31937;color:#fff}.next:disabled{background:#c9cbd0}.full{grid-column:1/-1}.toast{position:fixed;left:50%;bottom:92px;z-index:30;transform:translate(-50%,20px);opacity:0;padding:11px 15px;border-radius:999px;background:#202227;color:#fff;font-size:12px;transition:.2s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
 .consent input[type="checkbox"],.choice input[type="radio"]{width:24px;height:24px;min-width:24px;accent-color:#e31937;filter:saturate(1.35) contrast(1.15);cursor:pointer}.consent{gap:12px}.consent b{font-size:15px;font-weight:900}.choice input[type="radio"]{margin:0 10px 0 0}
-.head-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.back-btn{flex:none;height:36px;padding:0 12px;border:1px solid #dfe2e8;border-radius:10px;background:#fff;color:#3f444d;font-size:13px;font-weight:800;cursor:pointer}.back-btn:active{background:#f4f5f7}.selected-product-summary{display:grid;gap:8px;padding:14px;border:1px solid #e3e5e9;border-radius:16px;background:#f8f9fb}.selected-product-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding-bottom:8px;border-bottom:1px solid #e7e9ed}.selected-product-row:last-child{padding-bottom:0;border-bottom:0}.selected-product-row span{font-size:12px;color:#777;white-space:nowrap}.selected-product-row b{font-size:14px;text-align:right;line-height:1.45}.selected-product-row.total{margin:3px -4px -2px;padding:11px 12px;border:0;border-radius:12px;background:#fff0f2}.selected-product-row.total span,.selected-product-row.total b{color:#e31937;font-weight:900}.selected-product-row.total b{font-size:17px}</style>
+.head-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.back-btn{flex:none;height:36px;padding:0 12px;border:1px solid #dfe2e8;border-radius:10px;background:#fff;color:#3f444d;font-size:13px;font-weight:800;cursor:pointer}.back-btn:active{background:#f4f5f7}.selected-product-summary{display:grid;gap:8px;padding:14px;border:1px solid #e3e5e9;border-radius:16px;background:#f8f9fb}.selected-product-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding-bottom:8px;border-bottom:1px solid #e7e9ed}.selected-product-row:last-child{padding-bottom:0;border-bottom:0}.selected-product-row span{font-size:12px;color:#777;white-space:nowrap}.selected-product-row b{font-size:14px;text-align:right;line-height:1.45}.selected-product-row.total{margin:3px -4px -2px;padding:11px 12px;border:0;border-radius:12px;background:#fff0f2}.selected-product-row.total span,.selected-product-row.total b{color:#e31937;font-weight:900}.selected-product-row.total b{font-size:17px}.payment-choice-grid{grid-template-columns:1fr 1fr}.payment-choice-grid .choice{min-height:82px;padding:13px 11px}.payment-choice-grid .choice small{font-size:11px}#bankPaymentFields[hidden]{display:none!important}</style>
 <script src="pdf-lib.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="copy-protection.js" defer></script>
 </head>
 <body>
 <main class="app">
-  <header class="head"><div class="head-top"><div class="brand"><img class="logo" src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT 공식 Wordmark 로고"><strong>유선 전자신청서</strong></div><button type="button" class="back-btn" onclick="history.length>1?history.back():location.href='./'">← 뒤로가기</button></div><p>본인 확인 서류와 서명은 관리자 전용 비공개 저장소에 보관됩니다.</p><div class="progress" id="progress"></div></header>
+  <header class="head"><div class="head-top"><div class="brand"><img class="logo" src="assets/01_KT%20Wordmark%20(Standard)_01.png" alt="KT 공식 Wordmark 로고"><strong>유선 전자신청서</strong></div><button type="button" class="back-btn" onclick="leaveApplication()">← 뒤로가기</button></div><p>본인 확인 서류와 서명은 관리자 전용 비공개 저장소에 보관됩니다.</p><div class="progress" id="progress"></div></header>
   <div class="content">
     <section class="step on" data-step="0">
       <p class="eyebrow">1. 가입상품</p><h1 class="title">신청할 상품을 선택해주세요</h1><p class="desc">현장명은 전용 링크를 통해 자동으로 입력됩니다.</p>
@@ -106,30 +106,39 @@
       <div class="field"><label>현재 통신사</label><select id="carrier"><option>없음</option><option>KT</option><option>SK브로드밴드</option><option>LG유플러스</option><option>지역 케이블</option><option>기타</option></select></div>
       <div class="field"><label class="required">명세서 수신</label><select id="bill"><option value="">선택해주세요</option><option>모바일</option><option>이메일</option><option>kt.com 웹</option></select></div>
 
-      <div class="notice" style="margin:10px 0 16px"><b style="color:#16181d">요금 납부 정보</b><br>요금납부 영역의 빨간 안내칸까지 자동으로 기입되도록 예금주, 은행, 계좌정보를 입력해주세요.</div>
-
-      <div class="field"><label class="required">예금주</label><input id="accountHolder" autocomplete="name" placeholder="예금주 성명"></div>
-
-      <label class="consent" style="padding-top:0;margin-bottom:14px">
-        <input id="sameHolder" type="checkbox">
-        <span><b>가입자와 예금주가 동일합니다</b><span>체크 해제 시 예금주 성명을 별도로 입력할 수 있습니다.</span></span>
-      </label>
-
-      <div class="field"><label class="required">납부 은행</label>
-        <select id="bankName">
-          <option value="">은행을 선택해주세요</option>
-          <option>KB국민은행</option><option>신한은행</option><option>우리은행</option><option>하나은행</option>
-          <option>NH농협은행</option><option>IBK기업은행</option><option>SC제일은행</option><option>한국씨티은행</option>
-          <option>카카오뱅크</option><option>케이뱅크</option><option>토스뱅크</option><option>대구은행(iM뱅크)</option>
-          <option>부산은행</option><option>경남은행</option><option>광주은행</option><option>전북은행</option>
-          <option>제주은행</option><option>수협은행</option><option>우체국</option><option>새마을금고</option>
-          <option>신협</option><option>기타</option>
-        </select>
+      <div class="field"><label class="required">납부 방법</label>
+        <div class="choices payment-choice-grid">
+          <label class="choice"><input type="radio" name="paymentMethod" value="자동이체(은행)" checked><span><b>계좌 자동이체</b><small>은행 계좌에서 매월 납부</small></span></label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="지로"><span><b>지로 납부</b><small>지로 고지서로 직접 납부</small></span></label>
+        </div>
       </div>
 
-      <div class="field"><label class="required">계좌번호</label><input id="accountNumber" inputmode="numeric" autocomplete="off" placeholder="- 없이 숫자만 입력"></div>
-      <div class="field"><label>예금주와의 관계</label><input id="holderRelation" placeholder="예) 본인, 배우자, 부모"></div>
-      <div class="field"><label class="required">예금주 생년월일 / 사업자번호</label><input id="payerBirth" inputmode="numeric" placeholder="개인: YYMMDD / 법인·사업자: 사업자번호"></div>
+      <div class="notice" id="paymentNotice" style="margin:10px 0 16px"><b style="color:#16181d">계좌 자동이체 정보</b><br>예금주, 은행, 계좌정보가 신청서 요금납부 영역에 기입됩니다.</div>
+
+      <div id="bankPaymentFields">
+        <div class="field"><label class="required">예금주</label><input id="accountHolder" autocomplete="name" placeholder="예금주 성명"></div>
+
+        <label class="consent" style="padding-top:0;margin-bottom:14px">
+          <input id="sameHolder" type="checkbox">
+          <span><b>가입자와 예금주가 동일합니다</b><span>체크 해제 시 예금주 성명을 별도로 입력할 수 있습니다.</span></span>
+        </label>
+
+        <div class="field"><label class="required">납부 은행</label>
+          <select id="bankName">
+            <option value="">은행을 선택해주세요</option>
+            <option>KB국민은행</option><option>신한은행</option><option>우리은행</option><option>하나은행</option>
+            <option>NH농협은행</option><option>IBK기업은행</option><option>SC제일은행</option><option>한국씨티은행</option>
+            <option>카카오뱅크</option><option>케이뱅크</option><option>토스뱅크</option><option>대구은행(iM뱅크)</option>
+            <option>부산은행</option><option>경남은행</option><option>광주은행</option><option>전북은행</option>
+            <option>제주은행</option><option>수협은행</option><option>우체국</option><option>새마을금고</option>
+            <option>신협</option><option>기타</option>
+          </select>
+        </div>
+
+        <div class="field"><label class="required">계좌번호</label><input id="accountNumber" inputmode="numeric" autocomplete="off" placeholder="- 없이 숫자만 입력"></div>
+        <div class="field"><label>예금주와의 관계</label><input id="holderRelation" placeholder="예) 본인, 배우자, 부모"></div>
+        <div class="field"><label class="required">예금주 생년월일 / 사업자번호</label><input id="payerBirth" inputmode="numeric" placeholder="개인: YYMMDD / 법인·사업자: 사업자번호"></div>
+      </div>
     </section>
 
     <section class="step" data-step="2">
@@ -184,10 +193,21 @@ const params=new URLSearchParams(location.search);
 const steps=[...document.querySelectorAll('.step')], progress=document.getElementById('progress');let current=0,signed=false,submitting=false;
 steps.slice(0,5).forEach(()=>progress.insertAdjacentHTML('beforeend','<span class="bar"></span>'));
 const bars=[...progress.children], prev=document.getElementById('prev'), next=document.getElementById('next');
+function applicationReturnUrl(){const fallback='./?view=internet',target=params.get('return')||fallback;try{const url=new URL(target,location.href);return url.origin===location.origin?url.href:new URL(fallback,location.href).href}catch(_){return new URL(fallback,location.href).href}}
+function leaveApplication(){location.href=applicationReturnUrl()}
+function finishApplication(){if(params.get('source')==='qr'){window.close();setTimeout(()=>toast('접수가 완료되었습니다. 브라우저의 닫기 버튼으로 종료해주세요.'),180);return}location.href=applicationReturnUrl()}
 function showStep(index){current=index;steps.forEach((s,i)=>s.classList.toggle('on',i===current));bars.forEach((b,i)=>b.classList.toggle('on',i<=Math.min(current,4)));prev.style.visibility=current===0?'hidden':'visible';next.textContent=current===5?'신청서 제출':'다음';next.classList.toggle('full',current===0);window.scrollTo(0,0);if(current===4)requestAnimationFrame(resizeCanvas);if(current===5)renderReview()}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
 function requireValue(id,msg){if(!document.getElementById(id).value){toast(msg);return false}return true}
-function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}for(const [id,msg] of [['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.'],['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']])if(!requireValue(id,msg))return false;const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
+function selectedPaymentMethod(){return document.querySelector('[name="paymentMethod"]:checked')?.value||'자동이체(은행)'}
+function usesBankTransfer(){return selectedPaymentMethod()==='자동이체(은행)'}
+function paymentFieldValue(id){return usesBankTransfer()?(document.getElementById(id)?.value||'').trim():''}
+function updatePaymentFields(){
+  const bank=usesBankTransfer(),fields=document.getElementById('bankPaymentFields'),notice=document.getElementById('paymentNotice');
+  if(fields){fields.hidden=!bank;fields.querySelectorAll('input,select').forEach(input=>input.disabled=!bank)}
+  if(notice)notice.innerHTML=bank?'<b style="color:#16181d">계좌 자동이체 정보</b><br>예금주, 은행, 계좌정보가 신청서 요금납부 영역에 기입됩니다.':'<b style="color:#16181d">지로 납부 선택</b><br>계좌정보 입력 없이 지로 고지서 납부로 접수됩니다.';
+}
+function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}const required=[['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.']];if(usesBankTransfer())required.push(['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']);for(const [id,msg] of required)if(!requireValue(id,msg))return false;const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
 prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){if(validate())await submitApplication();return}if(validate())showStep(current+1)};
 document.getElementById('idFront').onchange=e=>{const file=e.target.files[0],img=document.getElementById('frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'};
 const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
@@ -198,13 +218,13 @@ function start(e){drawing=true;if(e.pointerId!==undefined&&canvas.setPointerCapt
 canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
 function value(id){return document.getElementById(id).value||'-'}
 function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}function isInternetTvProduct(product){const selected=document.querySelector('[name="product"]:checked')?.value||'';return selected==='인터넷+TV'||/(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(String(product||''))}
-function renderReview(){const product=selectedApplicationProduct();const items=[['현장',value('site')],['가입상품',product],['성명',value('name')],['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')],['신분증',value('idType')+' 첨부 완료'],['필수동의','5개 확인'],['전자서명','작성 완료']];document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
-async function imageData(file){if(!file)return'';const bitmap=await createImageBitmap(file),max=1280,scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bitmap.width*scale));c.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=c.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(bitmap,0,0,c.width,c.height);bitmap.close();return c.toDataURL('image/jpeg',.72)}
+function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['성명',value('name')],['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]];if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료'],['필수동의','5개 확인'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+async function imageData(file){if(!file)return'';let source,width,height,revoke='';try{if(typeof createImageBitmap==='function'){source=await createImageBitmap(file);width=source.width;height=source.height}else{revoke=URL.createObjectURL(file);source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('선택한 신분증 사진을 읽지 못했습니다.'));img.src=revoke});width=source.naturalWidth;height=source.naturalHeight}const max=1280,scale=Math.min(1,max/Math.max(width,height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(width*scale));c.height=Math.max(1,Math.round(height*scale));const imageCtx=c.getContext('2d');imageCtx.imageSmoothingEnabled=true;imageCtx.imageSmoothingQuality='high';imageCtx.drawImage(source,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.72);if(!/^data:image\/jpeg;base64,/i.test(data))throw new Error('신분증 사진 변환에 실패했습니다.');return data}finally{if(source&&typeof source.close==='function')source.close();if(revoke)URL.revokeObjectURL(revoke)}}
 async function submitApplication(){
   submitting=true;next.disabled=true;prev.disabled=true;next.textContent='안전하게 전송 중...';
   try{
     const agrees=[...document.querySelectorAll('.agree')];
-    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerName:value('name'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:'자동이체(은행)',accountHolder:value('accountHolder'),bankName:value('bankName'),accountNumber:value('accountNumber'),holderRelation:document.getElementById('holderRelation').value.trim(),payerBirth:value('payerBirth'),idType:value('idType'),consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:await imageData(document.getElementById('idFront').files[0]),signature:canvas.toDataURL('image/png')};
+    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerName:value('name'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:selectedPaymentMethod(),accountHolder:paymentFieldValue('accountHolder'),bankName:paymentFieldValue('bankName'),accountNumber:paymentFieldValue('accountNumber'),holderRelation:paymentFieldValue('holderRelation'),payerBirth:paymentFieldValue('payerBirth'),idType:value('idType'),consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:await imageData(document.getElementById('idFront').files[0]),signature:canvas.toDataURL('image/png')};
     const response=await fetch(APPLICATION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await response.json().catch(()=>({}));
     if(!response.ok||!result.success)throw new Error(result.message||'접수 서버에 연결할 수 없습니다.');
     fetch(SHEETS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'resident',applicationId:result.applicationId,residentNumber:body.residentNumber,name:body.customerName,phone:body.phone})}).catch(error=>console.error('주민번호 보완 저장 실패',error));
@@ -216,7 +236,8 @@ async function submitApplication(){
       console.error('관리자 PDF 자동 저장 실패',pdfError);
       pdfWarning='접수는 완료되었습니다. PDF는 관리자 페이지에서 확인해주세요.';
     }
-    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'완성된 신청서 PDF가 관리자 페이지에 자동 저장되었습니다.<br><br>':pdfWarning?pdfWarning+'<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="location.href='./'">홈으로 돌아가기</button></section>`;
+    const completionLabel=params.get('source')==='qr'?'창 닫기':'인터넷 탭으로 돌아가기';
+    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'완성된 신청서 PDF가 관리자 페이지에 자동 저장되었습니다.<br><br>':pdfWarning?pdfWarning+'<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="finishApplication()">${completionLabel}</button></section>`;
     document.querySelector('.bottom').style.display='none';
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
 }
@@ -349,12 +370,12 @@ function currentFormDataForPdf() {
     email:document.getElementById('email').value.trim(),
     currentCarrier:value('carrier'),
     billingMethod:value('bill'),
-    paymentMethod:'자동이체(은행)',
-    accountHolder:value('accountHolder'),
-    bankName:value('bankName'),
-    accountNumber:value('accountNumber'),
-    holderRelation:document.getElementById('holderRelation').value.trim(),
-    payerBirth:value('payerBirth'),
+    paymentMethod:selectedPaymentMethod(),
+    accountHolder:paymentFieldValue('accountHolder'),
+    bankName:paymentFieldValue('bankName'),
+    accountNumber:paymentFieldValue('accountNumber'),
+    holderRelation:paymentFieldValue('holderRelation'),
+    payerBirth:paymentFieldValue('payerBirth'),
     idType:value('idType'),
     consents:{
       service:!!agrees[0]?.checked,
@@ -497,31 +518,34 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   }
 
   // ----------------------------
-  // 요금납부 - 자동이체(은행)
-  // 빨간색 안내 항목 뒤의 내용이 자동으로 기입되도록 구성
+  // 요금납부 - 계좌 자동이체 또는 지로
   // ----------------------------
-  // 자동이체 / 은행 체크박스
-  await drawCheck(pdfDoc, p2, 190, 1150, 19);
-  await drawCheck(pdfDoc, p2, 285, 1150, 19);
+  const isBankTransfer = data.paymentMethod !== '지로';
+  if (isBankTransfer) {
+    // 자동이체 / 은행 체크박스
+    await drawCheck(pdfDoc, p2, 190, 1150, 19);
+    await drawCheck(pdfDoc, p2, 285, 1150, 19);
 
-  // 예금주: 빨간색 '예금주/카드주:' 문구 바로 뒤 빈칸
-  await drawTextImageFit(pdfDoc, p2, data.accountHolder, 545, 1133, 170, 24, {fontSize:18, weight:700});
+    // 예금주: 빨간색 '예금주/카드주:' 문구 바로 뒤 빈칸
+    await drawTextImageFit(pdfDoc, p2, data.accountHolder, 545, 1133, 170, 24, {fontSize:18, weight:700});
 
-  // 관계: 빨간색 '(관계: )' 뒤 빈칸
-  const relationText = data.holderRelation || (data.accountHolder === data.customerName ? '본인' : '');
-  if (relationText) {
-    await drawTextImageFit(pdfDoc, p2, relationText, 850, 1133, 95, 22, {fontSize:16, weight:600});
+    // 관계: 빨간색 '(관계: )' 뒤 빈칸
+    const relationText = data.holderRelation || (data.accountHolder === data.customerName ? '본인' : '');
+    if (relationText) {
+      await drawTextImageFit(pdfDoc, p2, relationText, 850, 1133, 95, 22, {fontSize:16, weight:600});
+    }
+
+    // 은행명 / 계좌번호는 빨간 안내문구 뒤의 실제 빈칸에 분리해서 배치
+    await drawTextImageFit(pdfDoc, p2, data.bankName, 690, 1170, 145, 22, {fontSize:15, weight:600});
+    await drawTextImageFit(pdfDoc, p2, data.accountNumber, 840, 1170, 260, 22, {fontSize:15, weight:600});
+    await drawTextImageFit(pdfDoc, p2, data.payerBirth, 1040, 1133, 135, 22, {fontSize:15, weight:600});
+  } else {
+    // KT 원본에 지로 전용 체크칸이 없어 계좌정보 행에 납부방법을 명확히 표시
+    await drawTextImageFit(pdfDoc, p2, '지로 납부', 690, 1170, 180, 22, {fontSize:16, weight:700});
   }
 
-  // 은행명 + 계좌번호:
-  // 빨간색 '은행(카드사)명/계좌(카드)번호:' 뒤쪽 한 줄에 함께 표시
-  // 은행명 / 계좌번호는 빨간 안내문구 뒤의 실제 빈칸에 분리해서 배치
-  await drawTextImageFit(pdfDoc, p2, data.bankName, 690, 1170, 145, 22, {fontSize:15, weight:600});
-  await drawTextImageFit(pdfDoc, p2, data.accountNumber, 840, 1170, 260, 22, {fontSize:15, weight:600});
-  await drawTextImageFit(pdfDoc, p2, data.payerBirth, 1040, 1133, 135, 22, {fontSize:15, weight:600});
-
   // 메모란 : 특판현장 / 설치희망일
-  const memo = `특판현장: ${data.siteLabel}  /  설치희망일: ${data.preferredInstallDate}`;
+  const memo = `특판현장: ${data.siteLabel}  /  설치희망일: ${data.preferredInstallDate}  /  납부방법: ${isBankTransfer ? '계좌 자동이체' : '지로'}`;
   await drawTextImage(pdfDoc, p2, memo, 180, 1390, 820, 25, {fontSize:15});
 
   // 신청일
@@ -541,10 +565,11 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 780, 60, 20, {fontSize:17, weight:700});
   await drawSignature(pdfDoc, p2, data.signature, 1100, 774, 70, 30);
 
-  // 요금납부 동의 서명란
-  // '신청/가입자(본인) | 이름 | 서명(인)' 구조에 맞춤
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 1295, 60, 20, {fontSize:17, weight:700});
-  await drawSignature(pdfDoc, p2, data.signature, 1100, 1289, 70, 30);
+  // 계좌 자동이체를 선택한 경우에만 자동/통합 납부 동의란에 서명
+  if (isBankTransfer) {
+    await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 1295, 60, 20, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p2, data.signature, 1100, 1289, 70, 30);
+  }
 
   // 페이지 하단 신청/가입자(본인)
   // 실제 빨간 박스(y 약 1618~1665) 안쪽에 정확히 맞춤
@@ -774,6 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const payerBirthEl = document.getElementById('payerBirth');
   const sameHolderEl = document.getElementById('sameHolder');
   const accountEl = document.getElementById('accountNumber');
+  const paymentRadios = [...document.querySelectorAll('[name="paymentMethod"]')];
 
   function syncHolder(){
     if(!holderEl || !sameHolderEl) return;
@@ -800,7 +826,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if(nameEl) nameEl.addEventListener('input', syncHolder);
   if(birthEl) birthEl.addEventListener('input', syncHolder);
   if(sameHolderEl) sameHolderEl.addEventListener('change', syncHolder);
+  paymentRadios.forEach(radio=>radio.addEventListener('change',()=>{updatePaymentFields();syncHolder()}));
   if(accountEl) accountEl.addEventListener('input', ()=>{accountEl.value = accountEl.value.replace(/[^0-9]/g,'')});
+  updatePaymentFields();
   syncHolder();
 
   const btn = document.getElementById('savePdfBtn');
