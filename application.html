@@ -35,12 +35,12 @@
           <label class="choice"><input type="radio" name="customerType" value="개인사업자"><span><b>개인사업자</b><small>사업자 정보와 등록증 제출</small></span></label>
         </div>
       </div>
-      <div class="field"><label class="required">성명</label><input id="name" autocomplete="name" placeholder="가입자 이름"></div>
+      <div class="field" id="customerNameField"><label class="required">성명</label><input id="name" autocomplete="name" placeholder="가입자 이름"></div>
       <div id="businessFields" hidden>
         <div class="field"><label class="required">상호명</label><input id="businessName" autocomplete="organization" placeholder="사업자등록증의 상호명"></div>
         <div class="field"><label class="required">사업자등록번호</label><input id="businessNumber" inputmode="numeric" maxlength="12" autocomplete="off" placeholder="000-00-00000"></div>
-        <div class="field"><label class="required">대표자명</label><input id="representativeName" autocomplete="name" placeholder="가입자 성명과 자동으로 동일하게 입력됩니다" readonly style="background:#f6f7f9"></div>
-        <div class="notice" style="margin-top:-6px;margin-bottom:14px">대표자 본인이 신청하며, 아래 주민등록번호와 신분증은 본인확인 용도로 저장됩니다.</div>
+        <div class="field"><label class="required">대표자명</label><input id="representativeName" autocomplete="name" placeholder="사업자등록증의 대표자명"></div>
+        <div class="notice" style="margin-top:-6px;margin-bottom:14px">대표자명을 직접 입력하면 신청서의 성명과 서명자 성명에 동일하게 적용됩니다. 아래 주민등록번호와 신분증은 대표자 본인확인 용도로 저장됩니다.</div>
       </div>
       <div class="field"><label class="required">주민등록번호</label><div style="display:grid;grid-template-columns:1fr 18px 1fr;align-items:center;gap:6px"><input id="residentFront" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="앞 6자리"><span style="text-align:center;font-weight:900">-</span><input id="residentBack" type="password" inputmode="numeric" maxlength="7" autocomplete="new-password" placeholder="뒤 7자리"></div><input id="residentNumber" type="hidden"><div class="notice" style="margin-top:8px">주민등록번호는 신규가입 접수 및 본인 확인을 위해 필요합니다. 입력한 뒷자리는 안전하게 가려서 표시됩니다.</div></div><input id="birth" type="hidden"><div class="field"><label class="required">성별</label><select id="gender"><option value="">자동 선택</option><option>남</option><option>여</option></select></div>
       <div class="field"><label class="required">휴대폰 번호</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000"></div>
@@ -221,8 +221,16 @@ function updateCustomerTypeFields(){
   const business=isIndividualBusiness(),fields=document.getElementById('businessFields'),license=document.getElementById('businessLicenseWrap'),name=document.getElementById('name'),representative=document.getElementById('representativeName');
   if(fields){fields.hidden=!business;fields.querySelectorAll('input').forEach(input=>input.disabled=!business)}
   if(license){license.hidden=!business;license.querySelectorAll('input').forEach(input=>input.disabled=!business)}
-  if(name)name.previousElementSibling.textContent=business?'대표자(가입자) 성명':'성명';
-  if(business&&representative)representative.value=(name?.value||'').trim();
+  if(name){
+    if(business){
+      if(!name.readOnly)name.dataset.personalValue=name.value;
+      name.value=(representative?.value||'').trim();name.readOnly=true;name.style.background='#f6f7f9';name.placeholder='대표자명 입력 시 자동 반영';
+    }else{
+      name.readOnly=false;name.style.background='#fff';name.placeholder='가입자 이름';
+      if(name.dataset.personalValue!==undefined)name.value=name.dataset.personalValue;
+    }
+    name.previousElementSibling.textContent=business?'성명 (대표자명 자동 반영)':'성명';
+  }
 }
 function selectedPaymentMethod(){return document.querySelector('[name="paymentMethod"]:checked')?.value||'자동이체(은행)'}
 function usesBankTransfer(){return selectedPaymentMethod()==='자동이체(은행)'}
@@ -232,7 +240,7 @@ function updatePaymentFields(){
   if(fields){fields.hidden=!bank;fields.querySelectorAll('input,select').forEach(input=>input.disabled=!bank)}
   if(notice)notice.innerHTML=bank?'<b style="color:#16181d">계좌 자동이체 정보</b><br>예금주, 은행, 계좌정보가 신청서 요금납부 영역에 기입됩니다.':'<b style="color:#16181d">지로 납부 선택</b><br>계좌정보 입력 없이 지로 고지서 납부로 접수됩니다.';
 }
-function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}const required=[['name','성명을 입력해주세요.'],['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.']];if(isIndividualBusiness())required.push(['businessName','상호명을 입력해주세요.'],['businessNumber','사업자등록번호를 입력해주세요.'],['representativeName','대표자명을 확인해주세요.']);if(usesBankTransfer())required.push(['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']);for(const [id,msg] of required)if(!requireValue(id,msg))return false;if(isIndividualBusiness()&&document.getElementById('businessNumber').value.replace(/\D/g,'').length!==10){toast('사업자등록번호 10자리를 정확히 입력해주세요.');return false}const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}if(isIndividualBusiness()&&!document.getElementById('businessLicense').files.length){toast('사업자등록증을 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
+function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}const required=isIndividualBusiness()?[['businessName','상호명을 입력해주세요.'],['businessNumber','사업자등록번호를 입력해주세요.'],['representativeName','대표자명을 입력해주세요.']]:[['name','성명을 입력해주세요.']];required.push(['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.']);if(usesBankTransfer())required.push(['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']);for(const [id,msg] of required)if(!requireValue(id,msg))return false;if(isIndividualBusiness()&&document.getElementById('businessNumber').value.replace(/\D/g,'').length!==10){toast('사업자등록번호 10자리를 정확히 입력해주세요.');return false}const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}if(isIndividualBusiness()&&!document.getElementById('businessLicense').files.length){toast('사업자등록증을 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
 prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){if(validate())await submitApplication();return}if(validate())showStep(current+1)};
 document.getElementById('idFront').onchange=e=>{const file=e.target.files[0],img=document.getElementById('frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'};
 document.getElementById('businessLicense').onchange=e=>{const file=e.target.files[0],img=document.getElementById('businessLicensePreview');if(!file||file.type==='application/pdf'){img.style.display='none';img.removeAttribute('src');return}img.src=URL.createObjectURL(file);img.style.display='block'};
@@ -244,7 +252,7 @@ function start(e){drawing=true;if(e.pointerId!==undefined&&canvas.setPointerCapt
 canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
 function value(id){return document.getElementById(id).value||'-'}
 function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}function isInternetTvProduct(product){const selected=document.querySelector('[name="product"]:checked')?.value||'';return selected==='인터넷+TV'||/(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(String(product||''))}
-function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['고객유형',selectedCustomerType()],['성명',value('name')]];if(isIndividualBusiness())items.push(['상호명',value('businessName')],['사업자등록번호',value('businessNumber')],['대표자명',value('representativeName')]);items.push(['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]);if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료']);if(isIndividualBusiness())items.push(['사업자등록증','첨부 완료']);items.push(['필수동의','5개 확인'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['고객유형',selectedCustomerType()]];if(isIndividualBusiness())items.push(['상호명',value('businessName')],['사업자등록번호',value('businessNumber')],['성명(대표자)',value('representativeName')]);else items.push(['성명',value('name')]);items.push(['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]);if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료']);if(isIndividualBusiness())items.push(['사업자등록증','첨부 완료']);items.push(['필수동의','5개 확인'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
 async function imageData(file){if(!file)return'';let source,width,height,revoke='';try{if(typeof createImageBitmap==='function'){source=await createImageBitmap(file);width=source.width;height=source.height}else{revoke=URL.createObjectURL(file);source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('선택한 신분증 사진을 읽지 못했습니다.'));img.src=revoke});width=source.naturalWidth;height=source.naturalHeight}const max=1280,scale=Math.min(1,max/Math.max(width,height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(width*scale));c.height=Math.max(1,Math.round(height*scale));const imageCtx=c.getContext('2d');imageCtx.imageSmoothingEnabled=true;imageCtx.imageSmoothingQuality='high';imageCtx.drawImage(source,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.72);if(!/^data:image\/jpeg;base64,/i.test(data))throw new Error('신분증 사진 변환에 실패했습니다.');return data}finally{if(source&&typeof source.close==='function')source.close();if(revoke)URL.revokeObjectURL(revoke)}}
 async function documentData(file){if(!file)return'';if(file.type==='application/pdf'){if(file.size>2*1024*1024)throw new Error('사업자등록증 PDF는 2MB 이하로 등록해주세요.');return await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('사업자등록증을 읽지 못했습니다.'));reader.readAsDataURL(file)})}return imageData(file)}
 async function submitApplication(){
@@ -508,7 +516,7 @@ async function createFilledKtPdf(data, applicationId='미접수') {
 
   // 고객정보 첫 줄
   // 텍스트가 가로로 늘어나지 않도록 비율을 유지해서 배치
-  const pdfCustomerName = data.customerType === '개인사업자' ? data.businessName : data.customerName;
+  const pdfCustomerName = data.customerType === '개인사업자' ? data.representativeName : data.customerName;
   await drawTextImageFit(pdfDoc, p2, pdfCustomerName, 285, 843, 155, 28, {fontSize:22, weight:700});
   await drawTextImageFit(pdfDoc, p2, data.birthDate, 585, 843, 155, 25, {fontSize:18, weight:700});
 
@@ -864,17 +872,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function syncRepresentative(){if(representativeEl)representativeEl.value=isIndividualBusiness()?(nameEl?.value||'').trim():''}
-  if(nameEl) nameEl.addEventListener('input', ()=>{syncHolder();syncRepresentative()});
+  function syncCustomerNameFromRepresentative(){if(isIndividualBusiness()&&nameEl&&representativeEl){nameEl.value=representativeEl.value.trim();syncHolder()}}
+  if(nameEl) nameEl.addEventListener('input', syncHolder);
+  if(representativeEl)representativeEl.addEventListener('input',syncCustomerNameFromRepresentative);
   if(birthEl) birthEl.addEventListener('input', syncHolder);
   if(sameHolderEl) sameHolderEl.addEventListener('change', syncHolder);
-  customerTypeRadios.forEach(radio=>radio.addEventListener('change',()=>{updateCustomerTypeFields();syncRepresentative()}));
+  customerTypeRadios.forEach(radio=>radio.addEventListener('change',()=>{updateCustomerTypeFields();syncCustomerNameFromRepresentative();syncHolder()}));
   if(businessNumberEl)businessNumberEl.addEventListener('input',()=>{const digits=businessNumberEl.value.replace(/\D/g,'').slice(0,10);businessNumberEl.value=digits.length<=3?digits:digits.length<=5?`${digits.slice(0,3)}-${digits.slice(3)}`:`${digits.slice(0,3)}-${digits.slice(3,5)}-${digits.slice(5)}`});
   paymentRadios.forEach(radio=>radio.addEventListener('change',()=>{updatePaymentFields();syncHolder()}));
   if(accountEl) accountEl.addEventListener('input', ()=>{accountEl.value = accountEl.value.replace(/[^0-9]/g,'')});
   updatePaymentFields();
   updateCustomerTypeFields();
-  syncRepresentative();
+  syncCustomerNameFromRepresentative();
   syncHolder();
 
   const btn = document.getElementById('savePdfBtn');

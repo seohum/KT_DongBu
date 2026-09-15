@@ -82,12 +82,13 @@ async function notifyTelegramAndAdmin(input, applicationId) {
   const businessName = customerType === '개인사업자' ? text(input.businessName, 120) : '';
   const businessNumber = customerType === '개인사업자' ? text(input.businessNumber, 30) : '';
   const representativeName = customerType === '개인사업자' ? text(input.representativeName, 60) : '';
+  const customerName = customerType === '개인사업자' ? representativeName : text(input.customerName, 40);
   const isSamjeong = input.siteCode === 'samjeong-greencore-the-city' || siteLabel === '삼정그린코아 더 시티';
   const telegramChatId = isSamjeong ? '@ktmnsDB' : process.env.TELEGRAM_CHAT_ID;
   const adminRecord = {
     action: 'create',
     category: '가입신청',
-    name: text(input.customerName, 40),
+    name: customerName,
     phone: normalizeKoreanMobile(input.phone),
     residentNumber: String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13),
     product: text(input.product, 80),
@@ -228,9 +229,10 @@ export default async function handler(req, res) {
     const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
     const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
     const customerType = text(input.customerType, 20) === '개인사업자' ? '개인사업자' : '개인';
-    const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
+    const effectiveCustomerName = customerType === '개인사업자' ? text(input.representativeName, 60) : text(input.customerName, 40);
+    const requiredText = ['phone', 'address', 'product', 'idType'];
     if (residentNumber.length !== 13) return send(res, 400, { success: false, message: '주민등록번호를 확인해주세요.' }, origin);
-    if (requiredText.some(key => !text(input[key], 300))) {
+    if (!effectiveCustomerName || requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
     }
     if (paymentMethod === '자동이체(은행)' && ['accountHolder', 'bankName', 'accountNumber', 'payerBirth'].some(key => !text(input[key], 100))) {
@@ -269,7 +271,7 @@ export default async function handler(req, res) {
       product: text(input.product, 80),
       preferredInstallDate: text(input.preferredInstallDate, 30),
       customerType,
-      customerName: text(input.customerName, 40),
+      customerName: effectiveCustomerName,
       businessName: customerType === '개인사업자' ? text(input.businessName, 120) : '',
       businessNumber: customerType === '개인사업자' ? text(input.businessNumber, 30) : '',
       representativeName: customerType === '개인사업자' ? text(input.representativeName, 60) : '',
