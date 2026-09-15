@@ -141,6 +141,11 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     text(input.bankName, 60) ? `은행명: ${text(input.bankName, 60)}` : '',
     text(input.accountNumber, 80) ? `계좌번호: ${text(input.accountNumber, 80)}` : ''
   ].filter(Boolean).join(' / ');
+  const samjeongPaymentSummary = paymentMethod === '지로' ? '지로' : [
+    text(input.bankName, 60).replace(/은행$/u, ''),
+    String(input.accountNumber || '').replace(/\D/g, ''),
+    String(input.payerBirth || '').replace(/\D/g, '')
+  ].join(' / ');
 
   const standardTelegramText = [
     '<b>■ 유선양식■</b>',
@@ -190,7 +195,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     '- 건물코드 : B0002836953',
     `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
-    `- 자동이체(납부일) : ${escapeHtml(paymentSummary)}`,
+    `- 자동이체(납부일) : ${escapeHtml(samjeongPaymentSummary)}`,
     `- E-MAIL : ${escapeHtml(text(input.email, 120))}`,
     '＊가입유형 : 신규가입',
     `＊상품 : ${escapeHtml(productText)}`,
