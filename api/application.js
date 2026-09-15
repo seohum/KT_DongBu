@@ -27,8 +27,14 @@ function text(value, max) {
   return String(value || '').trim().slice(0, max);
 }
 
+function normalizeDataImage(value) {
+  return String(value || '').trim().replace(/[\r\n\t ]+/g, '');
+}
+
 function validDataImage(value) {
-  return /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
+  const normalized = normalizeDataImage(value);
+  const match = /^data:image\/(?:jpeg|jpg|png|webp)(?:;charset=[^;,]+)?;base64,([A-Za-z0-9+/]+={0,2})$/i.exec(normalized);
+  return Boolean(match && match[1].length >= 16);
 }
 function validDataPdf(value) {
   return /^data:application\/pdf;base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
@@ -211,8 +217,13 @@ export default async function handler(req, res) {
     if (requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
     }
-    if (!validDataImage(input.idFront) || !validDataImage(input.signature)) {
-      return send(res, 400, { success: false, message: '신분증과 서명을 확인해주세요.' }, origin);
+    const idFrontData = normalizeDataImage(input.idFront);
+    const signatureData = normalizeDataImage(input.signature);
+    if (!validDataImage(idFrontData)) {
+      return send(res, 400, { success: false, message: '신분증 사진을 다시 선택해주세요.' }, origin);
+    }
+    if (!validDataImage(signatureData)) {
+      return send(res, 400, { success: false, message: '서명을 다시 작성해주세요.' }, origin);
     }
     if (input.idBack && !validDataImage(input.idBack)) {
       return send(res, 400, { success: false, message: '신분증 뒷면 파일을 확인해주세요.' }, origin);
@@ -244,9 +255,9 @@ export default async function handler(req, res) {
       payerBirth: text(input.payerBirth, 20),
       idType: text(input.idType, 40),
       consents: input.consents,
-      idFront: input.idFront,
-      idBack: input.idBack || '',
-      signature: input.signature
+      idFront: idFrontData,
+      idBack: input.idBack ? normalizeDataImage(input.idBack) : '',
+      signature: signatureData
     };
 
     const upstream = await fetch(process.env.APPLICATION_ENDPOINT, {
