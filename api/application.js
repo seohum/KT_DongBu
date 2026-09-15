@@ -8,6 +8,8 @@ const ALLOWED_ORIGINS = new Set([
 const SHEETS_ENDPOINT =
   'https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
 
+export const maxDuration = 60;
+
 function cors(origin) {
   return {
     'Access-Control-Allow-Origin': ALLOWED_ORIGINS.has(origin) ? origin : 'https://seohum.github.io',
@@ -38,6 +40,9 @@ function validDataImage(value) {
 }
 function validDataPdf(value) {
   return /^data:application\/pdf;base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
+}
+function validDataDocument(value) {
+  return validDataImage(value) || validDataPdf(value);
 }
 
 function escapeHtml(value) {
@@ -73,6 +78,10 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     timeStyle: 'medium'
   }).format(new Date());
   const siteLabel = text(input.siteLabel, 120) || '일반 가입';
+  const customerType = text(input.customerType, 20) === '개인사업자' ? '개인사업자' : '개인';
+  const businessName = customerType === '개인사업자' ? text(input.businessName, 120) : '';
+  const businessNumber = customerType === '개인사업자' ? text(input.businessNumber, 30) : '';
+  const representativeName = customerType === '개인사업자' ? text(input.representativeName, 60) : '';
   const isSamjeong = input.siteCode === 'samjeong-greencore-the-city' || siteLabel === '삼정그린코아 더 시티';
   const telegramChatId = isSamjeong ? '@ktmnsDB' : process.env.TELEGRAM_CHAT_ID;
   const adminRecord = {
@@ -87,7 +96,9 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     apartment: siteLabel,
     unit: '',
     installDate: text(input.preferredInstallDate, 30),
-    message: `전자신청 접수번호: ${applicationId}`,
+    message: customerType === '개인사업자'
+      ? `개인사업자: ${businessName} / ${businessNumber} / 대표자 ${representativeName} / 전자신청 접수번호: ${applicationId}`
+      : `전자신청 접수번호: ${applicationId}`,
     status: '접수'
   };
 
@@ -118,8 +129,10 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     '＊프론티어 이름 :',
     '＊공조(서포터) :',
     '',
-    '- 사업자명 :',
-    '- 사업자등록번호 :',
+    `- 고객유형 : ${escapeHtml(customerType)}`,
+    `- 사업자명 : ${escapeHtml(businessName)}`,
+    `- 사업자등록번호 : ${escapeHtml(businessNumber)}`,
+    `- 대표자명 : ${escapeHtml(representativeName)}`,
     `- 고객명 : ${escapeHtml(adminRecord.name)}`,
     `- 주민번호 : ${escapeHtml(notificationBirth)}`,
     `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
@@ -198,7 +211,7 @@ export default async function handler(req, res) {
       ]);
       if (!auth.ok || !authResult.success) return send(res, 401, { success: false, message: '관리자 비밀번호가 올바르지 않습니다.' }, origin);
       if (!upstream.ok || !result.ok) return send(res, 404, { success: false, message: '저장된 신청 파일을 찾지 못했습니다.' }, origin);
-      return send(res, 200, { success: true, files: { folderUrl: result.folderUrl || '', pdfUrl: result.pdfUrl || '', idFrontUrl: result.idFrontUrl || '', idBackUrl: result.idBackUrl || '' } }, origin);
+      return send(res, 200, { success: true, files: { folderUrl: result.folderUrl || '', pdfUrl: result.pdfUrl || '', idFrontUrl: result.idFrontUrl || '', idBackUrl: result.idBackUrl || '', businessLicenseUrl: result.businessLicenseUrl || '' } }, origin);
     }
     if (input.action === 'attachPdf') {
       const applicationId = text(input.applicationId, 100);
@@ -214,6 +227,7 @@ export default async function handler(req, res) {
     }
     const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
     const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
+    const customerType = text(input.customerType, 20) === '개인사업자' ? '개인사업자' : '개인';
     const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
     if (residentNumber.length !== 13) return send(res, 400, { success: false, message: '주민등록번호를 확인해주세요.' }, origin);
     if (requiredText.some(key => !text(input[key], 300))) {
@@ -221,6 +235,17 @@ export default async function handler(req, res) {
     }
     if (paymentMethod === '자동이체(은행)' && ['accountHolder', 'bankName', 'accountNumber', 'payerBirth'].some(key => !text(input[key], 100))) {
       return send(res, 400, { success: false, message: '자동이체 계좌정보를 확인해주세요.' }, origin);
+    }
+    if (customerType === '개인사업자') {
+      if (['businessName', 'businessNumber', 'representativeName'].some(key => !text(input[key], 120))) {
+        return send(res, 400, { success: false, message: '개인사업자 필수정보를 확인해주세요.' }, origin);
+      }
+      if (String(input.businessNumber || '').replace(/\D/g, '').length !== 10) {
+        return send(res, 400, { success: false, message: '사업자등록번호 10자리를 확인해주세요.' }, origin);
+      }
+      if (!validDataDocument(input.businessLicense)) {
+        return send(res, 400, { success: false, message: '사업자등록증 파일을 확인해주세요.' }, origin);
+      }
     }
     const idFrontData = normalizeDataImage(input.idFront);
     const signatureData = normalizeDataImage(input.signature);
@@ -243,7 +268,11 @@ export default async function handler(req, res) {
       siteLabel: text(input.siteLabel, 120),
       product: text(input.product, 80),
       preferredInstallDate: text(input.preferredInstallDate, 30),
+      customerType,
       customerName: text(input.customerName, 40),
+      businessName: customerType === '개인사업자' ? text(input.businessName, 120) : '',
+      businessNumber: customerType === '개인사업자' ? text(input.businessNumber, 30) : '',
+      representativeName: customerType === '개인사업자' ? text(input.representativeName, 60) : '',
       birthDate: text(input.birthDate, 8),
       residentNumber,
       gender: text(input.gender, 10),
@@ -262,6 +291,7 @@ export default async function handler(req, res) {
       consents: input.consents,
       idFront: idFrontData,
       idBack: input.idBack ? normalizeDataImage(input.idBack) : '',
+      businessLicense: customerType === '개인사업자' ? input.businessLicense : '',
       signature: signatureData
     };
 
