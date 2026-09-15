@@ -104,8 +104,9 @@ async function notifyTelegramAndAdmin(input, applicationId) {
   const notificationBirth = birthDigits.length === 8
     ? `${birthDigits.slice(0, 4)}-${birthDigits.slice(4, 6)}-${birthDigits.slice(6, 8)}`
     : residentNumber.slice(0, 6);
-  const paymentSummary = [
-    text(input.paymentMethod, 50) || '자동이체(은행)',
+  const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
+  const paymentSummary = paymentMethod === '지로' ? '지로' : [
+    paymentMethod,
     text(input.bankName, 60) ? `은행명: ${text(input.bankName, 60)}` : '',
     text(input.accountNumber, 80) ? `계좌번호: ${text(input.accountNumber, 80)}` : ''
   ].filter(Boolean).join(' / ');
@@ -124,7 +125,7 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     '- 건물코드 :',
     `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
-    `- 자동이체(납부일) : ${escapeHtml(paymentSummary)}`,
+    `- 납부방법 : ${escapeHtml(paymentSummary)}`,
     '  ＊가입유형 : 신규가입',
     `  ＊상품 : ${escapeHtml(productText)}`,
     '',
@@ -212,10 +213,14 @@ export default async function handler(req, res) {
       return send(res, 200, { success: true }, origin);
     }
     const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
+    const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
     const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
     if (residentNumber.length !== 13) return send(res, 400, { success: false, message: '주민등록번호를 확인해주세요.' }, origin);
     if (requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
+    }
+    if (paymentMethod === '자동이체(은행)' && ['accountHolder', 'bankName', 'accountNumber', 'payerBirth'].some(key => !text(input[key], 100))) {
+      return send(res, 400, { success: false, message: '자동이체 계좌정보를 확인해주세요.' }, origin);
     }
     const idFrontData = normalizeDataImage(input.idFront);
     const signatureData = normalizeDataImage(input.signature);
@@ -247,12 +252,12 @@ export default async function handler(req, res) {
       email: text(input.email, 120),
       currentCarrier: text(input.currentCarrier, 50),
       billingMethod: text(input.billingMethod, 50),
-      paymentMethod: text(input.paymentMethod, 50),
-      accountHolder: text(input.accountHolder, 60),
-      bankName: text(input.bankName, 60),
-      accountNumber: text(input.accountNumber, 80),
-      holderRelation: text(input.holderRelation, 40),
-      payerBirth: text(input.payerBirth, 20),
+      paymentMethod,
+      accountHolder: paymentMethod === '지로' ? '' : text(input.accountHolder, 60),
+      bankName: paymentMethod === '지로' ? '' : text(input.bankName, 60),
+      accountNumber: paymentMethod === '지로' ? '' : text(input.accountNumber, 80),
+      holderRelation: paymentMethod === '지로' ? '' : text(input.holderRelation, 40),
+      payerBirth: paymentMethod === '지로' ? '' : text(input.payerBirth, 20),
       idType: text(input.idType, 40),
       consents: input.consents,
       idFront: idFrontData,
