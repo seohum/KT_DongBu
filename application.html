@@ -253,27 +253,37 @@ canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermov
 function value(id){return document.getElementById(id).value||'-'}
 function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}function isInternetTvProduct(product){const selected=document.querySelector('[name="product"]:checked')?.value||'';return selected==='인터넷+TV'||/(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(String(product||''))}
 function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['고객유형',selectedCustomerType()]];if(isIndividualBusiness())items.push(['상호명',value('businessName')],['사업자등록번호',value('businessNumber')],['성명(대표자)',value('representativeName')]);else items.push(['성명',value('name')]);items.push(['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]);if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료']);if(isIndividualBusiness())items.push(['사업자등록증','첨부 완료']);items.push(['필수동의','5개 확인'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
-async function imageData(file){if(!file)return'';let source,width,height,revoke='';try{if(typeof createImageBitmap==='function'){source=await createImageBitmap(file);width=source.width;height=source.height}else{revoke=URL.createObjectURL(file);source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('선택한 신분증 사진을 읽지 못했습니다.'));img.src=revoke});width=source.naturalWidth;height=source.naturalHeight}const max=1280,scale=Math.min(1,max/Math.max(width,height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(width*scale));c.height=Math.max(1,Math.round(height*scale));const imageCtx=c.getContext('2d');imageCtx.imageSmoothingEnabled=true;imageCtx.imageSmoothingQuality='high';imageCtx.drawImage(source,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.72);if(!/^data:image\/jpeg;base64,/i.test(data))throw new Error('신분증 사진 변환에 실패했습니다.');return data}finally{if(source&&typeof source.close==='function')source.close();if(revoke)URL.revokeObjectURL(revoke)}}
+async function imageData(file){if(!file)return'';let source,width,height,revoke='';try{if(typeof createImageBitmap==='function'){source=await createImageBitmap(file);width=source.width;height=source.height}else{revoke=URL.createObjectURL(file);source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('선택한 첨부사진을 읽지 못했습니다.'));img.src=revoke});width=source.naturalWidth;height=source.naturalHeight}const max=1200,scale=Math.min(1,max/Math.max(width,height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(width*scale));c.height=Math.max(1,Math.round(height*scale));const imageCtx=c.getContext('2d');imageCtx.imageSmoothingEnabled=true;imageCtx.imageSmoothingQuality='high';imageCtx.drawImage(source,0,0,c.width,c.height);const data=c.toDataURL('image/jpeg',.68);if(!/^data:image\/jpeg;base64,/i.test(data))throw new Error('첨부사진 변환에 실패했습니다.');return data}finally{if(source&&typeof source.close==='function')source.close();if(revoke)URL.revokeObjectURL(revoke)}}
 async function documentData(file){if(!file)return'';if(file.type==='application/pdf'){if(file.size>2*1024*1024)throw new Error('사업자등록증 PDF는 2MB 이하로 등록해주세요.');return await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('사업자등록증을 읽지 못했습니다.'));reader.readAsDataURL(file)})}return imageData(file)}
 async function submitApplication(){
   submitting=true;next.disabled=true;prev.disabled=true;next.textContent='안전하게 전송 중...';
   try{
     const agrees=[...document.querySelectorAll('.agree')];
-    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerType:selectedCustomerType(),customerName:value('name'),businessName:businessFieldValue('businessName'),businessNumber:businessFieldValue('businessNumber'),representativeName:businessFieldValue('representativeName'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:selectedPaymentMethod(),accountHolder:paymentFieldValue('accountHolder'),bankName:paymentFieldValue('bankName'),accountNumber:paymentFieldValue('accountNumber'),holderRelation:paymentFieldValue('holderRelation'),payerBirth:paymentFieldValue('payerBirth'),idType:value('idType'),businessLicenseName:document.getElementById('businessLicense').files[0]?.name||'',consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:await imageData(document.getElementById('idFront').files[0]),businessLicense:isIndividualBusiness()?await documentData(document.getElementById('businessLicense').files[0]):'',signature:canvas.toDataURL('image/png')};
-    const response=await fetch(APPLICATION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await response.json().catch(()=>({}));
+    next.textContent='첨부파일 정리 중...';
+    const [idFrontData,businessLicenseData]=await Promise.all([
+      imageData(document.getElementById('idFront').files[0]),
+      isIndividualBusiness()?documentData(document.getElementById('businessLicense').files[0]):Promise.resolve('')
+    ]);
+    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerType:selectedCustomerType(),customerName:value('name'),businessName:businessFieldValue('businessName'),businessNumber:businessFieldValue('businessNumber'),representativeName:businessFieldValue('representativeName'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:selectedPaymentMethod(),accountHolder:paymentFieldValue('accountHolder'),bankName:paymentFieldValue('bankName'),accountNumber:paymentFieldValue('accountNumber'),holderRelation:paymentFieldValue('holderRelation'),payerBirth:paymentFieldValue('payerBirth'),idType:value('idType'),businessLicenseName:document.getElementById('businessLicense').files[0]?.name||'',consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:idFrontData,businessLicense:businessLicenseData,signature:canvas.toDataURL('image/png')};
+    next.textContent='신청정보 저장 중...';
+    const requestBody=JSON.stringify(body);
+    if(new Blob([requestBody]).size>3_800_000)throw new Error('첨부파일 용량이 너무 큽니다. 사업자등록증은 더 작은 파일로 다시 등록해주세요.');
+    const response=await fetch(APPLICATION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:requestBody}),result=await response.json().catch(()=>({}));
     if(!response.ok||!result.success)throw new Error(result.message||'접수 서버에 연결할 수 없습니다.');
     fetch(SHEETS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'resident',applicationId:result.applicationId,residentNumber:body.residentNumber,name:body.customerName,phone:body.phone})}).catch(error=>console.error('주민번호 보완 저장 실패',error));
+    const completionLabel=params.get('source')==='qr'?'창 닫기':'인터넷 탭으로 돌아가기';
+    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b></p><div class="security" id="pdfSaveStatus" style="text-align:left"><b>PDF를 관리자 Drive에 저장하고 있습니다.</b><br>저장이 끝날 때까지 이 화면을 닫지 말아주세요.</div><button class="next full" id="finishApplicationBtn" disabled>${completionLabel}</button></section>`;
+    document.querySelector('.bottom').style.display='none';
     let pdfName='',pdfWarning='';
-    next.textContent='관리자 PDF 저장 중...';
     try {
       pdfName=await createFilledKtPdf(body,result.applicationId||'KT');
     } catch (pdfError) {
       console.error('관리자 PDF 자동 저장 실패',pdfError);
-      pdfWarning='접수는 완료되었습니다. PDF는 관리자 페이지에서 확인해주세요.';
+      pdfWarning='접수는 완료됐지만 PDF 자동 저장에 실패했습니다. 관리자에게 접수번호를 알려주세요.';
     }
-    const completionLabel=params.get('source')==='qr'?'창 닫기':'인터넷 탭으로 돌아가기';
-    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b><br><br>${pdfName?'완성된 신청서 PDF가 관리자 페이지에 자동 저장되었습니다.<br><br>':pdfWarning?pdfWarning+'<br><br>':''}담당자가 확인 후 연락드리겠습니다.</p><button class="next full" onclick="finishApplication()">${completionLabel}</button></section>`;
-    document.querySelector('.bottom').style.display='none';
+    const status=document.getElementById('pdfSaveStatus'),finish=document.getElementById('finishApplicationBtn');
+    if(status)status.innerHTML=pdfName?'<b>PDF 저장이 완료되었습니다.</b><br>담당자가 확인 후 연락드리겠습니다.':`<b style="color:#dc2626">PDF 저장 확인이 필요합니다.</b><br>${pdfWarning}`;
+    if(finish){finish.disabled=false;finish.onclick=finishApplication}
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
 }
 function renderSelectedProductDetails(text){const box=document.getElementById('selectedProductDisplay');box.textContent='';const parts=String(text||'').split('/').map(x=>x.trim()).filter(Boolean);parts.forEach((part,index)=>{let label='신청 유형';if(part.includes('예상 월'))label='예상 월 요금';else if(part.includes('셋톱'))label='셋톱박스';else if(part.includes('와이파이'))label='와이파이 패키지';else if(index>0&&part.includes('TV'))label='TV 상품';else if(index>0&&part.includes('인터넷'))label='인터넷 상품';const row=document.createElement('div');row.className='selected-product-row'+(label==='예상 월 요금'?' total':'');const key=document.createElement('span');key.textContent=label;const value=document.createElement('b');value.textContent=label==='예상 월 요금'?part.replace(/^예상 월\s*/,'월 '):part;row.append(key,value);box.appendChild(row)})}
@@ -655,9 +665,9 @@ async function createFilledKtPdf(data, applicationId='미접수') {
   if (applicationId && applicationId !== '미접수') {
     let lastUploadError = null;
     const uploadUrl = `${PDF_UPLOAD_ENDPOINT}?applicationId=${encodeURIComponent(applicationId)}&fileName=${encodeURIComponent(filename)}`;
-    for (let attempt = 1; attempt <= 2; attempt += 1) {
+    for (let attempt = 1; attempt <= 1; attempt += 1) {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 65000);
+      const timeout = setTimeout(() => controller.abort(), 45000);
       try {
         const uploadResponse = await fetch(uploadUrl, {
           method:'POST',
@@ -673,9 +683,8 @@ async function createFilledKtPdf(data, applicationId='미접수') {
         return filename;
       } catch (uploadError) {
         lastUploadError = uploadError;
-        console.error('관리자용 PDF 업로드 실패 (' + attempt + '/2)', uploadError);
+        console.error('관리자용 PDF 업로드 실패', uploadError);
         if (uploadError && uploadError.name === 'AbortError') break;
-        if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1200));
       } finally {
         clearTimeout(timeout);
       }

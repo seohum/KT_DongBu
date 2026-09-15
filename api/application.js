@@ -9,6 +9,23 @@ const SHEETS_ENDPOINT =
   'https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
 
 export const maxDuration = 60;
+export const config = {
+  api: {
+    bodyParser: { sizeLimit: '4mb' }
+  }
+};
+
+async function withTimeout(promise, ms) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('NOTIFICATION_TIMEOUT')), ms); })
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 function cors(origin) {
   return {
@@ -307,7 +324,7 @@ export default async function handler(req, res) {
     if (!result.ok) throw new Error('Apps Script rejected the submission');
 
     try {
-      await notifyTelegramAndAdmin(input, result.applicationId);
+      await withTimeout(notifyTelegramAndAdmin(input, result.applicationId), 8000);
     } catch (notificationError) {
       console.error('application notification warning', notificationError && notificationError.message);
     }
