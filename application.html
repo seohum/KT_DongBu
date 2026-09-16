@@ -6,7 +6,7 @@
 <title>KT 유선 전자신청서</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#16181d;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{width:100%;max-width:430px;min-height:100vh;margin:auto;background:#fff}.head{position:sticky;top:0;z-index:10;padding:15px 18px 12px;background:#fff;border-bottom:1px solid #eceef1}.brand{display:flex;align-items:center;gap:9px}.logo{width:52px;height:auto;display:block;object-fit:contain}.brand strong{font-size:16px}.head p{margin:6px 0 0;font-size:11px;color:#727780}.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:12px}.bar{height:4px;border-radius:9px;background:#e8eaf0}.bar.on{background:#e31937}.content{padding:20px 18px 110px}.step{display:none}.step.on{display:block}.eyebrow{margin:0 0 7px;font-size:12px;font-weight:900;color:#e31937}.title{margin:0 0 7px;font-size:23px;line-height:1.25}.desc{margin:0 0 22px;color:#6d727b;font-size:13px;line-height:1.6}.field{margin-bottom:16px}.field label,.label{display:block;margin-bottom:7px;font-size:13px;font-weight:800}.required:after{content:" *";color:#e31937}input,select{width:100%;height:50px;padding:0 13px;border:1px solid #d9dde4;border-radius:12px;background:#fff;font:inherit;font-size:14px;outline:none}input:focus,select:focus{border-color:#e31937;box-shadow:0 0 0 3px rgba(227,25,55,.08)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choices{display:grid;gap:10px}.choice{position:relative;display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #dfe2e8;border-radius:14px}.choice:has(input:checked){border-color:#e31937;background:#fff7f8}.choice input{width:18px;height:18px;margin:1px 0 0}.choice b{display:block;font-size:14px}.choice small{display:block;margin-top:4px;color:#747984;line-height:1.45}.upload{display:block;padding:18px;border:1.5px dashed #c9ced7;border-radius:15px;background:#f8f9fb;text-align:center;cursor:pointer}.upload input{display:none}.upload b{display:block;font-size:14px}.upload span{display:block;margin-top:5px;color:#7b8089;font-size:12px}.preview{display:none;width:100%;max-height:210px;margin-top:10px;border-radius:12px;object-fit:contain;background:#eceff3}.notice{padding:13px 14px;border-radius:12px;background:#f4f6f9;color:#5d636d;font-size:12px;line-height:1.55}.consent{display:flex;gap:10px;padding:13px 0;border-bottom:1px solid #eceef2}.consent input{width:19px;height:19px;margin:1px 0 0}.consent b{display:block;font-size:13px}.consent span{display:block;margin-top:4px;color:#6f747d;font-size:11px;line-height:1.45}.canvas-wrap{border:1px solid #d9dde4;border-radius:14px;overflow:hidden;background:#fff}.canvas-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#f6f7f9;font-size:12px;font-weight:800}.clear{border:0;background:none;color:#e31937;font-weight:800}.sig{display:block;width:100%;height:185px;touch-action:none}.review{display:grid;gap:9px}.row{display:flex;justify-content:space-between;gap:16px;padding:12px 13px;border-radius:11px;background:#f6f7f9;font-size:13px}.row span{color:#747984}.row b{text-align:right}.security{margin-top:17px;padding:14px;border-radius:12px;background:#fff4f5;color:#6a343b;font-size:12px;line-height:1.55}.bottom{position:fixed;left:50%;bottom:0;z-index:20;width:100%;max-width:430px;transform:translateX(-50%);display:grid;grid-template-columns:1fr 1.5fr;gap:9px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #eceef1;backdrop-filter:blur(10px)}button{min-height:50px;border:0;border-radius:13px;font:inherit;font-size:14px;font-weight:900;cursor:pointer}.prev{background:#eef0f3;color:#353940}.next{background:#e31937;color:#fff}.next:disabled{background:#c9cbd0}.full{grid-column:1/-1}.toast{position:fixed;left:50%;bottom:92px;z-index:30;transform:translate(-50%,20px);opacity:0;padding:11px 15px;border-radius:999px;background:#202227;color:#fff;font-size:12px;transition:.2s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
-.consent input[type="checkbox"],.choice input[type="radio"]{width:24px;height:24px;min-width:24px;accent-color:#e31937;filter:saturate(1.35) contrast(1.15);cursor:pointer}.consent{gap:12px}.consent b{font-size:15px;font-weight:900}.choice input[type="radio"]{margin:0 10px 0 0}
+.consent input[type="checkbox"],.choice input[type="radio"]{width:24px;height:24px;min-width:24px;accent-color:#e31937;filter:saturate(1.35) contrast(1.15);cursor:pointer}.consent{gap:12px}.consent b{font-size:15px;font-weight:900}.choice input[type="radio"]{margin:0 10px 0 0}.name-mark{height:130px}
 .head-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.back-btn{flex:none;height:36px;padding:0 12px;border:1px solid #dfe2e8;border-radius:10px;background:#fff;color:#3f444d;font-size:13px;font-weight:800;cursor:pointer}.back-btn:active{background:#f4f5f7}.selected-product-summary{display:grid;gap:8px;padding:14px;border:1px solid #e3e5e9;border-radius:16px;background:#f8f9fb}.selected-product-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding-bottom:8px;border-bottom:1px solid #e7e9ed}.selected-product-row:last-child{padding-bottom:0;border-bottom:0}.selected-product-row span{font-size:12px;color:#777;white-space:nowrap}.selected-product-row b{font-size:14px;text-align:right;line-height:1.45}.selected-product-row.total{margin:3px -4px -2px;padding:11px 12px;border:0;border-radius:12px;background:#fff0f2}.selected-product-row.total span,.selected-product-row.total b{color:#e31937;font-weight:900}.selected-product-row.total b{font-size:17px}.payment-choice-grid,.customer-type-grid{grid-template-columns:1fr 1fr}.payment-choice-grid .choice,.customer-type-grid .choice{min-height:82px;padding:13px 11px}.payment-choice-grid .choice small,.customer-type-grid .choice small{font-size:11px}#bankPaymentFields[hidden],#businessFields[hidden],#businessLicenseWrap[hidden]{display:none!important}</style>
 <script src="pdf-lib.min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -173,10 +173,11 @@
     </section>
 
     <section class="step" data-step="4">
-      <p class="eyebrow">4. 전자서명</p><h1 class="title">아래 칸에 서명해주세요</h1><p class="desc">한 번 작성한 서명은 확인한 필수동의의 분홍색 서명란에 동일하게 적용됩니다.</p>
-      <div class="canvas-wrap"><div class="canvas-top"><span>가입자 본인 서명</span><button type="button" class="clear" id="clearSig">다시 쓰기</button></div><canvas class="sig" id="signature"></canvas></div>
+      <p class="eyebrow">4. 자필 성명 및 전자서명</p><h1 class="title">성명과 서명을 각각 작성해주세요</h1><p class="desc">자필 성명은 신청서의 이름 칸에, 서명은 서명(인) 칸에 각각 적용됩니다.</p>
+      <div class="canvas-wrap"><div class="canvas-top"><span>신청자 성명 자필 작성</span><button type="button" class="clear" id="clearApplicantName">다시 쓰기</button></div><canvas class="sig name-mark" id="applicantNameMark"></canvas></div>
+      <div class="canvas-wrap" style="margin-top:12px"><div class="canvas-top"><span>가입자 본인 서명</span><button type="button" class="clear" id="clearSig">다시 쓰기</button></div><canvas class="sig" id="signature"></canvas></div>
       <label class="consent" style="margin-top:12px"><input id="applySig" type="checkbox"><span><b>서명 적용에 동의합니다</b><span>위 서명을 필수 신청·동의 서명란에 동일하게 적용하는 것에 동의합니다.</span></span></label>
-      <div class="security">서명과 동의 시각은 접수번호와 함께 저장됩니다. 제출 전 내용을 다시 확인해주세요.</div>
+      <div class="security">자필 성명, 서명과 동의 시각은 접수번호와 함께 저장됩니다. 제출 전 내용을 다시 확인해주세요.</div>
     </section>
 
     <section class="step" data-step="5">
@@ -207,7 +208,7 @@ const SITE_APPLICATION_DEFAULTS={
   'samjeong-greencore-the-city':{internet:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 3년 약정 / 와이파이 패키지 미포함 / 월 15,000원',bundle:'아파트/오피스텔 특판 / 인터넷 슬림 100M / 지니 TV 베이직 / 3년 약정 / 와이파이 패키지 미포함 / 월 23,400원'}
 };
 const params=new URLSearchParams(location.search);
-const steps=[...document.querySelectorAll('.step')], progress=document.getElementById('progress');let current=0,signed=false,submitting=false;
+const steps=[...document.querySelectorAll('.step')], progress=document.getElementById('progress');let current=0,signed=false,nameWritten=false,submitting=false;
 let pdfTemplateBytesPromise=null,preparedApplicationPdf=null;
 function loadPdfTemplateBytes(){
   if(!pdfTemplateBytesPromise){
@@ -225,7 +226,7 @@ const bars=[...progress.children], prev=document.getElementById('prev'), next=do
 function applicationReturnUrl(){const fallback='./?view=internet',target=params.get('return')||fallback;try{const url=new URL(target,location.href);return url.origin===location.origin?url.href:new URL(fallback,location.href).href}catch(_){return new URL(fallback,location.href).href}}
 function leaveApplication(){location.href=applicationReturnUrl()}
 function finishApplication(){if(params.get('source')==='qr'){window.close();setTimeout(()=>toast('접수가 완료되었습니다. 브라우저의 닫기 버튼으로 종료해주세요.'),180);return}location.href=applicationReturnUrl()}
-function showStep(index){current=index;steps.forEach((s,i)=>s.classList.toggle('on',i===current));bars.forEach((b,i)=>b.classList.toggle('on',i<=Math.min(current,4)));prev.style.visibility=current===0?'hidden':'visible';next.textContent=current===5?'신청서 제출':'다음';next.classList.toggle('full',current===0);window.scrollTo(0,0);if(current===4)requestAnimationFrame(resizeCanvas);if(current===5){renderReview();prepareApplicationPdf()}}
+function showStep(index){current=index;steps.forEach((s,i)=>s.classList.toggle('on',i===current));bars.forEach((b,i)=>b.classList.toggle('on',i<=Math.min(current,4)));prev.style.visibility=current===0?'hidden':'visible';next.textContent=current===5?'신청서 제출':'다음';next.classList.toggle('full',current===0);window.scrollTo(0,0);if(current===4)requestAnimationFrame(resizeSigningCanvases);if(current===5){renderReview();prepareApplicationPdf()}}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
 function requireValue(id,msg){if(!document.getElementById(id).value){toast(msg);return false}return true}
 function selectedCustomerType(){return document.querySelector('[name="customerType"]:checked')?.value||'개인'}
@@ -254,19 +255,22 @@ function updatePaymentFields(){
   if(fields){fields.hidden=!bank;fields.querySelectorAll('input,select').forEach(input=>input.disabled=!bank)}
   if(notice)notice.innerHTML=bank?'<b style="color:#16181d">계좌 자동이체 정보</b><br>예금주, 은행, 계좌정보가 신청서 요금납부 영역에 기입됩니다.':'<b style="color:#16181d">지로 납부 선택</b><br>계좌정보 입력 없이 지로 고지서 납부로 접수됩니다.';
 }
-function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}const required=isIndividualBusiness()?[['businessName','상호명을 입력해주세요.'],['businessNumber','사업자등록번호를 입력해주세요.'],['representativeName','대표자명을 입력해주세요.']]:[['name','성명을 입력해주세요.']];required.push(['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.']);if(usesBankTransfer())required.push(['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']);for(const [id,msg] of required)if(!requireValue(id,msg))return false;if(isIndividualBusiness()&&document.getElementById('businessNumber').value.replace(/\D/g,'').length!==10){toast('사업자등록번호 10자리를 정확히 입력해주세요.');return false}const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}if(isIndividualBusiness()&&!document.getElementById('businessLicense').files.length){toast('사업자등록증을 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
+function validate(){if(current===0)return true;if(current===1){const residentDigits=(document.getElementById('residentNumber')?.value||'').replace(/\D/g,'');if(residentDigits.length!==13){toast('주민등록번호 13자리를 정확히 입력해주세요.');return false;}const required=isIndividualBusiness()?[['businessName','상호명을 입력해주세요.'],['businessNumber','사업자등록번호를 입력해주세요.'],['representativeName','대표자명을 입력해주세요.']]:[['name','성명을 입력해주세요.']];required.push(['birth','생년월일을 입력해주세요.'],['gender','성별을 선택해주세요.'],['phone','휴대폰 번호를 입력해주세요.'],['address','설치 주소를 검색해주세요.'],['addressDetail','상세주소를 입력해주세요.'],['email','이메일을 입력해주세요.'],['bill','명세서 수신 방법을 선택해주세요.']);if(usesBankTransfer())required.push(['accountHolder','예금주를 입력해주세요.'],['bankName','납부 은행을 선택해주세요.'],['accountNumber','계좌번호를 입력해주세요.'],['payerBirth','예금주 생년월일 또는 사업자번호를 입력해주세요.']);for(const [id,msg] of required)if(!requireValue(id,msg))return false;if(isIndividualBusiness()&&document.getElementById('businessNumber').value.replace(/\D/g,'').length!==10){toast('사업자등록번호 10자리를 정확히 입력해주세요.');return false}const email=document.getElementById('email').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('이메일 주소를 정확히 입력해주세요.');return false}}if(current===2){if(!document.getElementById('idFront').files.length){toast('신분증 사진을 촬영하거나 등록해주세요.');return false}if(isIndividualBusiness()&&!document.getElementById('businessLicense').files.length){toast('사업자등록증을 등록해주세요.');return false}}if(current===3&&[...document.querySelectorAll('.agree')].some(x=>!x.checked)){toast('필수 동의를 모두 확인해주세요.');return false}if(current===4){if(!hasApplicantNameInk()){nameWritten=false;toast('신청자 성명을 자필로 작성해주세요.');return false}nameWritten=true;if(!hasSignatureInk()){signed=false;toast('서명란에 서명을 작성해주세요.');return false}signed=true;if(!document.getElementById('applySig').checked){toast('서명 아래의 적용 동의를 체크해주세요.');return false}}if(current===5)return requireValue('installDate','개통 희망일을 선택해주세요.');return true}
 prev.onclick=()=>{if(!submitting&&current>0)showStep(current-1)};next.onclick=async()=>{if(submitting)return;if(current===5){if(validate())await submitApplication();return}if(validate())showStep(current+1)};
 document.getElementById('idFront').onchange=e=>{const file=e.target.files[0],img=document.getElementById('frontPreview');if(!file){img.style.display='none';return}img.src=URL.createObjectURL(file);img.style.display='block'};
 document.getElementById('businessLicense').onchange=e=>{const file=e.target.files[0],img=document.getElementById('businessLicensePreview');if(!file||file.type==='application/pdf'){img.style.display='none';img.removeAttribute('src');return}img.src=URL.createObjectURL(file);img.style.display='block'};
-const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
-function resizeCanvas(){const rect=canvas.getBoundingClientRect(),old=canvas.toDataURL();canvas.width=Math.round(rect.width*devicePixelRatio);canvas.height=Math.round(rect.height*devicePixelRatio);ctx.scale(devicePixelRatio,devicePixelRatio);ctx.lineWidth=6;ctx.lineCap='round';ctx.strokeStyle='#111';if(signed){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,rect.width,rect.height);img.src=old}}
-function point(e){const r=canvas.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top}}
-function hasSignatureInk(){try{const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;for(let i=3;i<pixels.length;i+=4){if(pixels[i]>0)return true}}catch(error){console.warn('서명 확인 실패',error)}return signed}
-function start(e){drawing=true;if(e.pointerId!==undefined&&canvas.setPointerCapture){try{canvas.setPointerCapture(e.pointerId)}catch(_){}}const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+.1,p.y+.1);ctx.stroke();signed=true;e.preventDefault()}function move(e){if(!drawing)return;const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();signed=true;e.preventDefault()}function end(e){drawing=false;if(e&&e.pointerId!==undefined&&canvas.releasePointerCapture){try{canvas.releasePointerCapture(e.pointerId)}catch(_){}}}
-canvas.addEventListener('pointerdown',start);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);document.getElementById('clearSig').onclick=()=>{ctx.clearRect(0,0,canvas.width,canvas.height);signed=false};window.addEventListener('resize',resizeCanvas);setTimeout(resizeCanvas,0);
+const canvas=document.getElementById('signature'),nameCanvas=document.getElementById('applicantNameMark');
+function bindInkCanvas(target,onInk,onClear){const context=target.getContext('2d');let drawing=false;function resize(){const rect=target.getBoundingClientRect(),old=target.toDataURL(),hadInk=canvasHasInk(target,context);target.width=Math.round(rect.width*devicePixelRatio);target.height=Math.round(rect.height*devicePixelRatio);context.scale(devicePixelRatio,devicePixelRatio);context.lineWidth=6;context.lineCap='round';context.lineJoin='round';context.strokeStyle='#111';if(hadInk){const img=new Image();img.onload=()=>context.drawImage(img,0,0,rect.width,rect.height);img.src=old}}function point(e){const r=target.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top}}function start(e){drawing=true;if(e.pointerId!==undefined&&target.setPointerCapture){try{target.setPointerCapture(e.pointerId)}catch(_){}}const p=point(e);context.beginPath();context.moveTo(p.x,p.y);context.lineTo(p.x+.1,p.y+.1);context.stroke();onInk();e.preventDefault()}function move(e){if(!drawing)return;const p=point(e);context.lineTo(p.x,p.y);context.stroke();onInk();e.preventDefault()}function end(e){drawing=false;if(e&&e.pointerId!==undefined&&target.releasePointerCapture){try{target.releasePointerCapture(e.pointerId)}catch(_){}}}target.addEventListener('pointerdown',start);target.addEventListener('pointermove',move);target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end);window.addEventListener('pointerup',end);return{context,resize,clear(){context.clearRect(0,0,target.width,target.height);onClear()}}}
+function canvasHasInk(target,context){try{const pixels=context.getImageData(0,0,target.width,target.height).data;for(let i=3;i<pixels.length;i+=4){if(pixels[i]>0)return true}}catch(error){console.warn('필기 확인 실패',error)}return false}
+const signaturePad=bindInkCanvas(canvas,()=>{signed=true},()=>{signed=false});
+const applicantNamePad=bindInkCanvas(nameCanvas,()=>{nameWritten=true},()=>{nameWritten=false});
+function hasSignatureInk(){return canvasHasInk(canvas,signaturePad.context)||signed}
+function hasApplicantNameInk(){return canvasHasInk(nameCanvas,applicantNamePad.context)||nameWritten}
+function resizeSigningCanvases(){applicantNamePad.resize();signaturePad.resize()}
+document.getElementById('clearSig').onclick=signaturePad.clear;document.getElementById('clearApplicantName').onclick=applicantNamePad.clear;window.addEventListener('resize',resizeSigningCanvases);setTimeout(resizeSigningCanvases,0);
 function value(id){return document.getElementById(id).value||'-'}
 function fullAddress(){const a=(document.getElementById('address')?.value||'').trim(),d=(document.getElementById('addressDetail')?.value||'').trim();return [a,d].filter(Boolean).join(' ')||'-'}function maskAccount(v){const s=String(v||'').replace(/\D/g,'');if(s.length<6)return s||'-';return s.slice(0,3)+'****'+s.slice(-3)}function selectedApplicationProduct(){return document.getElementById('selectedProductDetails').value.trim()||document.querySelector('[name="product"]:checked').value}function isInternetTvProduct(product){const selected=document.querySelector('[name="product"]:checked')?.value||'';return selected==='인터넷+TV'||/(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(String(product||''))}
-function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['고객유형',selectedCustomerType()]];if(isIndividualBusiness())items.push(['상호명',value('businessName')],['사업자등록번호',value('businessNumber')],['성명(대표자)',value('representativeName')]);else items.push(['성명',value('name')]);items.push(['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]);if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료']);if(isIndividualBusiness())items.push(['사업자등록증','첨부 완료']);items.push(['필수동의','5개 확인'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+function renderReview(){const product=selectedApplicationProduct(),method=selectedPaymentMethod();const items=[['현장',value('site')],['가입상품',product],['고객유형',selectedCustomerType()]];if(isIndividualBusiness())items.push(['상호명',value('businessName')],['사업자등록번호',value('businessNumber')],['성명(대표자)',value('representativeName')]);else items.push(['성명',value('name')]);items.push(['생년월일',value('birth')],['연락처',value('phone')],['설치주소',fullAddress()],['설치 희망일',value('installDate')],['납부방법',method]);if(usesBankTransfer())items.push(['예금주',value('accountHolder')],['납부은행',value('bankName')],['계좌번호',maskAccount(value('accountNumber'))],['예금주 생년월일/사업자번호',value('payerBirth')]);items.push(['신분증',value('idType')+' 첨부 완료']);if(isIndividualBusiness())items.push(['사업자등록증','첨부 완료']);items.push(['필수동의','5개 확인'],['자필 성명','작성 완료'],['전자서명','작성 완료']);document.getElementById('review').innerHTML=items.map(x=>`<div class="row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
 function prepareApplicationPdf(){
   const data=currentFormDataForPdf(),key=JSON.stringify(data);
   if(preparedApplicationPdf&&preparedApplicationPdf.key===key)return preparedApplicationPdf.promise;
@@ -300,7 +304,7 @@ async function submitApplication(){
     ]);
     if(pdfResult.error)throw pdfResult.error;
     const pdfPackage=pdfResult.value;
-    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerType:selectedCustomerType(),customerName:value('name'),businessName:businessFieldValue('businessName'),businessNumber:businessFieldValue('businessNumber'),representativeName:businessFieldValue('representativeName'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:selectedPaymentMethod(),accountHolder:paymentFieldValue('accountHolder'),bankName:paymentFieldValue('bankName'),accountNumber:paymentFieldValue('accountNumber'),holderRelation:paymentFieldValue('holderRelation'),payerBirth:paymentFieldValue('payerBirth'),idType:value('idType'),businessLicenseName:document.getElementById('businessLicense').files[0]?.name||'',consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:idFrontData,businessLicense:businessLicenseData,signature:canvas.toDataURL('image/png')};
+    const body={action:'submitApplication',siteCode:params.get('site')||'',siteLabel:value('site'),product:selectedApplicationProduct(),preferredInstallDate:value('installDate'),customerType:selectedCustomerType(),customerName:value('name'),businessName:businessFieldValue('businessName'),businessNumber:businessFieldValue('businessNumber'),representativeName:businessFieldValue('representativeName'),birthDate:value('birth'),residentNumber:value('residentNumber'),gender:value('gender'),phone:value('phone'),address:fullAddress(),zipCode:document.getElementById('zonecode').value.trim(),email:document.getElementById('email').value.trim(),currentCarrier:value('carrier'),billingMethod:value('bill'),paymentMethod:selectedPaymentMethod(),accountHolder:paymentFieldValue('accountHolder'),bankName:paymentFieldValue('bankName'),accountNumber:paymentFieldValue('accountNumber'),holderRelation:paymentFieldValue('holderRelation'),payerBirth:paymentFieldValue('payerBirth'),idType:value('idType'),businessLicenseName:document.getElementById('businessLicense').files[0]?.name||'',consents:{service:agrees[0].checked,privacy:agrees[1].checked,uniqueId:agrees[2].checked,credit:agrees[3].checked,fraudPrevention:agrees[4].checked,signatureApply:document.getElementById('applySig').checked},idFront:idFrontData,businessLicense:businessLicenseData,applicantNameMark:nameCanvas.toDataURL('image/png'),signature:canvas.toDataURL('image/png')};
     next.textContent='신청정보 저장 중...';
     const result=await submitApplicationWithPdf(body,pdfPackage.blob,pdfPackage.filename);
     fetch(SHEETS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'resident',applicationId:result.applicationId,residentNumber:body.residentNumber,name:body.customerName,phone:body.phone})}).catch(error=>console.error('주민번호 보완 저장 실패',error));
@@ -315,7 +319,7 @@ async function submitApplication(){
 }
 function renderSelectedProductDetails(text){const box=document.getElementById('selectedProductDisplay');box.textContent='';const parts=String(text||'').split('/').map(x=>x.trim()).filter(Boolean);parts.forEach((part,index)=>{let label='신청 유형';if(part.includes('예상 월'))label='예상 월 요금';else if(part.includes('셋톱'))label='셋톱박스';else if(part.includes('와이파이'))label='와이파이 패키지';else if(index>0&&part.includes('TV'))label='TV 상품';else if(index>0&&part.includes('인터넷'))label='인터넷 상품';const row=document.createElement('div');row.className='selected-product-row'+(label==='예상 월 요금'?' total':'');const key=document.createElement('span');key.textContent=label;const value=document.createElement('b');value.textContent=label==='예상 월 요금'?part.replace(/^예상 월\s*/,'월 '):part;row.append(key,value);box.appendChild(row)})}
 const siteCode=params.get('site')||'';if(SITE_NAMES[siteCode])document.getElementById('site').value=SITE_NAMES[siteCode];const requestedProduct=params.get('product');if(requestedProduct){const radio=[...document.querySelectorAll('[name="product"]')].find(x=>x.value===requestedProduct);if(radio)radio.checked=true}let requestedDetails=params.get('details')||'';if(SITE_APPLICATION_DEFAULTS[siteCode]&&!requestedDetails){requestedDetails=isInternetTvProduct(requestedProduct)?SITE_APPLICATION_DEFAULTS[siteCode].bundle:SITE_APPLICATION_DEFAULTS[siteCode].internet}else if(SITE_NAMES[siteCode]&&!requestedDetails){requestedDetails=isInternetTvProduct(requestedProduct)?'인터넷+TV / 인터넷 슬림 100M / 지니 TV 베이직':'인터넷 슬림 100M'}if(requestedDetails){document.getElementById('selectedProductDetails').value=requestedDetails;renderSelectedProductDetails(requestedDetails);document.getElementById('selectedProductWrap').style.display='block'}document.querySelectorAll('[name="product"]').forEach(x=>x.addEventListener('change',()=>{const detailEl=document.getElementById('selectedProductDetails');const displayEl=document.getElementById('selectedProductDisplay');const wrapEl=document.getElementById('selectedProductWrap');if(requestedDetails&&x.value===(requestedProduct||'인터넷')){detailEl.value=requestedDetails;renderSelectedProductDetails(requestedDetails);wrapEl.style.display='block'}else{detailEl.value='';displayEl.textContent='';wrapEl.style.display='none'}}))
-showStep(requestedProduct ? 1 : 0);
+showStep(params.get('preview')==='signature' ? 4 : (requestedProduct ? 1 : 0));
 </script>
 
 <script>
@@ -381,13 +385,17 @@ const signatureImageCache = new WeakMap();
 
 async function drawSignature(pdfDoc, page, dataUrl, xPx, yPxTop, widthPx, heightPx) {
   if (!dataUrl) return;
-  let cached = signatureImageCache.get(pdfDoc);
-  if (!cached || cached.dataUrl !== dataUrl) {
-    const bytes = await fetch(dataUrl).then(r => r.arrayBuffer());
-    cached = {dataUrl, image:await pdfDoc.embedPng(bytes)};
-    signatureImageCache.set(pdfDoc, cached);
+  let cache = signatureImageCache.get(pdfDoc);
+  if (!cache) {
+    cache = new Map();
+    signatureImageCache.set(pdfDoc, cache);
   }
-  const img = cached.image;
+  let img = cache.get(dataUrl);
+  if (!img) {
+    const bytes = await fetch(dataUrl).then(r => r.arrayBuffer());
+    img = await pdfDoc.embedPng(bytes);
+    cache.set(dataUrl, img);
+  }
   const x = pxToPtX(xPx);
   const topPt = pxToPtY(yPxTop);
   const w = pxToPtX(widthPx);
@@ -460,6 +468,7 @@ function currentFormDataForPdf() {
       fraudPrevention:!!agrees[4]?.checked,
       signatureApply:document.getElementById('applySig').checked
     },
+    applicantNameMark:nameCanvas.toDataURL('image/png'),
     signature:canvas.toDataURL('image/png')
   };
 }
@@ -520,29 +529,29 @@ async function createFilledKtPdf(data, applicationId='미접수', options={}) {
 
     // TV 서명란 3곳
     // 인터넷+TV 선택 시 각 서명칸에도 이름 + 서명을 함께 기입
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 309, 34, 22, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.applicantNameMark, 1040, 309, 34, 22);
     await drawSignature(pdfDoc, p1, data.signature, 1070, 302, 70, 30);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 343, 34, 20, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.applicantNameMark, 1040, 343, 34, 20);
     await drawSignature(pdfDoc, p1, data.signature, 1070, 337, 70, 30);
-    await drawTextImageFit(pdfDoc, p1, data.customerName, 1040, 373, 34, 20, {fontSize:18, weight:700});
+    await drawSignature(pdfDoc, p1, data.applicantNameMark, 1040, 373, 34, 20);
     await drawSignature(pdfDoc, p1, data.signature, 1070, 366, 70, 30);
   }
 
   // 인터넷 안내사항
   // 사용자가 dddddd로 표시한 정확한 위치에 고객 이름 + 전자서명 배치
   // 이름은 dddddd 자리, 서명은 오른쪽 '서명(인)' 칸 안쪽
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 623, 48, 15, {fontSize:18, weight:700});
+  await drawSignature(pdfDoc, p1, data.applicantNameMark, 963, 623, 48, 15);
   await drawSignature(pdfDoc, p1, data.signature, 1070, 618, 70, 28);
 
   // 바로 아래 '신청번호' 행에는 이름/서명을 절대 넣지 않음
 
   // 혜택 > 고객 사은품 : "신청/가입자(본인) | 이름 | 서명"
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 1370, 48, 20, {fontSize:16, weight:700});
+  await drawSignature(pdfDoc, p1, data.applicantNameMark, 963, 1370, 48, 20);
   await drawSignature(pdfDoc, p1, data.signature, 1070, 1364, 70, 30);
 
   // 하단 신청란 : "신청/가입자(본인) | 이름 | 서명(인)"
   // 실제 빨간 박스 안쪽에 딱 맞도록 재정렬
-  await drawTextImageFit(pdfDoc, p1, data.customerName, 963, 1603, 48, 20, {fontSize:16, weight:700});
+  await drawSignature(pdfDoc, p1, data.applicantNameMark, 963, 1603, 48, 20);
   await drawSignature(pdfDoc, p1, data.signature, 1070, 1597, 70, 30);
 
 
@@ -638,25 +647,25 @@ async function createFilledKtPdf(data, applicationId='미접수', options={}) {
   // 상단 통신범죄 예방 안내:
   // 첫 번째 칸은 판매자(본인) 서명란이므로 고객 서명을 넣지 않음.
   // 두 번째 / 세 번째 칸만 신청/가입자 이름 + 서명
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 232, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.applicantNameMark, 980, 232, 60, 20);
   await drawSignature(pdfDoc, p2, data.signature, 1100, 226, 70, 30);
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 296, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.applicantNameMark, 980, 296, 60, 20);
   await drawSignature(pdfDoc, p2, data.signature, 1100, 290, 70, 30);
 
   // 결합서비스 신청 하단 신청/가입자(대리인)란
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 780, 60, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.applicantNameMark, 980, 780, 60, 20);
   await drawSignature(pdfDoc, p2, data.signature, 1100, 774, 70, 30);
 
   // 계좌 자동이체를 선택한 경우에만 자동/통합 납부 동의란에 서명
   if (isBankTransfer) {
-    await drawTextImageFit(pdfDoc, p2, data.customerName, 980, 1295, 60, 20, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p2, data.applicantNameMark, 980, 1295, 60, 20);
     await drawSignature(pdfDoc, p2, data.signature, 1100, 1289, 70, 30);
   }
 
   // 페이지 하단 신청/가입자(본인)
   // 실제 빨간 박스(y 약 1618~1665) 안쪽에 정확히 맞춤
   // 이름은 라벨 뒤 빈칸, 전자서명은 우측 '서명(인)' 칸 내부
-  await drawTextImageFit(pdfDoc, p2, data.customerName, 950, 1617, 55, 20, {fontSize:17, weight:700});
+  await drawSignature(pdfDoc, p2, data.applicantNameMark, 950, 1617, 55, 20);
   await drawSignature(pdfDoc, p2, data.signature, 1070, 1611, 70, 30);
 
 
@@ -666,16 +675,16 @@ async function createFilledKtPdf(data, applicationId='미접수', options={}) {
   // ----------------------------
   if (p3) {
     // 상단 고유식별정보 수집 이용 동의
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 174, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.applicantNameMark, 1010, 174, 40, 18);
     await drawSignature(pdfDoc, p3, data.signature, 1110, 168, 70, 30);
 
     // 개인정보 신용정보 수집 이용 동의
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 660, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.applicantNameMark, 1010, 660, 40, 18);
     await drawSignature(pdfDoc, p3, data.signature, 1110, 654, 70, 30);
 
     // 페이지 하단 필수동의 서명
     // 이름은 기존보다 위로 올리고 글씨 크기를 줄여 칸 중앙에 맞춤
-    await drawTextImageFit(pdfDoc, p3, data.customerName, 1010, 1665, 40, 18, {fontSize:17, weight:700});
+    await drawSignature(pdfDoc, p3, data.applicantNameMark, 1010, 1665, 40, 18);
     await drawSignature(pdfDoc, p3, data.signature, 1110, 1659, 70, 30);
   }
 
