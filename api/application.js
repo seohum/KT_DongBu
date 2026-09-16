@@ -304,16 +304,12 @@ export default async function handler(req, res) {
       }
     }
     const idFrontData = normalizeDataImage(input.idFront);
-    const applicantNameMarkData = normalizeDataImage(input.applicantNameMark);
     const signatureData = normalizeDataImage(input.signature);
     if (!validDataImage(idFrontData)) {
       return send(res, 400, { success: false, message: '신분증 사진을 다시 선택해주세요.' }, origin);
     }
     if (!validDataImage(signatureData)) {
       return send(res, 400, { success: false, message: '서명을 다시 작성해주세요.' }, origin);
-    }
-    if (!validDataImage(applicantNameMarkData)) {
-      return send(res, 400, { success: false, message: '신청자 성명을 자필로 다시 작성해주세요.' }, origin);
     }
     if (input.idBack && !validDataImage(input.idBack)) {
       return send(res, 400, { success: false, message: '신분증 뒷면 파일을 확인해주세요.' }, origin);
@@ -352,7 +348,6 @@ export default async function handler(req, res) {
       idFront: idFrontData,
       idBack: input.idBack ? normalizeDataImage(input.idBack) : '',
       businessLicense: customerType === '개인사업자' ? input.businessLicense : '',
-      applicantNameMark: applicantNameMarkData,
       signature: signatureData
     };
 
