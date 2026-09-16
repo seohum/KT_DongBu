@@ -1,4 +1,3 @@
-import { waitUntil } from '@vercel/functions';
 import applicationHandler from './application.js';
 
 const ALLOWED_ORIGINS = new Set([
@@ -81,6 +80,21 @@ async function attachPdf(applicationId, fileName, pdf) {
   if (!upstream.ok || !result.ok) throw new Error('PDF upload failed');
 }
 
+async function attachPdfWithRetry(applicationId, fileName, pdf) {
+  let lastError;
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      await attachPdf(applicationId, fileName, pdf);
+      return true;
+    } catch (error) {
+      lastError = error;
+      console.error('PDF upload attempt failed', applicationId, attempt, error && error.message);
+      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+  throw lastError || new Error('PDF upload failed');
+}
+
 export default async function handler(req, res) {
   const origin = String(req.headers.origin || '');
   if (req.method === 'OPTIONS') {
@@ -110,12 +124,19 @@ export default async function handler(req, res) {
       .replace(/[\\/:*?"<>|]/g, '')
       .slice(0, 150);
     const fileName = `${applicationId}_${suffix || '유선가입신청서.pdf'}`;
-    waitUntil(
-      attachPdf(applicationId, fileName, pdf)
-        .catch(error => console.error('background PDF upload failed', applicationId, error && error.message))
-    );
+    let pdfSaved = false;
+    try {
+      pdfSaved = await attachPdfWithRetry(applicationId, fileName, pdf);
+    } catch (pdfError) {
+      console.error('PDF upload failed after submission', applicationId, pdfError && pdfError.message);
+    }
 
-    return send(res, 200, { success: true, applicationId, pdfQueued: true }, origin);
+    return send(res, 200, {
+      success: true,
+      applicationId,
+      pdfSaved,
+      message: pdfSaved ? '' : '접수는 완료됐지만 PDF 저장에 실패했습니다. 접수번호를 관리자에게 알려주세요.'
+    }, origin);
   } catch (error) {
     console.error('combined application submission failed', error && error.message);
     if (error && error.message === 'REQUEST_TOO_LARGE') {

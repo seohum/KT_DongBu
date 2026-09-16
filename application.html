@@ -305,7 +305,10 @@ async function submitApplication(){
     const result=await submitApplicationWithPdf(body,pdfPackage.blob,pdfPackage.filename);
     fetch(SHEETS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'resident',applicationId:result.applicationId,residentNumber:body.residentNumber,name:body.customerName,phone:body.phone})}).catch(error=>console.error('주민번호 보완 저장 실패',error));
     const completionLabel=params.get('source')==='qr'?'창 닫기':'인터넷 탭으로 돌아가기';
-    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b></p><div class="security" id="pdfSaveStatus" style="text-align:left"><b>PDF를 서버에서 Drive에 저장하고 있습니다.</b><br>이제 이 화면을 닫아도 저장은 계속됩니다.</div><button class="next full" id="finishApplicationBtn">${completionLabel}</button></section>`;
+    const pdfStatus=result.pdfSaved===false
+      ? `<b style="color:#dc2626">PDF 저장 확인이 필요합니다.</b><br>${result.message||'접수번호를 관리자에게 알려주세요.'}`
+      : '<b>PDF 저장이 완료되었습니다.</b><br>이제 이 화면을 닫아도 됩니다.';
+    document.querySelector('.content').innerHTML=`<section class="step on" style="display:block;text-align:center;padding-top:48px"><div style="font-size:52px">✓</div><h1 class="title" style="margin-top:16px">신청서가 접수되었습니다</h1><p class="desc">접수번호<br><b style="color:#16181d">${result.applicationId||'-'}</b></p><div class="security" id="pdfSaveStatus" style="text-align:left">${pdfStatus}</div><button class="next full" id="finishApplicationBtn">${completionLabel}</button></section>`;
     document.querySelector('.bottom').style.display='none';
     const finish=document.getElementById('finishApplicationBtn');if(finish)finish.onclick=finishApplication;
   }catch(error){toast(error.message||'전송에 실패했습니다. 잠시 후 다시 시도해주세요.');submitting=false;next.disabled=false;prev.disabled=false;next.textContent='신청서 제출'}
