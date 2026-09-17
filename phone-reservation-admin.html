@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>사전예약 모델 관리</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#17191e;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{width:100%;max-width:680px;min-height:100vh;margin:auto;background:#fff}.head{padding:20px;border-bottom:1px solid #eceef1}.head-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:10px}.brand img{width:52px}.brand strong{font-size:18px}.badge{padding:7px 10px;border-radius:999px;background:#fff0f2;color:#e31937;font-size:11px;font-weight:900}.head p{margin:9px 0 0;color:#737883;font-size:12px;line-height:1.55}.content{padding:18px 18px 120px}.login{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-bottom:16px}.login input,.row input{width:100%;height:48px;padding:0 12px;border:1px solid #d9dde4;border-radius:11px;font:inherit;outline:none}.login input:focus,.row input:focus{border-color:#e31937;box-shadow:0 0 0 3px rgba(227,25,55,.08)}button{border:0;border-radius:11px;font:inherit;font-weight:900;cursor:pointer}.load{background:#202227;color:#fff}.notice{margin-bottom:16px;padding:13px 14px;border-radius:12px;background:#f4f6f9;color:#5d636d;font-size:12px;line-height:1.55}.models{display:grid;gap:12px}.row{padding:15px;border:1px solid #e0e3e8;border-radius:15px;background:#fff}.row-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.row-title{font-size:13px;font-weight:900}.delete{min-height:34px;padding:0 11px;background:#fff0f2;color:#d31531}.fields{display:grid;gap:10px}.field label{display:block;margin-bottom:6px;color:#656b75;font-size:11px;font-weight:800}.field small{display:block;margin-top:5px;color:#8a8f97;font-size:10px}.active{display:flex;align-items:center;gap:9px;margin-top:12px;font-size:12px;font-weight:800}.active input{width:22px;height:22px;accent-color:#e31937}.add{width:100%;height:50px;margin-top:14px;background:#eef0f3;color:#343840}.bottom{position:fixed;left:50%;bottom:0;width:100%;max-width:680px;transform:translateX(-50%);padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid #eceef1}.save{width:100%;height:54px;background:#e31937;color:#fff;font-size:15px}.save:disabled{background:#aaa}.status{display:none;margin:0 0 12px;padding:12px;border-radius:11px;font-size:12px;font-weight:800}.status.on{display:block}.status.ok{background:#edfbf1;color:#117a37}.status.error{background:#fff0f2;color:#c3152d}@media(min-width:560px){.fields{grid-template-columns:1.2fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="head"><div class="head-top"><div class="brand"><img src="assets/kt-logo.png" alt="KT"><strong>사전예약 모델 관리</strong></div><span class="badge">관리자</span></div><p>모델·색상·용량을 저장하면 사전예약 사이트에 자동 반영됩니다.</p></header>
+<section class="content">
+<div class="login"><input id="password" type="password" autocomplete="current-password" placeholder="관리자 비밀번호"><button class="load" id="reloadBtn" type="button">목록 새로고침</button></div>
+<div class="status" id="status"></div>
+<div class="notice">색상과 용량은 쉼표로 구분해주세요. 예: 블랙, 화이트, 실버<br>‘사이트에 노출’ 체크를 끄면 삭제하지 않고 잠시 숨길 수 있습니다.</div>
+<div class="models" id="models"></div>
+<button class="add" id="addBtn" type="button">＋ 새 모델 등록</button>
+</section>
+<div class="bottom"><button class="save" id="saveBtn" type="button">변경사항 저장</button></div>
+</main>
+<script>
+const CATALOG_URL='./phone-products.json';
+const API_URL='https://kt-dong-bu.vercel.app/api/phone-products-admin';
+const models=document.getElementById('models'),statusBox=document.getElementById('status'),saveBtn=document.getElementById('saveBtn');
+function showStatus(message,type){statusBox.textContent=message;statusBox.className='status on '+type}
+function splitList(value){return [...new Set(String(value||'').split(',').map(x=>x.trim()).filter(Boolean))]}
+function addRow(product={name:'',colors:[],capacities:[],active:true}){
+  const row=document.createElement('section');row.className='row';
+  row.innerHTML='<div class="row-head"><span class="row-title">예약 모델</span><button class="delete" type="button">삭제</button></div><div class="fields"><div class="field"><label>모델명</label><input class="name" placeholder="예: iPhone 18 Pro"><small>예약 화면에 표시되는 이름</small></div><div class="field"><label>색상</label><input class="colors" placeholder="블랙, 화이트"><small>쉼표로 구분</small></div><div class="field"><label>용량</label><input class="capacities" placeholder="256GB, 512GB"><small>쉼표로 구분</small></div></div><label class="active"><input class="visible" type="checkbox">사이트에 노출</label>';
+  row.querySelector('.name').value=product.name||'';
+  row.querySelector('.colors').value=(product.colors||[]).join(', ');
+  row.querySelector('.capacities').value=(product.capacities||[]).join(', ');
+  row.querySelector('.visible').checked=product.active!==false;
+  row.querySelector('.delete').onclick=()=>{if(models.children.length<=1)return showStatus('예약 모델은 최소 1개가 필요합니다.','error');row.remove()};
+  models.appendChild(row);
+}
+async function loadProducts(){
+  try{const response=await fetch(CATALOG_URL+'?v='+Date.now(),{cache:'no-store'});if(!response.ok)throw new Error('목록을 불러오지 못했습니다.');const products=await response.json();models.textContent='';products.forEach(addRow);showStatus('현재 모델 목록을 불러왔습니다.','ok')}catch(error){showStatus(error.message||'목록을 불러오지 못했습니다.','error')}
+}
+function collectProducts(){
+  return [...models.querySelectorAll('.row')].map(row=>({name:row.querySelector('.name').value.trim(),colors:splitList(row.querySelector('.colors').value),capacities:splitList(row.querySelector('.capacities').value),active:row.querySelector('.visible').checked}));
+}
+document.getElementById('addBtn').onclick=()=>{addRow();models.lastElementChild.scrollIntoView({behavior:'smooth',block:'center'});models.lastElementChild.querySelector('.name').focus()};
+document.getElementById('reloadBtn').onclick=loadProducts;
+saveBtn.onclick=async()=>{
+  const password=document.getElementById('password').value,products=collectProducts();
+  if(!password)return showStatus('관리자 비밀번호를 입력해주세요.','error');
+  for(let i=0;i<products.length;i++){if(!products[i].name||!products[i].colors.length||!products[i].capacities.length)return showStatus((i+1)+'번째 모델의 이름·색상·용량을 입력해주세요.','error')}
+  saveBtn.disabled=true;saveBtn.textContent='저장 중...';
+  try{const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password,products})});const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.message||'저장에 실패했습니다.');showStatus('저장 완료! 약 1분 안에 사전예약 사이트에 반영됩니다.','ok')}catch(error){showStatus(error.message||'저장에 실패했습니다.','error')}finally{saveBtn.disabled=false;saveBtn.textContent='변경사항 저장'}
+};
+loadProducts();
+</script>
+</body>
+</html>
