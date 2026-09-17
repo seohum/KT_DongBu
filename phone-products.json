@@ -1,0 +1,42 @@
+[
+  {
+    "name": "직접 입력 / 추후 입력",
+    "colors": [
+      "미정"
+    ],
+    "capacities": [
+      "미정"
+    ],
+    "active": true
+  },
+  {
+    "name": "신제품 모델 A",
+    "colors": [
+      "블랙",
+      "화이트",
+      "기타"
+    ],
+    "capacities": [
+      "128GB",
+      "256GB",
+      "512GB",
+      "1TB"
+    ],
+    "active": true
+  },
+  {
+    "name": "신제품 모델 B",
+    "colors": [
+      "블랙",
+      "화이트",
+      "기타"
+    ],
+    "capacities": [
+      "128GB",
+      "256GB",
+      "512GB",
+      "1TB"
+    ],
+    "active": true
+  }
+]
