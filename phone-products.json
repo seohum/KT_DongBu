@@ -1,23 +1,13 @@
 [
   {
-    "name": "직접 입력 / 추후 입력",
-    "colors": [
-      "미정"
-    ],
-    "capacities": [
-      "미정"
-    ],
-    "active": true
-  },
-  {
-    "name": "신제품 모델 A",
+    "name": "아이폰18 PRO",
     "colors": [
       "블랙",
-      "화이트",
-      "기타"
+      "실버",
+      "글레이즈",
+      "버건디"
     ],
     "capacities": [
-      "128GB",
       "256GB",
       "512GB",
       "1TB"
@@ -25,14 +15,27 @@
     "active": true
   },
   {
-    "name": "신제품 모델 B",
+    "name": "아이폰18 PRO MAX",
     "colors": [
       "블랙",
-      "화이트",
-      "기타"
+      "실버",
+      "글레이즈",
+      "버건디"
     ],
     "capacities": [
-      "128GB",
+      "256GB",
+      "512GB",
+      "1TB"
+    ],
+    "active": true
+  },
+  {
+    "name": "아이폰 듀오",
+    "colors": [
+      "블랙",
+      "실버"
+    ],
+    "capacities": [
       "256GB",
       "512GB",
       "1TB"
