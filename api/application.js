@@ -1,5 +1,3 @@
-import { waitUntil } from '@vercel/functions';
-
 const ALLOWED_ORIGINS = new Set([
   'https://seohum.github.io',
   'https://ktmns.store',
@@ -9,25 +7,6 @@ const ALLOWED_ORIGINS = new Set([
 
 const SHEETS_ENDPOINT =
   'https://script.google.com/macros/s/AKfycbxi7OLg1zqI9BZtxOHVg5tsL_mgU_hj0zRnYY1vC92U9OGrxiwVDW9_Q6oDAIlJssYz/exec';
-
-export const maxDuration = 60;
-export const config = {
-  api: {
-    bodyParser: { sizeLimit: '4mb' }
-  }
-};
-
-async function withTimeout(promise, ms) {
-  let timer;
-  try {
-    return await Promise.race([
-      promise,
-      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('NOTIFICATION_TIMEOUT')), ms); })
-    ]);
-  } finally {
-    clearTimeout(timer);
-  }
-}
 
 function cors(origin) {
   return {
@@ -48,20 +27,11 @@ function text(value, max) {
   return String(value || '').trim().slice(0, max);
 }
 
-function normalizeDataImage(value) {
-  return String(value || '').trim().replace(/[\r\n\t ]+/g, '');
-}
-
 function validDataImage(value) {
-  const normalized = normalizeDataImage(value);
-  const match = /^data:image\/(?:jpeg|jpg|png|webp)(?:;charset=[^;,]+)?;base64,([A-Za-z0-9+/]+={0,2})$/i.exec(normalized);
-  return Boolean(match && match[1].length >= 16);
+  return /^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
 }
 function validDataPdf(value) {
   return /^data:application\/pdf;base64,[A-Za-z0-9+/=]+$/.test(String(value || ''));
-}
-function validDataDocument(value) {
-  return validDataImage(value) || validDataPdf(value);
 }
 
 function escapeHtml(value) {
@@ -97,73 +67,60 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     timeStyle: 'medium'
   }).format(new Date());
   const siteLabel = text(input.siteLabel, 120) || '일반 가입';
-  const customerType = text(input.customerType, 20) === '개인사업자' ? '개인사업자' : '개인';
-  const businessName = customerType === '개인사업자' ? text(input.businessName, 120) : '';
-  const businessNumber = customerType === '개인사업자' ? text(input.businessNumber, 30) : '';
-  const representativeName = customerType === '개인사업자' ? text(input.representativeName, 60) : '';
-  const customerName = customerType === '개인사업자' ? representativeName : text(input.customerName, 40);
   const isSamjeong = input.siteCode === 'samjeong-greencore-the-city' || siteLabel === '삼정그린코아 더 시티';
   const telegramChatId = isSamjeong ? '@ktmnsDB' : process.env.TELEGRAM_CHAT_ID;
   const adminRecord = {
     action: 'create',
     category: '가입신청',
-    name: customerName,
+    name: text(input.customerName, 40),
     phone: normalizeKoreanMobile(input.phone),
     residentNumber: String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13),
-    product: text(input.product, 80),
+    product: text(input.product, 300),
     address: text(input.address, 250),
     carrier: text(input.currentCarrier, 50),
     apartment: siteLabel,
     unit: '',
     installDate: text(input.preferredInstallDate, 30),
-    message: customerType === '개인사업자'
-      ? `개인사업자: ${businessName} / ${businessNumber} / 대표자 ${representativeName} / 전자신청 접수번호: ${applicationId}`
-      : `전자신청 접수번호: ${applicationId}`,
+    message: `전자신청 접수번호: ${applicationId}`,
     status: '접수'
   };
 
   const productText = adminRecord.product;
-  const isInternetTv = /(?:인터넷\s*\+\s*(?:TV|티비)|지니\s*TV)/i.test(productText);
+  const isInternetTv = /(?:인터넷\s*\+\s*TV|인터넷\s*\+\s*티비)/i.test(productText);
   const wifiExcluded = /(?:와이파이|Wi-?Fi).*(?:미포함|제외|없음)|(?:미포함|제외|없음).*(?:와이파이|Wi-?Fi)/i.test(productText);
-  const wifiIncluded = !wifiExcluded && /(?:와이파이|Wi-?Fi).*(?:포함|체크)|(?:포함|체크).*(?:와이파이|Wi-?Fi)/i.test(productText);
+  const wifiIncluded = typeof input.wifiIncluded === 'boolean'
+    ? input.wifiIncluded
+    : !wifiExcluded && /(?:와이파이|Wi-?Fi).*(?:포함|체크|추가|기가)|(?:포함|체크|추가|기가).*(?:와이파이|Wi-?Fi)/i.test(productText);
   const contract = productText.match(/(\d+\s*년\s*약정)/)?.[1]?.replace(/\s+/g, '') || '';
   const tvSettop = isInternetTv
-    ? (productText.match(/(?:지니\s*TV\s*)?(셋톱박스\s*[A-Za-z0-9]+)/i)?.[1] || '')
+    ? (productText.match(/(지니\s*TV\s*셋톱박스\s*\d+|셋톱박스\s*\d+)/i)?.[1] || '')
     : '';
   const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
   const birthDigits = String(input.birthDate || '').replace(/\D/g, '');
   const notificationBirth = birthDigits.length === 8
     ? `${birthDigits.slice(0, 4)}-${birthDigits.slice(4, 6)}-${birthDigits.slice(6, 8)}`
     : residentNumber.slice(0, 6);
-  const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
-  const paymentSummary = paymentMethod === '지로' ? '지로' : [
-    paymentMethod,
+  const paymentSummary = [
+    text(input.paymentMethod, 50) || '자동이체(은행)',
     text(input.bankName, 60) ? `은행명: ${text(input.bankName, 60)}` : '',
     text(input.accountNumber, 80) ? `계좌번호: ${text(input.accountNumber, 80)}` : ''
   ].filter(Boolean).join(' / ');
-  const samjeongPaymentSummary = paymentMethod === '지로' ? '지로' : [
-    text(input.bankName, 60).replace(/은행$/u, ''),
-    String(input.accountNumber || '').replace(/\D/g, ''),
-    String(input.payerBirth || '').replace(/\D/g, '')
-  ].join(' / ');
 
-  const standardTelegramText = [
+  const telegramText = [
     '<b>■ 유선양식■</b>',
     '＊서류발송여부(sos114@ktmns.com) : N',
     '＊판매코드 :',
     '＊프론티어 이름 :',
     '＊공조(서포터) :',
     '',
-    `- 고객유형 : ${escapeHtml(customerType)}`,
-    `- 사업자명 : ${escapeHtml(businessName)}`,
-    `- 사업자등록번호 : ${escapeHtml(businessNumber)}`,
-    `- 대표자명 : ${escapeHtml(representativeName)}`,
+    '- 사업자명 :',
+    '- 사업자등록번호 :',
     `- 고객명 : ${escapeHtml(adminRecord.name)}`,
     `- 주민번호 : ${escapeHtml(notificationBirth)}`,
     `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     '- 건물코드 :',
     `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
-    `- 납부방법 : ${escapeHtml(paymentSummary)}`,
+    `- 자동이체(납부일) : ${escapeHtml(paymentSummary)}`,
     '  ＊가입유형 : 신규가입',
     `  ＊상품 : ${escapeHtml(productText)}`,
     '',
@@ -180,36 +137,6 @@ async function notifyTelegramAndAdmin(input, applicationId) {
     `연락처 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
     `접수시간 : ${escapeHtml(createdAt)}`
   ].join('\n');
-
-  const samjeongTelegramText = [
-    '<b>■ 유선양식■</b>',
-    '＊서류발송여부(sos114@ktmns.com) : N',
-    '＊판매코드 :',
-    '＊프론티어 이름 :',
-    '＊공조(서포터) :',
-    '',
-    `- 사업자명 : ${escapeHtml(businessName)}`,
-    `- 사업자등록번호 : ${escapeHtml(businessNumber)}`,
-    `- 고객명 : ${escapeHtml(adminRecord.name)}`,
-    `- 주민번호 : ${escapeHtml(notificationBirth)}`,
-    `- 고객번호 : ${escapeHtml(formatPhone(adminRecord.phone))}`,
-    '- 건물코드 : B0002836953',
-    `- 설치주소 : ${escapeHtml(adminRecord.address)}`,
-    `- 자동이체(납부일) : ${escapeHtml(samjeongPaymentSummary)}`,
-    `- E-MAIL : ${escapeHtml(text(input.email, 120))}`,
-    '＊가입유형 : 신규가입',
-    `＊상품 : ${escapeHtml(productText)}`,
-    ` * 약정 : ${escapeHtml(contract || '3년')}`,
-    ` * WIFI여부 : ${wifiIncluded ? 'Y' : 'N'}`,
-    ` * TV셋탑 : ${escapeHtml(tvSettop)}`,
-    ' * 일반전화 :',
-    ' * 센트릭스 :',
-    ' * P/S 희망번호 :',
-    `＊가설날짜 : ${escapeHtml(adminRecord.installDate || '')}`,
-    `＊결 합 : ${isInternetTv ? '인터넷+TV' : ''}`,
-    `＊특이사항 : ${escapeHtml(siteLabel)} / 접수번호 ${escapeHtml(applicationId)}`
-  ].join('\n');
-  const telegramText = isSamjeong ? samjeongTelegramText : standardTelegramText;
 
   const [telegram, sheets] = await Promise.all([
     fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -266,7 +193,7 @@ export default async function handler(req, res) {
       ]);
       if (!auth.ok || !authResult.success) return send(res, 401, { success: false, message: '관리자 비밀번호가 올바르지 않습니다.' }, origin);
       if (!upstream.ok || !result.ok) return send(res, 404, { success: false, message: '저장된 신청 파일을 찾지 못했습니다.' }, origin);
-      return send(res, 200, { success: true, files: { folderUrl: result.folderUrl || '', pdfUrl: result.pdfUrl || '', idFrontUrl: result.idFrontUrl || '', idBackUrl: result.idBackUrl || '', businessLicenseUrl: result.businessLicenseUrl || '' } }, origin);
+      return send(res, 200, { success: true, files: { folderUrl: result.folderUrl || '', pdfUrl: result.pdfUrl || '', idFrontUrl: result.idFrontUrl || '', idBackUrl: result.idBackUrl || '' } }, origin);
     }
     if (input.action === 'attachPdf') {
       const applicationId = text(input.applicationId, 100);
@@ -281,35 +208,13 @@ export default async function handler(req, res) {
       return send(res, 200, { success: true }, origin);
     }
     const residentNumber = String(input.residentNumber || '').replace(/\D/g, '').slice(0, 13);
-    const paymentMethod = text(input.paymentMethod, 50) === '지로' ? '지로' : '자동이체(은행)';
-    const customerType = text(input.customerType, 20) === '개인사업자' ? '개인사업자' : '개인';
-    const effectiveCustomerName = customerType === '개인사업자' ? text(input.representativeName, 60) : text(input.customerName, 40);
-    const requiredText = ['phone', 'address', 'product', 'idType'];
+    const requiredText = ['customerName', 'phone', 'address', 'product', 'idType'];
     if (residentNumber.length !== 13) return send(res, 400, { success: false, message: '주민등록번호를 확인해주세요.' }, origin);
-    if (!effectiveCustomerName || requiredText.some(key => !text(input[key], 300))) {
+    if (requiredText.some(key => !text(input[key], 300))) {
       return send(res, 400, { success: false, message: '필수 입력 내용을 확인해주세요.' }, origin);
     }
-    if (paymentMethod === '자동이체(은행)' && ['accountHolder', 'bankName', 'accountNumber', 'payerBirth'].some(key => !text(input[key], 100))) {
-      return send(res, 400, { success: false, message: '자동이체 계좌정보를 확인해주세요.' }, origin);
-    }
-    if (customerType === '개인사업자') {
-      if (['businessName', 'businessNumber', 'representativeName'].some(key => !text(input[key], 120))) {
-        return send(res, 400, { success: false, message: '개인사업자 필수정보를 확인해주세요.' }, origin);
-      }
-      if (String(input.businessNumber || '').replace(/\D/g, '').length !== 10) {
-        return send(res, 400, { success: false, message: '사업자등록번호 10자리를 확인해주세요.' }, origin);
-      }
-      if (!validDataDocument(input.businessLicense)) {
-        return send(res, 400, { success: false, message: '사업자등록증 파일을 확인해주세요.' }, origin);
-      }
-    }
-    const idFrontData = normalizeDataImage(input.idFront);
-    const signatureData = normalizeDataImage(input.signature);
-    if (!validDataImage(idFrontData)) {
-      return send(res, 400, { success: false, message: '신분증 사진을 다시 선택해주세요.' }, origin);
-    }
-    if (!validDataImage(signatureData)) {
-      return send(res, 400, { success: false, message: '서명을 다시 작성해주세요.' }, origin);
+    if (!validDataImage(input.idFront) || !validDataImage(input.signature)) {
+      return send(res, 400, { success: false, message: '신분증과 서명을 확인해주세요.' }, origin);
     }
     if (input.idBack && !validDataImage(input.idBack)) {
       return send(res, 400, { success: false, message: '신분증 뒷면 파일을 확인해주세요.' }, origin);
@@ -323,12 +228,9 @@ export default async function handler(req, res) {
       siteCode: text(input.siteCode, 80),
       siteLabel: text(input.siteLabel, 120),
       product: text(input.product, 80),
+      wifiIncluded: typeof input.wifiIncluded === 'boolean' ? input.wifiIncluded : undefined,
       preferredInstallDate: text(input.preferredInstallDate, 30),
-      customerType,
-      customerName: effectiveCustomerName,
-      businessName: customerType === '개인사업자' ? text(input.businessName, 120) : '',
-      businessNumber: customerType === '개인사업자' ? text(input.businessNumber, 30) : '',
-      representativeName: customerType === '개인사업자' ? text(input.representativeName, 60) : '',
+      customerName: text(input.customerName, 40),
       birthDate: text(input.birthDate, 8),
       residentNumber,
       gender: text(input.gender, 10),
@@ -337,18 +239,17 @@ export default async function handler(req, res) {
       email: text(input.email, 120),
       currentCarrier: text(input.currentCarrier, 50),
       billingMethod: text(input.billingMethod, 50),
-      paymentMethod,
-      accountHolder: paymentMethod === '지로' ? '' : text(input.accountHolder, 60),
-      bankName: paymentMethod === '지로' ? '' : text(input.bankName, 60),
-      accountNumber: paymentMethod === '지로' ? '' : text(input.accountNumber, 80),
-      holderRelation: paymentMethod === '지로' ? '' : text(input.holderRelation, 40),
-      payerBirth: paymentMethod === '지로' ? '' : text(input.payerBirth, 20),
+      paymentMethod: text(input.paymentMethod, 50),
+      accountHolder: text(input.accountHolder, 60),
+      bankName: text(input.bankName, 60),
+      accountNumber: text(input.accountNumber, 80),
+      holderRelation: text(input.holderRelation, 40),
+      payerBirth: text(input.payerBirth, 20),
       idType: text(input.idType, 40),
       consents: input.consents,
-      idFront: idFrontData,
-      idBack: input.idBack ? normalizeDataImage(input.idBack) : '',
-      businessLicense: customerType === '개인사업자' ? input.businessLicense : '',
-      signature: signatureData
+      idFront: input.idFront,
+      idBack: input.idBack || '',
+      signature: input.signature
     };
 
     const upstream = await fetch(process.env.APPLICATION_ENDPOINT, {
@@ -360,12 +261,11 @@ export default async function handler(req, res) {
     const result = await upstream.json().catch(() => ({}));
     if (!result.ok) throw new Error('Apps Script rejected the submission');
 
-    waitUntil(
-      withTimeout(notifyTelegramAndAdmin(input, result.applicationId), 8000)
-        .catch(notificationError => {
-          console.error('application notification warning', notificationError && notificationError.message);
-        })
-    );
+    try {
+      await notifyTelegramAndAdmin(input, result.applicationId);
+    } catch (notificationError) {
+      console.error('application notification warning', notificationError && notificationError.message);
+    }
 
     return send(res, 200, { success: true, applicationId: result.applicationId }, origin);
   } catch (error) {
@@ -373,3 +273,4 @@ export default async function handler(req, res) {
     return send(res, 502, { success: false, message: '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' }, origin);
   }
 }
+
