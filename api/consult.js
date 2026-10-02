@@ -75,7 +75,7 @@ export default async function handler(request, response) {
     const isWireless = type === "무선 상담";
     const text = isWireless
       ? [
-          "📱 <b>KT 무선 상담 신규 접수</b>",
+          "📋 <b>가망고객리스트</b>",
           "",
           `👤 <b>고객명</b>  ${escapeHtml(name)}`,
           `📞 <b>연락처</b>  ${escapeHtml(formatPhone(phone))}`,
