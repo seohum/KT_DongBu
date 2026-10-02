@@ -72,7 +72,18 @@ export default async function handler(request, response) {
       timeStyle: "medium"
     }).format(new Date());
 
-    const text = isJoin
+    const isWireless = type === "무선 상담";
+    const text = isWireless
+      ? [
+          "📱 <b>KT 무선 상담 신규 접수</b>",
+          "",
+          `👤 <b>고객명</b>  ${escapeHtml(name)}`,
+          `📞 <b>연락처</b>  ${escapeHtml(formatPhone(phone))}`,
+          `📡 <b>현재 통신사</b>  ${escapeHtml(carrier || "미선택")}`,
+          `💬 <b>상담내용</b>  ${escapeHtml(message || "없음")}`,
+          `🕒 <b>접수시간</b>  ${escapeHtml(time)}`
+        ].join("\n")
+      : isJoin
       ? [
           "🔵 <b>KT동부법인지사 신규 가입신청</b>",
           "",
