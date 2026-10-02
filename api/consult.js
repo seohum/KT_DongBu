@@ -7,7 +7,8 @@ const ALLOWED_TYPES = new Set([
   "인터넷 + TV",
   "인터넷+TV",
   "기타 문의",
-  "입주 특판 상담"
+  "입주 특판 상담",
+  "무선 상담"
 ]);
 
 const SHEETS_ENDPOINT =
