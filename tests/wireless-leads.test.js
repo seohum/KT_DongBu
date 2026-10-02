@@ -1,14 +1,17 @@
-import { test, afterEach } from 'node:test';
+import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import handler from '../api/wireless-leads.js';
 import consult from '../api/consult.js';
 import { wirelessLead } from '../lib/wireless-leads.js';
 
+import { issueAccess, readAccess } from '../lib/wireless-access.js';
+const oldLinkSecret = process.env.WIRELESS_LINK_SECRET, oldVersion = process.env.WIRELESS_LINK_VERSION;
+beforeEach(() => { process.env.WIRELESS_LINK_SECRET = 'unit-test-secret'; delete process.env.WIRELESS_LINK_VERSION; });
 const originalFetch = globalThis.fetch;
 const oldToken = process.env.TELEGRAM_BOT_TOKEN, oldChat = process.env.TELEGRAM_CHAT_ID;
 afterEach(() => {
   globalThis.fetch = originalFetch;
-  for (const [key, value] of [['TELEGRAM_BOT_TOKEN', oldToken], ['TELEGRAM_CHAT_ID', oldChat]]) {
+  for (const [key, value] of [['TELEGRAM_BOT_TOKEN', oldToken], ['TELEGRAM_CHAT_ID', oldChat], ['WIRELESS_LINK_SECRET', oldLinkSecret], ['WIRELESS_LINK_VERSION', oldVersion]]) {
     if (value === undefined) delete process.env[key]; else process.env[key] = value;
   }
 });
@@ -32,7 +35,7 @@ test('missing password, disallowed origin and unsupported methods never access s
 });
 test('upstream authentication failure exposes no rows', async () => {
   globalThis.fetch = async () => ({ok:true,json:async()=>({success:false,items:[lead]})});
-  const res=response();await handler(request({password:'wrong'}),res);
+  const res=response();await handler(request({token:issueAccess('wrong').token}),res);
   assert.equal(res.code,401);assert.equal(res.body.items,undefined);
 });
 test('only authenticated Donggu wireless rows are returned without unrelated fields', async () => {
@@ -40,13 +43,13 @@ test('only authenticated Donggu wireless rows are returned without unrelated fie
     assert.deepEqual(JSON.parse(options.body),{action:'list',password:'test-password'});
     return {ok:true,json:async()=>({success:true,items:[{...lead,privateFile:'not returned'},{...lead,type:'인터넷'},{...lead,message:'상담 사이트: 다른 곳'}]})};
   };
-  const res=response();await handler(request({password:'test-password',action:'clear'}),res);
+  const res=response();await handler(request({token:issueAccess('test-password').token,action:'clear'}),res);
   assert.equal(res.code,200);assert.equal(res.body.items.length,1);assert.equal(res.body.items[0].privateFile,undefined);
 });
 test('storage error/malformed response is not an empty successful list', async () => {
   for (const result of [{ok:false,json:async()=>({})},{ok:true,json:async()=>({success:true})}]) {
     globalThis.fetch = async () => result;
-    const res=response();await handler(request({password:'test'}),res);assert.equal(res.code,502);
+    const res=response();await handler(request({token:issueAccess('test').token}),res);assert.equal(res.code,502);
   }
 });
 test('unchanged registration pipeline persists and lists all fields; wireless Telegram routing remains intact', async () => {
@@ -67,7 +70,7 @@ test('unchanged registration pipeline persists and lists all fields; wireless Te
   };
   const res=response();await consult(request({category:'상담신청',product:'무선 상담',name:lead.name,phone:lead.phone,carrier:lead.carrier,message:lead.message}),res);
   assert.equal(res.body.success,true);
-  const list=response();await handler(request({password:'test'}),list);
+  const list=response();await handler(request({token:issueAccess('test').token}),list);
   assert.deepEqual(list.body.items,[wirelessLead(lead)]);
 });
 test('existing internet consultation keeps its normal Telegram destination and Sheets payload', async () => {

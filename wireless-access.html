@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>직원용 비밀 링크 발급 | KT</title><link rel="stylesheet" href="wireless-admin.css"><script src="wireless-access.js" defer></script></head>
+<body><header><div class="header-inner"><a class="brand" href="/"><img src="assets/kt-logo.png" alt="KT"><span>동부법인지사 <small>동구시장</small></span></a></div></header><main>
+<div class="intro"><p class="eyebrow">DONGGU MARKET</p><h1>직원용 비밀 링크 발급</h1><p>한 번 발급한 링크로, 비밀번호 입력 없이 바로 조회하세요.</p></div>
+<section class="panel login" id="setup"><h2>최초 발급 인증</h2><p>기존 저장소의 관리자 비밀번호로 링크를 발급합니다. 직원은 발급된 링크만 열면 됩니다.</p><form id="issueForm"><label for="password">기존 관리자 비밀번호</label><input id="password" type="password" autocomplete="current-password" maxlength="200" required><button class="primary" id="issueButton">비밀 전용 링크 만들기</button></form></section>
+<p id="message" role="status" aria-live="polite"></p>
+<section class="panel" id="result" hidden><h2>비밀 전용 링크가 준비되었습니다</h2><p>이 링크를 가진 사람은 고객 목록을 볼 수 있습니다. 담당 직원에게만 공유해주세요.</p><label for="link">직원용 링크</label><textarea id="link" readonly rows="5" style="width:100%;padding:12px;overflow-wrap:anywhere;font:inherit;border:1px solid #d9dde4;border-radius:10px"></textarea><p id="expires"></p><div class="actions"><button class="button" id="copy">링크 복사</button><a class="button" id="open" referrerpolicy="no-referrer">관리 목록 열기</a></div><p>링크는 90일간 유효합니다. 링크를 보관해두세요.</p></section>
+</main></body></html>

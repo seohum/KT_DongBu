@@ -1,6 +1,6 @@
 const $ = id => document.getElementById(id);
 const endpoint = 'https://kt-dong-bu.vercel.app/api/wireless-leads';
-let password = '', items = [], generation = 0;
+let token = new URLSearchParams(location.hash.slice(1)).get('access') || '', items = [], generation = 0;
 function element(tag, text, className) {
   const node = document.createElement(tag);
   node.textContent = text;
@@ -38,38 +38,42 @@ function render() {
   $('empty').hidden = filtered.length > 0;
   $('empty').textContent = items.length ? '검색 조건에 맞는 고객이 없습니다.' : '등록된 가망고객이 없습니다. 고객 등록 후 새로고침해주세요.';
 }
-async function load(candidate) {
+async function load() {
   const current = ++generation;
-  $('loginButton').disabled = $('refresh').disabled = true;
+  $('refresh').disabled = true;
   $('message').textContent = '목록을 불러오는 중입니다…';
   try {
-    const response = await fetch(endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:candidate}), cache:'no-store', signal:AbortSignal.timeout(25000)});
+    const response = await fetch(endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({token}), cache:'no-store', signal:AbortSignal.timeout(25000)});
     const result = await response.json();
     if (current !== generation) return;
     if (!response.ok || !result.success || !Array.isArray(result.items)) {
-      if (response.status === 401) logout();
+      if (response.status === 401) { items = []; $('leads').replaceChildren(); $('dashboard').hidden = true; $('login').hidden = false; }
       throw new Error(result.message || '목록을 불러오지 못했습니다.');
     }
-    password = candidate; items = result.items;
-    $('password').value = ''; $('login').hidden = true; $('dashboard').hidden = false;
+    items = result.items;
+    $('login').hidden = true; $('dashboard').hidden = false;
     $('message').textContent = ''; $('updated').textContent = '최근 조회 ' + new Date().toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'});
     render();
   } catch (error) {
-    if (current === generation || !password) $('message').textContent = error.name === 'TimeoutError' ? '응답이 지연되고 있습니다. 다시 시도해주세요.' : (error.message || '연결을 확인한 뒤 다시 시도해주세요.');
+    if (current === generation) $('message').textContent = error.name === 'TimeoutError' ? '응답이 지연되고 있습니다. 다시 시도해주세요.' : (error.message || '연결을 확인한 뒤 다시 시도해주세요.');
   } finally {
-    if (current === generation || !password) $('loginButton').disabled = $('refresh').disabled = false;
+    if (current === generation) $('refresh').disabled = false;
   }
 }
-function logout() {
-  generation++; password = ''; items = [];
-  $('leads').replaceChildren(); $('password').value = ''; $('search').value = ''; $('carrierFilter').value = '';
+function closeList() {
+  generation++; items = [];
+  $('leads').replaceChildren(); $('search').value = ''; $('carrierFilter').value = '';
   $('dashboard').hidden = true; $('login').hidden = false; $('message').textContent = '';
-  $('loginButton').disabled = $('refresh').disabled = false; $('password').focus();
+  $('refresh').disabled = false;
 }
-$('loginForm').addEventListener('submit', event => {event.preventDefault();load($('password').value.trim());});
-$('refresh').addEventListener('click', () => load(password));
-$('logout').addEventListener('click', logout);
+$('refresh').addEventListener('click', load);
+$('logout').addEventListener('click', () => { closeList(); token = ''; history.replaceState(null, '', location.pathname); });
 $('search').addEventListener('input', render);
 $('carrierFilter').addEventListener('change', render);
-// Do not leave customer data in a restored back/forward page snapshot.
-window.addEventListener('pagehide', logout);
+window.addEventListener('pagehide', closeList);
+window.addEventListener('pageshow', event => { if (event.persisted && token) load(); });
+window.addEventListener('hashchange', () => {
+  closeList(); token = new URLSearchParams(location.hash.slice(1)).get('access') || '';
+  if (token) load();
+});
+if (token) load();
