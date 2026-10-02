@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="same-origin">
+<title>동구시장 가망고객 목록 | KT</title>
+<link rel="stylesheet" href="wireless-admin.css">
+<script src="wireless-admin.js" defer></script>
+</head>
+<body>
+<header><div class="header-inner"><a class="brand" href="/"><img src="assets/kt-logo.png" alt="KT"><span>동부법인지사 <small>동구시장</small></span></a><a class="button" href="wireless-consult.html">고객 등록</a></div></header>
+<main>
+<div class="intro"><p class="eyebrow">DONGGU MARKET</p><h1>가망고객 관리</h1><p>현장에서 나눈 상담, 한곳에서 이어가세요.</p></div>
+<section id="login" class="panel login">
+  <span class="tag">직원 전용</span><h2>관리자 로그인</h2><p>기존 관리자 비밀번호로 등록된 고객을 확인하세요.</p>
+  <form id="loginForm"><label for="password">관리자 비밀번호</label><input id="password" type="password" autocomplete="current-password" required maxlength="200"><button class="primary" id="loginButton">목록 확인하기</button></form>
+</section>
+<p id="message" role="status" aria-live="polite"></p>
+<section id="dashboard" hidden aria-label="고객 목록">
+  <div class="summary"><div><span>등록된 가망고객</span><strong id="total">0<small>명</small></strong></div><div class="actions"><button id="refresh" class="button">새로고침</button><button id="logout" class="button">로그아웃</button></div></div>
+  <div class="filters panel"><div><label for="search">고객 검색</label><input id="search" type="search" placeholder="고객명, 연락처, 상담 메모" autocomplete="off"></div><div><label for="carrierFilter">현재 통신사</label><select id="carrierFilter"><option value="">전체 통신사</option><option>KT</option><option>SKT</option><option>LG U+</option><option>알뜰폰</option><option>미선택</option></select></div></div>
+  <div class="list-heading"><h2>상담 목록 <span id="count"></span></h2><span id="updated"></span></div>
+  <div id="leads" class="leads"></div><p id="empty" class="panel empty" hidden>등록된 가망고객이 없습니다. 고객 등록 후 새로고침해주세요.</p>
+</section>
+<footer>KT 동부법인지사 · 동구시장 가망고객 관리</footer>
+</main>
+</body></html>
