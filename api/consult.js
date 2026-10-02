@@ -101,9 +101,11 @@ export default async function handler(request, response) {
       const source = new URL(request.headers.referer || "");
       fromSamjeongPage = allowedOrigins.has(source.origin) && source.pathname.endsWith('/samjeong-greencore-the-city-qr.html');
     } catch (_) {}
-    const telegramChatId = siteCode === "samjeong-greencore-the-city" || apartment === "삼정그린코아 더 시티" || fromSamjeongPage
-      ? (process.env.SAMJEONG_TELEGRAM_CHAT_ID || "@ktmnsDB")
-      : process.env.TELEGRAM_CHAT_ID;
+    const telegramChatId = type === "무선 상담"
+      ? "-5350656846"
+      : siteCode === "samjeong-greencore-the-city" || apartment === "삼정그린코아 더 시티" || fromSamjeongPage
+        ? (process.env.SAMJEONG_TELEGRAM_CHAT_ID || "@ktmnsDB")
+        : process.env.TELEGRAM_CHAT_ID;
 
     const telegram = await fetch(
       `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`,
